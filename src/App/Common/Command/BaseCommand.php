@@ -1,6 +1,6 @@
 <?php
 
-namespace Weez\Command;
+namespace App\Common\Command;
 
 use Pimple;
 use Symfony\Component\Console\Command\Command;

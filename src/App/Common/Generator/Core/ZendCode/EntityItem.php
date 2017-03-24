@@ -1,6 +1,6 @@
 <?php
 
-namespace Weez\Generator\Core\ZendCode;
+namespace App\Common\Generator\Core\ZendCode;
 
 use \Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlock\Tag\GenericTag;

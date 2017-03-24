@@ -3,8 +3,8 @@
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
-use Weez\Factory\ModelFactory;
-use Weez\Model\Entity\User;
+use App\Factory\ModelFactory;
+use App\Model\Entity\User;
 use Zend\Db\Adapter\Adapter;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -20,7 +20,7 @@ $app['db'] = array(
     'charset'  => 'utf8',
 );
 $app['logger'] = function ($container) {
-    $log = new Logger('Weez-Common-Log');
+    $log = new Logger('App-Common-Log');
     $log->pushHandler(new StreamHandler('php://stderr'));
     return $log;
 };
@@ -31,7 +31,7 @@ $app['entity'] = function() use ($app) {
 };
 
 $timestart   = microtime(true);
-$userManager = $app['entity']->get('\Weez\Model\Table\User');
+$userManager = $app['entity']->get('\App\Model\Table\User');
 $nbUser      = 10;
 echo "***********************************************" . PHP_EOL;
 //Ajouter x users

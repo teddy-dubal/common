@@ -41,7 +41,7 @@ $config=array(
     'namespace.default' => 'Default',
     #Override tg
     /* 'overrideTableGateway' => array(
-          'namespace' => 'Weez\\Generator\\demo\\Custom\\Model',
+          'namespace' => 'App\\Common\\Generator\\demo\\Custom\\Model',
           'className' => 'ModEntity'
           ) */
 

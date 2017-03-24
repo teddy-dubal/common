@@ -1,6 +1,6 @@
 <?php
 
-namespace Weez\Tools;
+namespace App\Common\Tools;
 
 use Exception;
 use Zend\Mail\Message;
@@ -40,7 +40,7 @@ class Mail
     /**
      * Advenced function fot smtp configuration
      * @param type $data
-     * @return \Aventers\Tools\Mail
+     * @return self
      */
     public function setSmtpConfig($data = array())
     {
@@ -51,7 +51,7 @@ class Mail
     /**
      *
      * @param type $st
-     * @return \Aventers\Tools\Mail
+     * @return self
      */
     public function setSmtpHost($st)
     {
@@ -62,7 +62,7 @@ class Mail
     /**
      *
      * @param type $st
-     * @return \Aventers\Tools\Mail
+     * @return self
      */
     public function setSubject($st)
     {

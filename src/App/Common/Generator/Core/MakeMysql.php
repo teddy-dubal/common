@@ -1,9 +1,9 @@
 <?php
 
-namespace Weez\Generator\Core;
+namespace App\Common\Generator\Core;
 
 use Exception;
-use Weez\Generator\Core\MakeDbTableFactory;
+use App\Common\Generator\Core\MakeDbTableFactory;
 
 /**
  * MySQL specific class for model creation

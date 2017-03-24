@@ -1,6 +1,6 @@
 <?php
 
-namespace Weez\Factory;
+namespace App\Common\Factory;
 
 use \Exception;
 
@@ -27,7 +27,7 @@ class ModelFactory
     /**
      *
      * @param Container $container
-     * @return \Weez\Model\ModelFactory
+     * @return \App\Common\Model\ModelFactory
      */
     public function setContainer($container)
     {
@@ -49,13 +49,13 @@ class ModelFactory
 	/**
 	 * @TODO put model path in config file
 	 */
-	if (class_exists($cl = 'Weezevent\Model\Table\\' . $className)) {
+	if (class_exists($cl = 'Appevent\Model\Table\\' . $className)) {
 	    $class = new $cl($this->adapter);
 	    $class->setContainer($this->container);
 	    $this->getContainer()['EntityManager.' . $className] = $class;
 	    return $class;
 	}
-	if (class_exists($cl = 'Weezevent\Generated\Model\Table\\' . $className)) {
+	if (class_exists($cl = 'Appevent\Generated\Model\Table\\' . $className)) {
 	    $class = new $cl($this->adapter);
 	    $class->setContainer($this->container);
 	    $this->getContainer()['EntityManager.' . $className] = $class;

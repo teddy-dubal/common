@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Weez\Generator\Core\ZendCode;
+namespace App\Common\Generator\Core\ZendCode;
 
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlockGenerator;

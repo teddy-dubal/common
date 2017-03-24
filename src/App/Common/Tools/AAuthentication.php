@@ -1,6 +1,6 @@
 <?php
 
-namespace Weez\Tools;
+namespace App\Common\Tools;
 
 use Exception;
 

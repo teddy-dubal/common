@@ -1,6 +1,6 @@
 <?php
 
-namespace Weez\Command;
+namespace App\Common\Command;
 
 use Exception;
 use Symfony\Component\Console\Input\InputArgument;
@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Weez\Generator\Core\MakeMysql;
+use App\Common\Generator\Core\MakeMysql;
 
 class GenerateDbModelCommand extends BaseCommand
 {

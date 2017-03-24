@@ -1,11 +1,7 @@
 #!/usr/bin/env php
 <?php
-/*
- *
- */
-
 /**
- * @author T.ED <t.erembertdubal@weezevent.com>
+ * @author T.D <teddy.dona@gmail.com>
  */
 // installed via composer?
 if (file_exists($a = __DIR__ . '/../../autoload.php')) {
@@ -13,5 +9,5 @@ if (file_exists($a = __DIR__ . '/../../autoload.php')) {
 } else {
     require_once __DIR__ . '/vendor/autoload.php';
 }
-require __DIR__ . '/src/Weez/console.php';
+require __DIR__ . '/src/App/console.php';
 
