@@ -1,6 +1,6 @@
 {
     "name": "app/common",
-    "description": "Common Lib for weezevent",
+    "description": "Common Lib",
     "authors": [
         {
             "name": "Teddy Dona",
