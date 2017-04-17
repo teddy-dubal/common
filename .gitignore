@@ -62,3 +62,4 @@ extras/documentation
 
 # phpstorm metadata
 /.idea
+/composer.lock

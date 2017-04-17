@@ -1,0 +1,23 @@
+version: "3"
+services:
+    appcommon:
+      image: webdevops/php-dev:alpine-3-php7
+      volumes:
+        - "./:/app"
+      working_dir: "/app"
+      links:
+        - mariadbcommon
+    mariadbcommon:
+      image: mariadb:10
+      ports:
+        - "3309:3306"
+      expose:
+        - "3306"
+      volumes:
+        - "./demo/scripts:/docker-entrypoint-initdb.d"
+      environment:
+        MYSQL_ROOT_PASSWORD: "common"
+        MYSQL_USER: "common"
+        MYSQL_PASSWORD: "common"
+        MYSQL_DATABASE: "common"
+        MYSQL_ALLOW_EMPTY_PASSWORD: "no"  
