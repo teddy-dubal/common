@@ -4,7 +4,7 @@ App Common
 * Generate Entity and EntityManager
 
 ```
-php weezcmd app:model-generator demo/config/config.php common App\\Model demo/models --tables-all
+php appcmd app:model-generator demo/config/config.php common App\\Model demo/models --tables-all
 
 ```
 

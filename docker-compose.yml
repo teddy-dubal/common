@@ -1,16 +1,16 @@
 version: "3"
 services:
-    appcommon:
-      image: webdevops/php-dev:alpine-3-php7
+    app:
+      image: webdevops/php-dev:ubuntu-16.10
       volumes:
         - "./:/app"
       working_dir: "/app"
       links:
-        - mariadbcommon
-    mariadbcommon:
+        - mariadb
+    mariadb:
       image: mariadb:10
       ports:
-        - "3309:3306"
+        - "3310:3306"
       expose:
         - "3306"
       volumes:
