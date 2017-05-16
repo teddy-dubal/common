@@ -10,23 +10,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Common\Generator\Core\MakeMysql;
 
-class GenerateDbModelCommand extends BaseCommand
-{
+class GenerateDbModelCommand extends BaseCommand {
 
-    protected function configure()
-    {
+    protected function configure() {
         $this
                 ->setName('app:model-generator')
                 ->setDescription('Generate Model Class')
-                ->setDefinition(array(
+                ->setDefinition([
                     new InputArgument('config-file', InputArgument::REQUIRED, 'Path to config file'),
                     new InputArgument('database', InputArgument::REQUIRED, 'The Database'),
                     new InputArgument('namespace', InputArgument::REQUIRED, 'The namespace.'),
                     new InputArgument('location', InputArgument::REQUIRED, 'Where to store model files'),
                     new InputOption('--tables-all', null, InputOption::VALUE_NONE, '', null),
                     new InputOption('--tables-regex', null, InputOption::VALUE_REQUIRED, '', false),
-                    new InputOption('--tables-prefix', null, InputOption::VALUE_REQUIRED, '', array()),
-                ))
+                    new InputOption('--tables-prefix', null, InputOption::VALUE_REQUIRED, '', []),
+                ])
                 ->setHelp(<<<EOT
                         <info>info</info>
                         <comment>foo</comment>
@@ -37,8 +35,7 @@ EOT
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $database     = $input->getArgument('database');
         $namespace    = $input->getArgument('namespace');
         $location     = $input->getArgument('location');
@@ -73,7 +70,7 @@ EOT
         $location .= DIRECTORY_SEPARATOR;
         $dbAdapter->addTablePrefixes($tablesPrefix);
         $dbAdapter->setLocation($location);
-        foreach (array('Table', 'Entity') as $name) {
+        foreach (['Table', 'Entity'] as $name) {
             $dir = $location . $name;
             if (!is_dir($dir)) {
                 if (!@mkdir($dir, 0755, true)) {
@@ -89,12 +86,12 @@ EOT
                 continue;
             }
             $dbAdapter->setTableName($table);
-                try {
-                    $dbAdapter->parseTable();
-                    $dbAdapter->generate();
-                } catch (Exception $e) {
-                    $output->writeln(sprintf('<error>Warning: Failed to process "%s" : %s ... Skipping</error>', $table, $e->getMessage()));
-                }
+            try {
+                $dbAdapter->parseTable();
+                $dbAdapter->generate();
+            } catch (Exception $e) {
+                $output->writeln(sprintf('<error>Warning: Failed to process "%s" : %s ... Skipping</error>', $table, $e->getMessage()));
+            }
         }
         $output->writeln(sprintf('<info>Done !!</info>'));
     }
@@ -104,8 +101,7 @@ EOT
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
+    protected function interact(InputInterface $input, OutputInterface $output) {
 
         if (!$input->getArgument('config-file')) {
             $configfile = $this->getHelper('dialog')->askAndValidate(

@@ -1,10 +1,10 @@
 <?php
 
+use App\Common\Factory\ModelFactory;
+use App\Model\Entity\User;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
-use App\Factory\ModelFactory;
-use App\Model\Entity\User;
 use Zend\Db\Adapter\Adapter;
 
 require_once __DIR__ . '/../vendor/autoload.php';
