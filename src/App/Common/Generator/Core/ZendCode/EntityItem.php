@@ -217,7 +217,6 @@ class EntityItem extends AbstractGenerator {
             $methods[]     = MethodGenerator::fromArray([
                         'name'       => 'set' . $column['capital'],
                         'parameters' => ['data'],
-                        'returntype' => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
                         'flags'      => MethodGenerator::FLAG_PUBLIC,
                         'body'       => $constructBody,
                         'docblock'   => DocBlockGenerator::fromArray(
