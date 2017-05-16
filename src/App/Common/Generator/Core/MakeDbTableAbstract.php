@@ -5,8 +5,7 @@ namespace App\Common\Generator\Core;
 /**
  * main class for files creation
  */
-abstract class MakeDbTableAbstract
-{
+abstract class MakeDbTableAbstract {
 
     /**
      *  @var String $_tbname;
@@ -127,19 +126,19 @@ abstract class MakeDbTableAbstract
      * List of table name prefixes to automatically remove
      * @var array
      */
-    protected $_tablePrefixes = array('tbl_', 'tbl', 't_', 'table');
+    protected $_tablePrefixes = ['tbl_', 'tbl', 't_', 'table'];
 
     /**
      * List of column name suffixes to automatically remove
      * @var array
      */
-    protected $_columnSuffixes = array('_id', 'id', '_ident', 'ident', '_col', 'col');
+    protected $_columnSuffixes = ['_id', 'id', '_ident', 'ident', '_col', 'col'];
 
     /**
      * List of column names that indiciate the column is to be used as a soft-delete
      * @var array
      */
-    protected $_softDeleteColumnNames = array('deleted', 'is_deleted');
+    protected $_softDeleteColumnNames = ['deleted', 'is_deleted'];
 
     /**
      * Name of the column to be used for soft-delete purposes
@@ -151,8 +150,7 @@ abstract class MakeDbTableAbstract
      *
      * @param array $info
      */
-    public function setForeignKeysInfo($info)
-    {
+    public function setForeignKeysInfo($info) {
         $this->_foreignKeysInfo = $info;
     }
 
@@ -160,8 +158,7 @@ abstract class MakeDbTableAbstract
      *
      * @return array
      */
-    public function getForeignKeysInfo()
-    {
+    public function getForeignKeysInfo() {
         return $this->_foreignKeysInfo;
     }
 
@@ -169,8 +166,7 @@ abstract class MakeDbTableAbstract
      *
      * @param string $location
      */
-    public function setLocation($location)
-    {
+    public function setLocation($location) {
         $this->_location = $location;
     }
 
@@ -178,8 +174,7 @@ abstract class MakeDbTableAbstract
      *
      * @return string
      */
-    public function getLocation()
-    {
+    public function getLocation() {
         return $this->_location;
     }
 
@@ -187,8 +182,7 @@ abstract class MakeDbTableAbstract
      *
      * @param string $templatePath
      */
-    public function setTemplatePath($templatePath)
-    {
+    public function setTemplatePath($templatePath) {
         $this->_templatePath = realpath($templatePath);
     }
 
@@ -196,8 +190,7 @@ abstract class MakeDbTableAbstract
      *
      * @return string
      */
-    public function getTemplatePath()
-    {
+    public function getTemplatePath() {
         return $this->_templatePath;
     }
 
@@ -205,8 +198,7 @@ abstract class MakeDbTableAbstract
      *
      * @param string $table
      */
-    public function setTableName($table)
-    {
+    public function setTableName($table) {
         $this->_tbname    = $table;
         $this->_className = $this->_getClassName($table);
     }
@@ -215,8 +207,7 @@ abstract class MakeDbTableAbstract
      *
      * @return string
      */
-    public function getTableName()
-    {
+    public function getTableName() {
         return $this->_tbname;
     }
 
@@ -224,16 +215,14 @@ abstract class MakeDbTableAbstract
      *
      * @param array $list
      */
-    public function setTableList($list)
-    {
+    public function setTableList($list) {
         $this->_tableList = $list;
     }
 
     /**
      * @return array
      */
-    public function getTableList()
-    {
+    public function getTableList() {
         return $this->_tableList;
     }
 
@@ -241,16 +230,14 @@ abstract class MakeDbTableAbstract
      *
      * @param array $list
      */
-    public function setDependentTables($tables)
-    {
+    public function setDependentTables($tables) {
         $this->_dependentTables = $tables;
     }
 
     /**
      * @return array
      */
-    public function getDependentTables()
-    {
+    public function getDependentTables() {
         return $this->_dependentTables;
     }
 
@@ -258,8 +245,7 @@ abstract class MakeDbTableAbstract
      *
      * @param array $prefixes
      */
-    public function addTablePrefixes($prefixes)
-    {
+    public function addTablePrefixes($prefixes) {
         $this->_tablePrefixes = array_merge($this->_tablePrefixes, $prefixes);
     }
 
@@ -267,8 +253,7 @@ abstract class MakeDbTableAbstract
      *
      * @param array $prefixes
      */
-    public function setTablePrefixes($prefixes)
-    {
+    public function setTablePrefixes($prefixes) {
         $this->_tablePrefixes = $prefixes;
     }
 
@@ -276,8 +261,7 @@ abstract class MakeDbTableAbstract
      *
      * @return array
      */
-    public function getTablePrefixes()
-    {
+    public function getTablePrefixes() {
         return $this->_tablePrefixes;
     }
 
@@ -289,11 +273,10 @@ abstract class MakeDbTableAbstract
      * @param String $str
      * @return String
      */
-    protected function _getCapital($str)
-    {
+    protected function _getCapital($str) {
         $temp = '';
         foreach (explode("_", $str) as $part) {
-            $temp.=ucfirst($part);
+            $temp .= ucfirst($part);
         }
         return $temp;
     }
@@ -305,11 +288,10 @@ abstract class MakeDbTableAbstract
      * @param array|string $str
      * @return array|string
      */
-    protected function _getClassName($_str)
-    {
+    protected function _getClassName($_str) {
         $str_tab = $_str;
         if (!is_array($_str)) {
-            $str_tab = array($_str);
+            $str_tab = [$_str];
         }
         foreach ($str_tab as &$str) {
             $temp = '';
@@ -332,7 +314,7 @@ abstract class MakeDbTableAbstract
             }
 
             foreach (explode("_", $str) as $part) {
-                $temp.=ucfirst($part);
+                $temp .= ucfirst($part);
             }
             $str = $temp;
         }
@@ -346,8 +328,7 @@ abstract class MakeDbTableAbstract
      * @param string $str
      * @return string
      */
-    protected function _getRelationName(array $relation_info, $type = 'parent')
-    {
+    protected function _getRelationName(array $relation_info, $type = 'parent') {
         if ($type == 'parent') {
             // Check if a column exists with the same resulting name
             $str = $this->_getClassName($relation_info['column_name']);
@@ -393,8 +374,7 @@ abstract class MakeDbTableAbstract
      *
      * @param string $name
      */
-    protected function _hasColumn($name)
-    {
+    protected function _hasColumn($name) {
         $found   = false;
         $capName = $this->_getCapital($name);
         foreach ($this->_columns as $column) {
@@ -416,15 +396,14 @@ abstract class MakeDbTableAbstract
      */
     abstract protected function _convertTypeToPhp($str);
 
-    public function parseTable()
-    {
+    public function parseTable() {
         // Ensure table specific data is reset
         $this->_primaryKey       = null;
-        $this->_columns          = array();
+        $this->_columns          = [];
         $this->_softDeleteColumn = null;
         $this->_classDesc        = null;
-        $this->_foreignKeysInfo  = array();
-        $this->_dependentTables  = array();
+        $this->_foreignKeysInfo  = [];
+        $this->_dependentTables  = [];
 
         $this->parseDescribeTable();
         $this->parseForeignKeys();
@@ -454,8 +433,7 @@ abstract class MakeDbTableAbstract
      * @param String $dbname
      * @param String $namespace
      */
-    function __construct($config, $dbname, $namespace)
-    {
+    function __construct($config, $dbname, $namespace) {
         $this->_namespace = $namespace;
 
 

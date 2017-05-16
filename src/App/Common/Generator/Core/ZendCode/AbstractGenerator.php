@@ -32,12 +32,12 @@ abstract class AbstractGenerator {
         $this->methodGenerator = new MethodGenerator();
     }
 
-    public function setData($data = array()) {
+    public function setData($data = []) {
         $this->data = $data;
     }
 
     public function setNamespace($data) {
-        $this->data = array_merge($this->data, array('namespace' => $data));
+        $this->data = array_merge($this->data, ['namespace' => $data]);
     }
 
     public function getData() {
@@ -61,26 +61,26 @@ abstract class AbstractGenerator {
      *
      * @param ClassGenerator $class contained class
      */
-    protected  function defineFileInfo(ClassGenerator $class){
+    protected function defineFileInfo(ClassGenerator $class) {
         $doc = DocBlockGenerator::fromArray(
-            array(
-                'shortDescription' => 'Contains ' . $class->getName() . ' class file',
-                'longDescription' => 'Generated Automatically.' .PHP_EOL.'Please do not modify',
-                'tags' => array(
-                    array(
-                        'name'        => 'author',
-                        'description' => $this->data['_author'],
-                    ),
-                    array(
-                        'name' => 'license',
-                        'description' => $this->data['_license'],
-                    ),
-                    array(
-                        'name' => 'package',
-                        'description' => $class->getNamespaceName(),
-                    ),
-                ),
-            )
+                        [
+                            'shortDescription' => 'Contains ' . $class->getName() . ' class file',
+                            'longDescription'  => 'Generated Automatically.' . PHP_EOL . 'Please do not modify',
+                            'tags'             => [
+                                [
+                                    'name'        => 'author',
+                                    'description' => $this->data['_author'],
+                                ],
+                                [
+                                    'name'        => 'license',
+                                    'description' => $this->data['_license'],
+                                ],
+                                [
+                                    'name'        => 'package',
+                                    'description' => $class->getNamespaceName(),
+                                ],
+                            ],
+                        ]
         );
         $this->fileGenerator->setDocBlock($doc);
     }
@@ -96,7 +96,7 @@ abstract class AbstractGenerator {
     protected function _getCapital($str) {
         $temp = '';
         foreach (explode("_", $str) as $part) {
-            $temp.=ucfirst($part);
+            $temp .= ucfirst($part);
         }
         return $temp;
     }

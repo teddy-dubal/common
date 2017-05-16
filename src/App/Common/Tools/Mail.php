@@ -10,8 +10,7 @@ use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Mime;
 use Zend\Mime\Part as MimePart;
 
-class Mail
-{
+class Mail {
 
     protected $_to;
     protected $_from;
@@ -31,10 +30,9 @@ class Mail
       $mail->setData(array());
       $mail->send();
      */
-    public function __construct()
-    {
-	$this->_mail = new Message();
-	$this->_mail->setEncoding("UTF-8");
+    public function __construct() {
+        $this->_mail = new Message();
+        $this->_mail->setEncoding("UTF-8");
     }
 
     /**
@@ -42,10 +40,9 @@ class Mail
      * @param type $data
      * @return self
      */
-    public function setSmtpConfig($data = array())
-    {
-	$this->_config = $data;
-	return $this;
+    public function setSmtpConfig($data = []) {
+        $this->_config = $data;
+        return $this;
     }
 
     /**
@@ -53,10 +50,9 @@ class Mail
      * @param type $st
      * @return self
      */
-    public function setSmtpHost($st)
-    {
-	$this->_config['smtp']['host'] = $st;
-	return $this;
+    public function setSmtpHost($st) {
+        $this->_config['smtp']['host'] = $st;
+        return $this;
     }
 
     /**
@@ -64,24 +60,22 @@ class Mail
      * @param type $st
      * @return self
      */
-    public function setSubject($st)
-    {
-	$this->_subject = $st;
-	return $this;
+    public function setSubject($st) {
+        $this->_subject = $st;
+        return $this;
     }
 
     /**
      *
      * @param type $data
      */
-    public function setAttachment($url)
-    {
-	$data		 = file_get_contents($url);
-	$at		 = $this->_mail->createAttachment($data);
-	$at->type	 = 'application/pdf';
-	$at->disposition = Mime::DISPOSITION_INLINE;
-	$at->encoding	 = Mime::ENCODING_BASE64;
-	$at->filename    = date('YmdHis') . '.pdf';
+    public function setAttachment($url) {
+        $data            = file_get_contents($url);
+        $at              = $this->_mail->createAttachment($data);
+        $at->type        = 'application/pdf';
+        $at->disposition = Mime::DISPOSITION_INLINE;
+        $at->encoding    = Mime::ENCODING_BASE64;
+        $at->filename    = date('YmdHis') . '.pdf';
         return $this;
     }
 
@@ -93,10 +87,9 @@ class Mail
      * $to = array('to' => 'unique@mail.com', 'toName' => 'Only Me');
      *
      */
-    public function setTo($to = array())
-    {
-	$this->_to = $to;
-	return $this;
+    public function setTo($to = []) {
+        $this->_to = $to;
+        return $this;
     }
 
     /**
@@ -104,10 +97,9 @@ class Mail
      * $from = array('from' => 'unique@mail.com', 'fromName' => 'Only Me');
      *
      */
-    public function setFrom($from = array())
-    {
-	$this->_from = $from;
-	return $this;
+    public function setFrom($from = []) {
+        $this->_from = $from;
+        return $this;
     }
 
     /**
@@ -115,10 +107,9 @@ class Mail
      * $rp = array('reply' => 'unique@mail.com', 'replyName' => 'Only Me');
      *
      */
-    public function setReplyTo($rp = array())
-    {
-	$this->_replyTo = $rp;
-	return $this;
+    public function setReplyTo($rp = []) {
+        $this->_replyTo = $rp;
+        return $this;
     }
 
     /**
@@ -127,142 +118,137 @@ class Mail
      * or
      * $cc = array('cc' => test@test.fr,'ccName'=> 'Test Name');
      */
-    public function setCc($cc = array())
-    {
-	$this->_cc = $cc;
-	return $this;
+    public function setCc($cc = []) {
+        $this->_cc = $cc;
+        return $this;
     }
 
     /**
      *
      * @param type $jsonTemplate JSON String
      */
-    public function setTemplate($jsonTemplate)
-    {
-	$this->_content = is_array($jsonTemplate) ? $jsonTemplate : $jsonTemplate;
-	return $this;
+    public function setTemplate($jsonTemplate) {
+        $this->_content = is_array($jsonTemplate) ? $jsonTemplate : $jsonTemplate;
+        return $this;
     }
 
     /**
      *
      * @param type $data
      */
-    public function setData($data = array())
-    {
-	$this->_data = $data;
+    public function setData($data = []) {
+        $this->_data = $data;
     }
 
     /**
      *
      * @param type $h
      */
-    public function setHeaders($h = array())
-    {
-	foreach ($h as $name => $value) {
-	    if (is_array($value)) {
-		foreach ($value as $v) {
-		    $this->_mail->setHeaders($name, $v);
-		}
-	    } else {
-		$this->_mail->setHeaders($name, $v);
-	    }
-	}
+    public function setHeaders($h = []) {
+        foreach ($h as $name => $value) {
+            if (is_array($value)) {
+                foreach ($value as $v) {
+                    $this->_mail->setHeaders($name, $v);
+                }
+            } else {
+                $this->_mail->setHeaders($name, $v);
+            }
+        }
     }
 
     /**
      *
      */
-    public function send()
-    {
-	try {
-	    if (empty($this->_content))
-		throw new Exception('Template not defined');
-	    if (empty($this->_config))
-		throw new Exception('SetUp Config');
-	    $config	 = $this->_config;
-	    $a	 = $this->_data;
-	    /*
-	      $fromName = preg_replace_callback('`{([^}]+)}`', function ($m) use ($a) {
-	      return isset($a[strtolower($m[1])]) ? $a[strtolower($m[1])] : '';
-	      }
-	      , $this->_content['fromName']);
-	     */
+    public function send() {
+        try {
+            if (empty($this->_content))
+                throw new Exception('Template not defined');
+            if (empty($this->_config))
+                throw new Exception('SetUp Config');
+            $config = $this->_config;
+            $a      = $this->_data;
+            /*
+              $fromName = preg_replace_callback('`{([^}]+)}`', function ($m) use ($a) {
+              return isset($a[strtolower($m[1])]) ? $a[strtolower($m[1])] : '';
+              }
+              , $this->_content['fromName']);
+             */
 
-	    $options	 = new SmtpOptions($config);
-	    $transport	 = new Smtp();
-	    $transport->setOptions($options);
+            $options   = new SmtpOptions($config);
+            $transport = new Smtp();
+            $transport->setOptions($options);
 
-	    $this->_mail->setFrom($this->_from['from'], $this->_from['fromName']);
+            $this->_mail->setFrom($this->_from['from'], $this->_from['fromName']);
 
-	    if (is_array($this->_to)) {
-		foreach ($this->_to as $to) {
-		    if (is_array($to)) {
-			if (isset($to['to']) && filter_var($to['to'], FILTER_VALIDATE_EMAIL)) {
-			    $toMail = $to['to'];
-			} else {
-			    throw new Exception('Invalid mail: ' . $to['to']);
-			}
-			$toName = isset($to['toName']) ? $to['toName'] : $to['to'];
-		    } else {
-			if (isset($this->_to['to']) && filter_var($this->_to['to'], FILTER_VALIDATE_EMAIL)) {
-			    $toMail = $this->_to['to'];
-			} else {
-			    throw new Exception('Invalid mail: ' . $this->_to['to']);
-			}
-			$toName = isset($this->_to['toName']) ? $this->_to['toName'] : $this->_to['to'];
-			$this->_mail->addTo($toMail, $toName);
-			break;
-		    }
-		    $this->_mail->addTo($toMail, $toName);
-		}
-	    }
-	    if (is_array($this->_replyTo)) {
-		foreach ($this->_replyTo as $rpt) {
-		    if (is_array($rpt)) {
-			if (isset($rpt['to']) && filter_var($rpt['to'], FILTER_VALIDATE_EMAIL)) {
-			    $rptMail = $rpt['to'];
-			} else {
-			    throw new Exception('Invalid mail: ' . $rpt['to']);
-			}
-			$rptName = isset($rpt['toName']) ? $rpt['toName'] : $rpt['to'];
-		    } else {
-			if (isset($this->_replyTo['to']) && filter_var($this->_replyTo['to'], FILTER_VALIDATE_EMAIL)) {
-			    $rptMail = $this->_replyTo['to'];
-			} else {
-			    throw new Exception('Invalid mail: ' . $this->_replyTo['to']);
-			}
-			$rptName = isset($this->_replyTo['toName']) ? $this->_replyTo['toName'] : $this->_replyTo['to'];
-		    }
-		    $this->_mail->setReplyTo($rptMail, $rptName);
-		}
-	    }
+            if (is_array($this->_to)) {
+                foreach ($this->_to as $to) {
+                    if (is_array($to)) {
+                        if (isset($to['to']) && filter_var($to['to'], FILTER_VALIDATE_EMAIL)) {
+                            $toMail = $to['to'];
+                        } else {
+                            throw new Exception('Invalid mail: ' . $to['to']);
+                        }
+                        $toName = isset($to['toName']) ? $to['toName'] : $to['to'];
+                    } else {
+                        if (isset($this->_to['to']) && filter_var($this->_to['to'], FILTER_VALIDATE_EMAIL)) {
+                            $toMail = $this->_to['to'];
+                        } else {
+                            throw new Exception('Invalid mail: ' . $this->_to['to']);
+                        }
+                        $toName = isset($this->_to['toName']) ? $this->_to['toName'] : $this->_to['to'];
+                        $this->_mail->addTo($toMail, $toName);
+                        break;
+                    }
+                    $this->_mail->addTo($toMail, $toName);
+                }
+            }
+            if (is_array($this->_replyTo)) {
+                foreach ($this->_replyTo as $rpt) {
+                    if (is_array($rpt)) {
+                        if (isset($rpt['to']) && filter_var($rpt['to'], FILTER_VALIDATE_EMAIL)) {
+                            $rptMail = $rpt['to'];
+                        } else {
+                            throw new Exception('Invalid mail: ' . $rpt['to']);
+                        }
+                        $rptName = isset($rpt['toName']) ? $rpt['toName'] : $rpt['to'];
+                    } else {
+                        if (isset($this->_replyTo['to']) && filter_var($this->_replyTo['to'], FILTER_VALIDATE_EMAIL)) {
+                            $rptMail = $this->_replyTo['to'];
+                        } else {
+                            throw new Exception('Invalid mail: ' . $this->_replyTo['to']);
+                        }
+                        $rptName = isset($this->_replyTo['toName']) ? $this->_replyTo['toName'] : $this->_replyTo['to'];
+                    }
+                    $this->_mail->setReplyTo($rptMail, $rptName);
+                }
+            }
 
-	    $subject = preg_replace_callback('`{{([^}]+)}}`', function ($m) use ($a) {
-		return isset($a[strtolower($m[1])]) ? $a[strtolower($m[1])] : '';
-	    }
-		    , $this->_subject);
-	    $this->_mail->setSubject($subject);
+            $subject = preg_replace_callback('`{{([^}]+)}}`', function ($m) use ($a) {
+                return isset($a[strtolower($m[1])]) ? $a[strtolower($m[1])] : '';
+            }
+                    , $this->_subject);
+            $this->_mail->setSubject($subject);
 
-	    try {
-		$htmlMarkup = preg_replace_callback('`{{([^}]+)}}`', function ($m) use ($a) {
-		    return isset($a[strtolower($m[1])]) ? $a[strtolower($m[1])] : '';
-		}
-			, $this->_content);
-	    } catch (Exception $exc) {
+            try {
+                $htmlMarkup = preg_replace_callback('`{{([^}]+)}}`', function ($m) use ($a) {
+                    return isset($a[strtolower($m[1])]) ? $a[strtolower($m[1])] : '';
+                }
+                        , $this->_content);
+            } catch (Exception $exc) {
 
-	    }
-	    $html		 = new MimePart($htmlMarkup);
-	    $html->type	 = "text/html";
-	    $body		 = new MimeMessage();
-	    $body->setParts(array($html));
-	    $this->_mail->setBody($body);
-	    $transport->send($this->_mail);
-	} catch (Exception $e) {
-	    echo $e->getMessage();
-	    throw $e;
-	}
+            }
+            $html       = new MimePart($htmlMarkup);
+            $html->type = "text/html";
+            $body       = new MimeMessage();
+            $body->setParts([$html]);
+            $this->_mail->setBody($body);
+            $transport->send($this->_mail);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            throw $e;
+        }
 
-	return true;
+        return true;
     }
 
 }
