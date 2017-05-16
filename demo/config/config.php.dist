@@ -16,7 +16,7 @@ $config=array(
     'db.type' => 'Mysql',
 
     # database host
-    'db.host' => 'mariadbcommon',
+    'db.host' => 'mariadb',
 
     # database unix socket (currently usful for mysql unix socket. leave empty if you want to use host)
     'db.socket' => '',

@@ -1,13 +1,14 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
 
+use App\Common\Factory\ModelFactory;
+use App\Model\Entity\User;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
-use App\Factory\ModelFactory;
-use App\Model\Entity\User;
 use Zend\Db\Adapter\Adapter;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+
 
 $config    = require_once __DIR__ . '/config/config.php';
 $app       = new Container();
@@ -39,7 +40,7 @@ echo sprintf('Ajout de %s users', $nbUser) . PHP_EOL;
 for ($i = 0; $i < $nbUser; $i++) {
     $user   = new User();
     $user->setOptions(array('name' => 'Teddy_' . $i));
-    $user->setOptions(array('name' => 'Teddy'));
+    $user->exchangeArray(array('name' => 'Teddy'));
     $result = $userManager->saveEntity($user);
     echo sprintf('User id:%s', $result) . PHP_EOL;
 }
