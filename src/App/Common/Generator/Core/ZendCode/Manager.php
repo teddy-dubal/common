@@ -230,7 +230,7 @@ class Manager extends AbstractGenerator {
                         ]),
                         ParameterGenerator::fromArray([
                             'name'         => 'order',
-                            'defaultvalue' => [],
+                            'defaultvalue' => null,
                         ]),
                         ParameterGenerator::fromArray([
                             'type'         => 'int',
