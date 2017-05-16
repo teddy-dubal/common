@@ -34,7 +34,7 @@ class EntityItem extends AbstractGenerator {
         return [
             'name'          => $this->data['_className'],
             'namespacename' => $this->data['_namespace'] . '\Entity',
-            'extendedclass' => 'Entity',
+            'extendedclass' => $this->data['_namespace'] . '\Entity\Entity',
             'docblock'      => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => 'Application Entity',
@@ -217,8 +217,7 @@ class EntityItem extends AbstractGenerator {
             $methods[]     = MethodGenerator::fromArray([
                         'name'       => 'set' . $column['capital'],
                         'parameters' => ['data'],
-//                        'returntype' => $this->data['_className'],
-                        'returntype' => 'self',
+                        'returntype' => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
                         'flags'      => MethodGenerator::FLAG_PUBLIC,
                         'body'       => $constructBody,
                         'docblock'   => DocBlockGenerator::fromArray(
@@ -228,7 +227,7 @@ class EntityItem extends AbstractGenerator {
                                     'tags'             => [
                                         new ParamTag('data', $column['phptype'], $column['field']),
                                         new ReturnTag([
-                                            'datatype' => 'self',
+                                            'datatype' => $column['capital'],
                                                 ]),
                                     ]
                                 ]
@@ -270,7 +269,6 @@ class EntityItem extends AbstractGenerator {
 
             $methods[] = MethodGenerator::fromArray([
                         'name'       => 'get' . $column['capital'],
-                        'returntype' => $returnType,
                         'parameters' => $parameters,
                         'flags'      => MethodGenerator::FLAG_PUBLIC,
                         'body'       => $constructBody,
@@ -394,7 +392,7 @@ class EntityItem extends AbstractGenerator {
                                 'longDescription'  => null,
                                 'tags'             => [
                                     new ParamTag('data', [$this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name']]),
-                                    new ReturnTag(['datatype' => 'self'])
+                                    new ReturnTag(['datatype' => $this->data['_className']])
                                 ]
                             ]
                     )
@@ -442,7 +440,7 @@ class EntityItem extends AbstractGenerator {
                                 'longDescription'  => null,
                                 'tags'             => [
                                     new ParamTag('data', ['array'], ' array of ' . $this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name']),
-                                    new ReturnTag(['datatype' => 'self'])
+                                    new ReturnTag(['datatype' => $this->data['_className']])
                                 ]
                             ]
                     )
@@ -487,7 +485,7 @@ class EntityItem extends AbstractGenerator {
                                 'longDescription'  => null,
                                 'tags'             => [
                                     new ParamTag('data', [$this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name']], $comment),
-                                    new ReturnTag(['datatype' => 'self'])
+                                    new ReturnTag(['datatype' => $this->data['_className']])
                                 ]
                             ]
                     )
@@ -509,29 +507,30 @@ class EntityItem extends AbstractGenerator {
             }
         }
         $constructBody .= 'return $this;';
-        $methods[]     = [
-            'name'       => 'exchangeArray',
-            'parameters' => [
-                ParameterGenerator::fromArray(
-                        [
-                            'name' => 'data',
-                            'type' => 'array',
-                        ]
-                )
-            ],
-            'flags'      => MethodGenerator::FLAG_PUBLIC,
-            'body'       => $constructBody,
-            'docblock'   => DocBlockGenerator::fromArray(
-                    [
-                        'shortDescription' => 'Array of options/values to be set for this model.',
-                        'longDescription'  => 'Options without a matching method are ignored.',
-                        'tags'             => [
-                            new ParamTag('data', ['array'], 'array of values to set'),
-                            new ReturnTag(['datatype' => 'self']),
-                        ]
-                    ]
-            )
-        ];
+        $methods[]     = MethodGenerator::fromArray([
+                    'name'       => 'exchangeArray',
+                    'returntype' => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
+                    'parameters' => [
+                        ParameterGenerator::fromArray(
+                                [
+                                    'name' => 'data',
+                                    'type' => 'array',
+                                ]
+                        )
+                    ],
+                    'flags'      => MethodGenerator::FLAG_PUBLIC,
+                    'body'       => $constructBody,
+                    'docblock'   => DocBlockGenerator::fromArray(
+                            [
+                                'shortDescription' => 'Array of options/values to be set for this model.',
+                                'longDescription'  => 'Options without a matching method are ignored.',
+                                'tags'             => [
+                                    new ParamTag('data', ['array'], 'array of values to set'),
+                                    new ReturnTag(['datatype' => $this->data['_className']]),
+                                ]
+                            ]
+                    )
+        ]);
         $constructBody = '';
         $constructBody .= '$result = array(' . PHP_EOL;
         foreach ($this->data['_columns'] as $column) {
@@ -539,21 +538,22 @@ class EntityItem extends AbstractGenerator {
         }
         $constructBody .= ');' . PHP_EOL;
         $constructBody .= 'return $result;' . PHP_EOL;
-        $methods[]     = [
-            'name'       => 'toArray',
-            'parameters' => [],
-            'flags'      => MethodGenerator::FLAG_PUBLIC,
-            'body'       => $constructBody,
-            'docblock'   => DocBlockGenerator::fromArray(
-                    [
-                        'shortDescription' => 'Returns an array, keys are the field names.',
-                        'longDescription'  => null,
-                        'tags'             => [
-                            new ReturnTag(['datatype' => 'array']),
-                        ]
-                    ]
-            )
-        ];
+        $methods[]     = MethodGenerator::fromArray([
+                    'name'       => 'toArray',
+                    'parameters' => [],
+                    'returntype' => 'array',
+                    'flags'      => MethodGenerator::FLAG_PUBLIC,
+                    'body'       => $constructBody,
+                    'docblock'   => DocBlockGenerator::fromArray(
+                            [
+                                'shortDescription' => 'Returns an array, keys are the field names.',
+                                'longDescription'  => null,
+                                'tags'             => [
+                                    new ReturnTag(['datatype' => 'array']),
+                                ]
+                            ]
+                    )
+        ]);
         return $methods;
     }
 
@@ -563,8 +563,7 @@ class EntityItem extends AbstractGenerator {
      */
     public function generate() {
         $class         = ClassGenerator::fromArray($this->getClassArrayRepresentation());
-//        $class->addUse($this->data['_namespace'] . '\Entity\\Entity');
-        $class->addUse('Entity');
+        $class->addUse($this->data['_namespace'] . '\Entity\Entity');
         $this->defineFileInfo($class);
         $fileGenerator = $this->getFileGenerator();
 

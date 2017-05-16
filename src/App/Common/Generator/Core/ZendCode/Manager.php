@@ -24,7 +24,6 @@ use Zend\Code\Generator\PropertyGenerator;
  */
 class Manager extends AbstractGenerator {
 
-    private $tableGatewayClass    = 'AbstractTableGateway';
     private $useTableGatewayClass = 'Zend\Db\TableGateway\AbstractTableGateway';
     private $data;
 
@@ -230,7 +229,6 @@ class Manager extends AbstractGenerator {
                             'type'         => 'array',
                         ]),
                         ParameterGenerator::fromArray([
-                            'type'         => 'array',
                             'name'         => 'order',
                             'defaultvalue' => [],
                         ]),
@@ -430,7 +428,11 @@ BODY
                                     'type' => $this->data['_namespace'] . '\Entity\Entity',
                                 ]
                         ),
-                        'useTransaction = true'
+                        ParameterGenerator::fromArray([
+                            'type'         => 'bool',
+                            'name'         => 'useTransaction',
+                            'defaultValue' => true,
+                        ])
                     ],
                     'flags'      => [MethodGenerator::FLAG_PUBLIC, MethodGenerator::FLAG_ABSTRACT],
                     'body'       => null,
@@ -595,10 +597,8 @@ BODY
                 ->addUse('Zend\Db\TableGateway\Feature')
                 ->addUse('Zend\Db\Sql\Expression')
                 ->addUse($this->data['_namespace'] . '\Entity\Entity')
-                ->addUse('Pimple\Container')
                 ->addUse('Zend\Db\Adapter\Adapter')
-                ->addUse('Zend\Db\ResultSet\ResultSet')
-                ->addUse('Zend\Db\Sql\Select');
+                ->addUse('Zend\Db\ResultSet\ResultSet');
         $this->defineFileInfo($class);
         $fileGenerator = $this->getFileGenerator();
 

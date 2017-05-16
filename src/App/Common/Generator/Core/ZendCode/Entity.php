@@ -251,8 +251,9 @@ class Entity extends AbstractGenerator {
                             ]
                     )
                 ],
-                [
+                MethodGenerator::fromArray([
                     'name'       => 'exchangeArray',
+//                    'returntype' => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
                     'parameters' => [
                         ParameterGenerator::fromArray(
                                 [
@@ -274,7 +275,7 @@ class Entity extends AbstractGenerator {
                                 ]
                             ]
                     )
-                ],
+                ]),
                 [
                     'name'       => 'toArray',
                     'parameters' => [],

@@ -32,7 +32,7 @@ class EntityManager extends AbstractGenerator {
         return [
             'name'          => $this->data['_className'],
             'namespacename' => $this->data['_namespace'] . '\Table',
-            'extendedclass' => $this->data['_namespace'] . '\\Table\\Manager',
+            'extendedclass' => $this->data['_namespace'] . '\Table\Manager',
             'docblock'      => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => 'Application Entity Manager',
@@ -111,7 +111,7 @@ class EntityManager extends AbstractGenerator {
                 'parameters' => [
                     ParameterGenerator::fromArray([
                         'name' => 'adapter',
-                        'type' => 'Adapter',
+                        'type' => 'Zend\Db\Adapter\Adapter',
                     ]),
                     ParameterGenerator::fromArray(
                             [
@@ -128,7 +128,7 @@ class EntityManager extends AbstractGenerator {
                             'shortDescription' => 'Constructor',
                             'longDescription'  => 'Pass a DB Adapter to handle connection',
                             'tags'             => [
-                                new ParamTag('adapter', ['Adapter'], 'Zend DB Adapter'),
+                                new ParamTag('adapter', ['Zend\Db\Adapter\Adapter'], 'Zend DB Adapter'),
                                 new ParamTag('entity', [$this->data['_className'] . 'Entity'], 'Reference entity'),
                             ]
                         ]
@@ -236,7 +236,7 @@ class EntityManager extends AbstractGenerator {
             'parameters' => [
                 ParameterGenerator::fromArray([
                     'name' => 'entity',
-                    'type' => 'Entity',
+                    'type' => $this->data['_namespace'] . '\Entity\Entity',
                 ]),
                 ParameterGenerator::fromArray([
                     'type'         => 'bool',
@@ -251,7 +251,7 @@ class EntityManager extends AbstractGenerator {
                         'shortDescription' => 'Deletes the current entity',
                         'longDescription'  => null,
                         'tags'             => [
-                            new ParamTag('entity', ['Entity'], 'Entity to delete'),
+                            new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to delete'),
                             new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if delete should be done inside a database transaction'),
                             new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
                         ]
@@ -400,7 +400,7 @@ class EntityManager extends AbstractGenerator {
             'parameters' => [
                 ParameterGenerator::fromArray([
                     'name' => 'entity',
-                    'type' => 'Entity',
+                    'type' => $this->data['_namespace'] . '\Entity\Entity',
                 ]),
                 ParameterGenerator::fromArray([
                     'type'         => 'bool',
@@ -425,7 +425,7 @@ class EntityManager extends AbstractGenerator {
                         'shortDescription' => 'Saves current row, and optionally dependent rows',
                         'longDescription'  => null,
                         'tags'             => [
-                            new ParamTag('entity', ['Entity'], 'Entity to save'),
+                            new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to save'),
                             new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),
                             new ParamTag('recursive', ['boolean'], 'Should the object graph be walked for all related elements'),
                             new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if save should be done inside a database transaction'),
@@ -444,8 +444,6 @@ class EntityManager extends AbstractGenerator {
     public function generate() {
         $class         = ClassGenerator::fromArray($this->getClassArrayRepresentation());
         $class
-                ->addUse('Zend\Db\Adapter\Adapter')
-                ->addUse($this->data['_namespace'] . '\Entity\\Entity')
                 ->addUse($this->data['_namespace'] . '\Entity\\' . $this->data['_className'], $this->data['_className'] . 'Entity')
         ;
         $this->defineFileInfo($class);
