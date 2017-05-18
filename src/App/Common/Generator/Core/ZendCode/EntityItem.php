@@ -472,7 +472,6 @@ class EntityItem extends AbstractGenerator {
                         ParameterGenerator::fromArray(
                                 [
                                     'name' => 'data',
-                                    'type' => $this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name'],
                                 ]
                         )
                     ],
