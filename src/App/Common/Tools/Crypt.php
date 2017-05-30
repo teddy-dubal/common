@@ -24,10 +24,14 @@ class Crypt extends Crypto {
      * @static
      * @param  string $token
      * @param  string $password
-     * @return array
+     * @return string
      */
     public static function decryptToken(string $token, string $password, int $duration = 0) {
-        $r    = self::decryptWithPassword($token, $password);
+        try {
+            $r = self::decryptWithPassword($token, $password);
+        } catch (Exception $e) {
+            return false;
+        }
         $decrypted = explode('|', $r);
         if ($duration) {
             $timestamp = $decrypted[0];
@@ -35,7 +39,7 @@ class Crypt extends Crypto {
             date_default_timezone_set("UTC");
             //Valid 30 mn => 30 * 60s => 1800s
             if ($timestamp > time() or $timestamp < (time() - ($duration))) {
-                throw new Exception("invalid timestamp");
+                return false;
             }
             date_default_timezone_set($timeZone);
         }

@@ -20,4 +20,12 @@ services:
         MYSQL_USER: "common"
         MYSQL_PASSWORD: "common"
         MYSQL_DATABASE: "common"
-        MYSQL_ALLOW_EMPTY_PASSWORD: "no"  
+        MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    mailhog:
+      image: mailhog/mailhog
+      expose:
+          - "1025"
+          - "8025"
+      environment:
+            VIRTUAL_HOST: "mail.dev.lan"
+            VIRTUAL_PORT: 8025
