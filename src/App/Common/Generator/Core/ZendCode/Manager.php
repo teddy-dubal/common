@@ -453,7 +453,7 @@ BODY
                 [
                     'name'       => 'beginTransaction',
                     'parameters' => [],
-                    'flags'      => MethodGenerator::FLAG_PROTECTED,
+                    'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => <<<'BODY'
 if ($this->adapter->getDriver()->getConnection()->inTransaction()) {
     $this->wasInTransaction = true;
@@ -474,7 +474,7 @@ BODY
                 [
                     'name'       => 'rollback',
                     'parameters' => [],
-                    'flags'      => MethodGenerator::FLAG_PROTECTED,
+                    'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => <<<'BODY'
 if ($this->wasInTransaction) {
     throw new \Exception('Inside transaction rollback call');
@@ -493,7 +493,7 @@ BODY
                 [
                     'name'       => 'commit',
                     'parameters' => [],
-                    'flags'      => MethodGenerator::FLAG_PROTECTED,
+                    'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => <<<'BODY'
 if (!$this->wasInTransaction) {
     $this->adapter->getDriver()->getConnection()->commit();
