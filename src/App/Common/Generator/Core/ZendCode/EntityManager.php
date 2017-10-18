@@ -316,16 +316,24 @@ class EntityManager extends AbstractGenerator {
                 $constructBody .= 'try {' . PHP_EOL;
                 $constructBody .= '    if ($exists === null) {' . PHP_EOL;
             }
-            $constructBody .= '        $this->insert($data);' . PHP_EOL;
-            $constructBody .= '        $primary_key = $this->getLastInsertValue();' . PHP_EOL;
-            $constructBody .= '        if ($primary_key) {' . PHP_EOL;
-            $constructBody .= '            $entity->set' . $this->data['_primaryKey']['capital'] . '($primary_key);' . PHP_EOL;
-            if ($this->data['_returnId']) {
-                $constructBody .= '            $success = $primary_key;' . PHP_EOL;
+            if ($this->data['_primaryKey']['phptype'] == 'string') {
+                $constructBody .= '        if ($this->insert($data)){' . PHP_EOL;
+                $constructBody .= '        $success = $primary_key;' . PHP_EOL;
+                $constructBody .= '        } else {' . PHP_EOL;
+                $constructBody .= '        $success = false;' . PHP_EOL;
+                $constructBody .= '        }' . PHP_EOL;
+            } else {
+                $constructBody .= '        $this->insert($data);' . PHP_EOL;
+                $constructBody .= '        $primary_key = $this->getLastInsertValue();' . PHP_EOL;
+                $constructBody .= '        if ($primary_key) {' . PHP_EOL;
+                $constructBody .= '            $entity->set' . $this->data['_primaryKey']['capital'] . '($primary_key);' . PHP_EOL;
+                if ($this->data['_returnId']) {
+                    $constructBody .= '            $success = $primary_key;' . PHP_EOL;
+                }
+                $constructBody .= '        } else {' . PHP_EOL;
+                $constructBody .= '            $success = false;' . PHP_EOL;
+                $constructBody .= '        }' . PHP_EOL;
             }
-            $constructBody .= '        } else {' . PHP_EOL;
-            $constructBody .= '            $success = false;' . PHP_EOL;
-            $constructBody .= '        }' . PHP_EOL;
         }
         $constructBody .= '    } else {' . PHP_EOL;
         $constructBody .= '        $this->update(' . PHP_EOL;
