@@ -9,46 +9,69 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Common\Generator\Core\MakeMysql;
+use Symfony\Component\Yaml\Yaml;
 
-class GenerateDbModelCommand extends BaseCommand {
+class GenerateDbModelCommand extends BaseCommand
+{
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
-                ->setName('app:model-generator')
-                ->setDescription('Generate Model Class')
-                ->setDefinition([
-                    new InputArgument('config-file', InputArgument::REQUIRED, 'Path to config file'),
-                    new InputArgument('database', InputArgument::REQUIRED, 'The Database'),
-                    new InputArgument('namespace', InputArgument::REQUIRED, 'The namespace.'),
-                    new InputArgument('location', InputArgument::REQUIRED, 'Where to store model files'),
-                    new InputOption('--tables-all', null, InputOption::VALUE_NONE, '', null),
-                    new InputOption('--tables-regex', null, InputOption::VALUE_REQUIRED, '', false),
-                    new InputOption('--tables-prefix', null, InputOption::VALUE_REQUIRED, '', []),
-                ])
-                ->setHelp(<<<EOT
+            ->setName('app:model-generator')
+            ->setDescription('Generate Model Class')
+            ->setDefinition([
+                new InputArgument('config-file', InputArgument::REQUIRED, 'Path to config file'),
+                new InputArgument('database', InputArgument::REQUIRED, 'The Database'),
+                new InputArgument('namespace', InputArgument::REQUIRED, 'The namespace.'),
+                new InputArgument('location', InputArgument::REQUIRED, 'Where to store model files'),
+                new InputOption('--tables-all', null, InputOption::VALUE_NONE, '', null),
+                new InputOption('--tables-regex', null, InputOption::VALUE_REQUIRED, '', false),
+                new InputOption('--tables-prefix', null, InputOption::VALUE_REQUIRED, '', []),
+            ])
+            ->setHelp(
+<<<EOT
                         <info>info</info>
                         <comment>foo</comment>
                         <question>foo</question>
                         <error>foo</error>
 EOT
-                )
-        ;
+);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
-        $database     = $input->getArgument('database');
-        $namespace    = $input->getArgument('namespace');
-        $location     = $input->getArgument('location');
-        $configfile   = $input->getArgument('config-file');
-        $tablesAll    = $input->getOption('tables-all');
-        $tablesRegex  = $input->getOption('tables-regex');
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $database = $input->getArgument('database');
+        $namespace = $input->getArgument('namespace');
+        $location = $input->getArgument('location');
+        $configfile = $input->getArgument('config-file');
+        $tablesAll = $input->getOption('tables-all');
+        $tablesRegex = $input->getOption('tables-regex');
         $tablesPrefix = $input->getOption('tables-prefix');
 
         if (!file_exists($configfile)) {
             $output->writeln(sprintf('<error>Incorrect config file path "%s"</error>', $configfile));
             return false;
         }
-        $config  = require_once $configfile;
+        if (in_array(pathinfo(
+            $configfile,
+            PATHINFO_EXTENSION
+        ), ['yaml', 'yml'])) {
+            $configValues = Yaml::parse(file_get_contents($configfile));
+            $conf = $configValues['parameters'];
+            $config = [
+                'docs.author' => '',
+                'docs.license' => 'http://framework.zend.com/license/new-bsd     New BSD License',
+                'docs.copyright' => '',
+                'db.type' => 'Mysql',
+                'db.socket' => '',
+                'db.host' => $conf['database_host'],
+                'db.port' => $conf['database_port'],
+                'db.user' => $conf['database_user'],
+                'db.password' => $conf['database_password'],
+            ];
+        } else {
+            $config = require_once $configfile;
+        }
         $db_type = $config['db.type'];
         switch ($db_type) {
             case 'Mysql':
@@ -101,50 +124,59 @@ EOT
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
         if (!$input->getArgument('config-file')) {
             $configfile = $this->getHelper('dialog')->askAndValidate(
-                    $output, 'Please set the config file path : ', function($configfile) {
-                if (empty($configfile)) {
-                    throw new Exception('Config path name can not be empty');
+                $output,
+                'Please set the config file path : ',
+                function ($configfile) {
+                    if (empty($configfile)) {
+                        throw new Exception('Config path name can not be empty');
+                    }
+                    return $configfile;
                 }
-                return $configfile;
-            }
             );
             $input->setArgument('config-file', $configfile);
         }
         if (!$input->getArgument('database')) {
             $database = $this->getHelper('dialog')->askAndValidate(
-                    $output, 'Please choose a module database : ', function($database) {
-                if (empty($database)) {
-                    throw new Exception('Database name can not be empty');
+                $output,
+                'Please choose a module database : ',
+                function ($database) {
+                    if (empty($database)) {
+                        throw new Exception('Database name can not be empty');
+                    }
+                    return $database;
                 }
-                return $database;
-            }
             );
             $input->setArgument('database', $database);
         }
         if (!$input->getArgument('namespace')) {
             $namespace = $this->getHelper('dialog')->askAndValidate(
-                    $output, 'Please choose a namespace : ', function($namespace) {
-                if (empty($namespace)) {
-                    throw new Exception('Namespace can not be empty');
-                }
+                $output,
+                'Please choose a namespace : ',
+                function ($namespace) {
+                    if (empty($namespace)) {
+                        throw new Exception('Namespace can not be empty');
+                    }
 
-                return $namespace;
-            }
+                    return $namespace;
+                }
             );
             $input->setArgument('namespace', $namespace);
         }
         if (!$input->getArgument('location')) {
             $location = $this->getHelper('dialog')->askAndValidate(
-                    $output, 'Please choose an location : ', function($location) {
-                if (empty($location)) {
-                    throw new Exception('Location can not be empty');
+                $output,
+                'Please choose an location : ',
+                function ($location) {
+                    if (empty($location)) {
+                        throw new Exception('Location can not be empty');
+                    }
+                    return $location;
                 }
-                return $location;
-            }
             );
             $input->setArgument('location', $location);
         }
