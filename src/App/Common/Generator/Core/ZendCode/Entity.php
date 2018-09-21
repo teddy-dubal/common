@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Common\Generator\Core\ZendCode;
+namespace App\Generator\Core\ZendCode;
 
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
@@ -20,189 +20,191 @@ use Zend\Code\Generator\ParameterGenerator;
  *
  * @author teddy
  */
-class Entity extends AbstractGenerator {
+class Entity extends AbstractGenerator
+{
 
-    public function getClassArrayRepresentation() {
+    public function getClassArrayRepresentation()
+    {
         $data = $this->getData();
-        return [
+        return array(
             'name'          => 'Entity',
             'namespacename' => $data['_namespace'] . '\Entity',
             'flags'         => ClassGenerator::FLAG_ABSTRACT,
             'docblock'      => DocBlockGenerator::fromArray(
-                    [
+                    array(
                         'shortDescription' => 'Generic Entity Class',
                         'longDescription'  => null,
-                        'tags'             => [
-                            [
+                        'tags'             => array(
+                            array(
                                 'name'        => 'package',
                                 'description' => $data['_namespace'],
-                            ],
-                            [
+                            ),
+                            array(
                                 'name'        => 'author',
                                 'description' => $data['_author'],
-                            ],
-                            [
+                            ),
+                            array(
                                 'name'        => 'copyright',
                                 'description' => $data['_copyright'],
-                            ],
-                            [
+                            ),
+                            array(
                                 'name'        => 'license',
                                 'description' => $data['_license'],
-                            ],
-                        ]
-                    ]
+                            ),
+                        )
+                    )
             ),
-            'methods'       => [
-                [
+            'methods'       => array(
+                array(
                     'name'       => 'setColumnsList',
-                    'parameters' => [
+                    'parameters' => array(
                         ParameterGenerator::fromArray(
-                                [
+                                array(
                                     'name' => 'data',
                                     'type' => 'array',
-                                ]
+                                )
                         )
-                    ],
+                    ),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => '$this->_columnsList = $data;' . "\n" . 'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Set the list of columns associated with this model',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('data', ['array'], 'array of field names'),
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ParamTag('data', array('array'), 'array of field names'),
+                                    new ReturnTag(array(
                                         'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'getColumnsList',
-                    'parameters' => [],
+                    'parameters' => array(),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->_columnsList;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Returns columns list array',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ReturnTag(array(
                                         'datatype' => 'array',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'setParentList',
-                    'parameters' => [
+                    'parameters' => array(
                         ParameterGenerator::fromArray(
-                                [
+                                array(
                                     'name' => 'data',
                                     'type' => 'array',
-                                ]
+                                )
                         )
-                    ],
+                    ),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => '$this->_parentList = $data;' . "\n" . 'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Set the list of relationships associated with this model',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('data', ['array'], 'Array of relationship'),
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ParamTag('data', array('array'), 'Array of relationship'),
+                                    new ReturnTag(array(
                                         'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'getParentList',
-                    'parameters' => [],
+                    'parameters' => array(),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->_parentList;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Returns relationship list array',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ReturnTag(array(
                                         'datatype' => 'array',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'setDependentList',
-                    'parameters' => [
+                    'parameters' => array(
                         ParameterGenerator::fromArray(
-                                [
+                                array(
                                     'name' => 'data',
                                     'type' => 'array',
-                                ]
+                                )
                         )
-                    ],
+                    ),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => '$this->_dependentList = $data;' . "\n" . 'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Set the list of relationships associated with this model',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('data', ['array'], 'array of relationships'),
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ParamTag('data', array('array'), 'array of relationships'),
+                                    new ReturnTag(array(
                                         'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'getDependentList',
-                    'parameters' => [],
+                    'parameters' => array(),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->_dependentList;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Returns relationship list array',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ReturnTag(array(
                                         'datatype' => 'array',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'columnNameToVar',
-                    'parameters' => ['column'],
+                    'parameters' => array('column'),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'if (! isset($this->_columnsList[$column])) {' . "\n" .
                     '    throw new \Exception("column \'$column\' not found!");' . "\n" .
                     '}' . "\n" .
                     'return $this->_columnsList[$column];',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Converts database column name to php setter/getter function name',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('column', ['string'], 'Column name'),
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ParamTag('column', array('string'), 'Column name'),
+                                    new ReturnTag(array(
                                         'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'varNameToColumn',
-                    'parameters' => ['thevar'],
+                    'parameters' => array('thevar'),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
                     'foreach ($this->_columnsList as $column => $var) {' . "\n" .
@@ -212,101 +214,99 @@ class Entity extends AbstractGenerator {
                     '}' . "\n" .
                     'return null;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Converts database column name to PHP setter/getter function name',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('thevar', ['string'], 'Column name'),
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ParamTag('thevar', array('string'), 'Column name'),
+                                    new ReturnTag(array(
                                         'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'setOptions',
-                    'parameters' => [
+                    'parameters' => array(
                         ParameterGenerator::fromArray(
-                                [
+                                array(
                                     'name' => 'options',
                                     'type' => 'array',
-                                ]
+                                )
                         )
-                    ],
+                    ),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
                     '$this->exchangeArray($options);' . "\n" .
                     'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Array of options/values to be set for this model.',
                                 'longDescription'  => 'Options without a matching method are ignored.',
-                                'tags'             => [
-                                    new ParamTag('options', ['array'], 'array of Options'),
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ParamTag('options', array('array'), 'array of Options'),
+                                    new ReturnTag(array(
                                         'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ],
-                MethodGenerator::fromArray([
+                ),
+                array(
                     'name'       => 'exchangeArray',
-//                    'returntype' => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
-                    'parameters' => [
+                    'parameters' => array(
                         ParameterGenerator::fromArray(
-                                [
+                                array(
                                     'name' => 'options',
                                     'type' => 'array',
-                                ]
+                                )
                         )
-                    ],
+                    ),
                     'flags'      => MethodGenerator::FLAG_ABSTRACT,
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Array of options/values to be set for this model.',
                                 'longDescription'  => 'Options without a matching method are ignored.',
-                                'tags'             => [
-                                    new ParamTag('options', ['array'], 'array of Options'),
-                                    new ReturnTag([
+                                'tags'             => array(
+                                    new ParamTag('options', array('array'), 'array of Options'),
+                                    new ReturnTag(array(
                                         'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
+                                            )),
+                                )
+                            )
                     )
-                ]),
-                [
+                ),
+                array(
                     'name'       => 'toArray',
-                    'parameters' => [],
+                    'parameters' => array(),
                     'flags'      => MethodGenerator::FLAG_ABSTRACT,
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Returns an array, keys are the field names.',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag(['datatype' => 'array']),
-                                ]
-                            ]
+                        array(
+                            'shortDescription' => 'Returns an array, keys are the field names.',
+                            'longDescription'  => null,
+                            'tags'             => array(
+                                new ReturnTag(array('datatype' => 'array')),
+                            )
+                        )
                     )
-                ],
-                [
+                ),
+                array(
                     'name'       => 'getPrimaryKey',
-                    'parameters' => [],
+                    'parameters' => array(),
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return  $this->primary_key;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
+                            array(
                                 'shortDescription' => 'Returns primary key.',
                                 'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag(['datatype' => 'array|string']),
-                                ]
-                            ]
+                                'tags'             => array(
+                                    new ReturnTag(array('datatype' => 'array|string')),
+                                )
+                            )
                     )
-                ]
-            ]
-        ];
+                )
+            )
+        );
     }
-
 }
