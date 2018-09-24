@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Generator\Core\ZendCode;
+namespace App\Common\Generator\Core\ZendCode;
 
 use \Zend\Code\Generator\ClassGenerator;
 use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
@@ -29,112 +29,112 @@ class EntityManager extends AbstractGenerator {
         $methods = array_merge($methods, $this->getDeleteEntityMethod());
 
 
-        return array(
-            'name' => $this->data['_className'],
+        return [
+            'name'          => $this->data['_className'],
             'namespacename' => $this->data['_namespace'] . '\Table',
-            'extendedclass' => 'Manager',
-            'docblock' => DocBlockGenerator::fromArray(
-                    array(
+            'extendedclass' => $this->data['_namespace'] . '\Table\Manager',
+            'docblock'      => DocBlockGenerator::fromArray(
+                    [
                         'shortDescription' => 'Application Entity Manager',
-                        'longDescription' => null,
-                        'tags' => array(
-                            array(
-                                'name' => 'package',
+                        'longDescription'  => null,
+                        'tags'             => [
+                            [
+                                'name'        => 'package',
                                 'description' => $this->data['_namespace'],
-                            ),
-                            array(
-                                'name' => 'author',
+                            ],
+                            [
+                                'name'        => 'author',
                                 'description' => $this->data['_author'],
-                            ),
-                            array(
-                                'name' => 'copyright',
+                            ],
+                            [
+                                'name'        => 'copyright',
                                 'description' => $this->data['_copyright'],
-                            ),
-                            array(
-                                'name' => 'license',
+                            ],
+                            [
+                                'name'        => 'license',
                                 'description' => $this->data['_license'],
-                            ),
-                        )
-                    )
+                            ],
+                        ]
+                    ]
             ),
-            'properties' => $this->getProperties(),
-            'methods' => $methods
-        );
+            'properties'    => $this->getProperties(),
+            'methods'       => $methods
+        ];
     }
 
     private function getProperties() {
-        $classProperties = array();
-        $classProperties[] = PropertyGenerator::fromArray(array(
-                    'name' => 'table',
+        $classProperties   = [];
+        $classProperties[] = PropertyGenerator::fromArray([
+                    'name'         => 'table',
                     'defaultvalue' => $this->data['_tbname'],
-                    'flags' => PropertyGenerator::FLAG_PROTECTED,
-                    'docblock' => DocBlockGenerator::fromArray(array(
+                    'flags'        => PropertyGenerator::FLAG_PROTECTED,
+                    'docblock'     => DocBlockGenerator::fromArray([
                         'shortDescription' => 'Name of database table ',
-                        'longDescription' => null,
-                        'tags' => array(
+                        'longDescription'  => null,
+                        'tags'             => [
                             new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
-                        )
-                    ))
-        ));
-        $classProperties[] = PropertyGenerator::fromArray(array(
-                    'name' => 'id',
+                        ]
+                    ])
+        ]);
+        $classProperties[] = PropertyGenerator::fromArray([
+                    'name'         => 'id',
                     'defaultvalue' => 'array' !== $this->data['_primaryKey']['phptype'] ? $this->data['_primaryKey']['field'] : eval('return ' . $this->data['_primaryKey']['field'] . ';'),
-                    'flags' => PropertyGenerator::FLAG_PROTECTED,
-                    'docblock' => DocBlockGenerator::fromArray(array(
+                    'flags'        => PropertyGenerator::FLAG_PROTECTED,
+                    'docblock'     => DocBlockGenerator::fromArray([
                         'shortDescription' => 'Primary key name',
-                        'longDescription' => null,
-                        'tags' => array(
+                        'longDescription'  => null,
+                        'tags'             => [
                             new GenericTag('var', 'string|array' . ' ' . 'Primary key name'),
-                        )
-                    ))
-        ));
-        $classProperties[] = PropertyGenerator::fromArray(array(
-                    'name' => 'sequence',
+                        ]
+                    ])
+        ]);
+        $classProperties[] = PropertyGenerator::fromArray([
+                    'name'         => 'sequence',
                     'defaultvalue' => 'array' !== $this->data['_primaryKey']['phptype'],
-                    'flags' => PropertyGenerator::FLAG_PROTECTED,
-                    'docblock' => DocBlockGenerator::fromArray(array(
+                    'flags'        => PropertyGenerator::FLAG_PROTECTED,
+                    'docblock'     => DocBlockGenerator::fromArray([
                         'shortDescription' => 'Is primary Key auto increment',
-                        'longDescription' => null,
-                        'tags' => array(
+                        'longDescription'  => null,
+                        'tags'             => [
                             new GenericTag('var', 'boolean' . ' ' . 'Is primary Key auto increment'),
-                        )
-                    ))
-        ));
+                        ]
+                    ])
+        ]);
         return $classProperties;
     }
 
     private function getConstructor() {
         $constructBody = 'parent::__construct($adapter, $entity ? $entity : new ' . $this->data['_className'] . 'Entity());' . PHP_EOL;
-        $methods = array(
-            array(
-                'name' => '__construct',
-                'parameters' => array(
-                    ParameterGenerator::fromArray(array(
+        $methods       = [
+            [
+                'name'       => '__construct',
+                'parameters' => [
+                    ParameterGenerator::fromArray([
                         'name' => 'adapter',
-                        'type' => 'Adapter',
-                    )),
+                        'type' => 'Zend\Db\Adapter\Adapter',
+                    ]),
                     ParameterGenerator::fromArray(
-                            array(
-                                'name' => 'entity',
-                                'type' => $this->data['_className'] . 'Entity',
+                            [
+                                'name'         => 'entity',
+                                'type'         => $this->data['_className'] . 'Entity',
                                 'defaultvalue' => null,
-                            )
+                            ]
                     ),
-                ),
-                'flags' => MethodGenerator::FLAG_PUBLIC,
-                'body' => $constructBody,
-                'docblock' => DocBlockGenerator::fromArray(
-                        array(
+                ],
+                'flags'      => MethodGenerator::FLAG_PUBLIC,
+                'body'       => $constructBody,
+                'docblock'   => DocBlockGenerator::fromArray(
+                        [
                             'shortDescription' => 'Constructor',
-                            'longDescription' => 'Pass a DB Adapter to handle connection',
-                            'tags' => array(
-                                new ParamTag('adapter', array('Adapter'), 'Zend DB Adapter'),
-                                new ParamTag('entity', array($this->data['_className'] . 'Entity'), 'Reference entity'),
-                            )
-                        )
+                            'longDescription'  => 'Pass a DB Adapter to handle connection',
+                            'tags'             => [
+                                new ParamTag('adapter', ['Zend\Db\Adapter\Adapter'], 'Zend DB Adapter'),
+                                new ParamTag('entity', [$this->data['_className'] . 'Entity'], 'Reference entity'),
+                            ]
+                        ]
                 )
-            ),
-        );
+            ],
+        ];
         return $methods;
     }
 
@@ -142,7 +142,7 @@ class EntityManager extends AbstractGenerator {
         $constructBody = '' . PHP_EOL;
         $constructBody .= '$rowset = $this->select(' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] !== 'array') {
-            $constructBody .='      array(\'' . $this->data['_primaryKey']['field'] . '\' => $id)' . PHP_EOL;
+            $constructBody .= '      array(\'' . $this->data['_primaryKey']['field'] . '\' => $id)' . PHP_EOL;
         } else {
             $constructBody .= '$id' . PHP_EOL;
         }
@@ -152,27 +152,29 @@ class EntityManager extends AbstractGenerator {
         $constructBody .= '     return null;' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
         $constructBody .= 'return $row->getArrayCopy();' . PHP_EOL;
-        $methods[] = array(
-            'name' => 'find',
-            'parameters' => array(
-                ParameterGenerator::fromArray(array(
+        $methods[]     = [
+            'name'       => 'find',
+            'parameters' => [
+                ParameterGenerator::fromArray([
                     'name' => 'id',
-                    'type' => $this->data['_primaryKey']['phptype'],
-                ))
-            ),
-            'flags' => MethodGenerator::FLAG_PUBLIC,
-            'body' => $constructBody,
-            'docblock' => DocBlockGenerator::fromArray(
-                    array(
+                    //'type' => $this->data['_primaryKey']['phptype'],
+                ])
+            ],
+            'flags'      => MethodGenerator::FLAG_PUBLIC,
+            'body'       => $constructBody,
+            'docblock'   => DocBlockGenerator::fromArray(
+                    [
                         'shortDescription' => 'Finds row by primary key',
-                        'longDescription' => null,
-                        'tags' => array(
-                            new ParamTag('id', array($this->data['_primaryKey']['phptype']), 'Primary key value'),
-                            new ReturnTag(array('array','null'), 'Found entity'),
-                        )
-                    )
+                        'longDescription'  => null,
+                        'tags'             => [
+                            new ParamTag('id', [$this->data['_primaryKey']['phptype']], 'Primary key value'),
+                            new ReturnTag([$this->data['_className'] . 'Entity',
+                                'null'], 'Found entity'),
+                        ]
+                    ]
             )
-        );
+        ];
+
         return $methods;
     }
 
@@ -229,32 +231,33 @@ class EntityManager extends AbstractGenerator {
         $constructBody .= '}' . PHP_EOL;
         $constructBody .= 'return $result;' . PHP_EOL;
         $constructBody .= '' . PHP_EOL;
-        $methods[] = array(
-            'name' => 'deleteEntity',
-            'parameters' => array(
-                ParameterGenerator::fromArray(array(
+        $methods[]     = [
+            'name'       => 'deleteEntity',
+            'parameters' => [
+                ParameterGenerator::fromArray([
                     'name' => 'entity',
-                    'type' => $this->data['_className'] . 'Entity',
-                )),
-                ParameterGenerator::fromArray(array(
-                    'name' => 'useTransaction',
+                    'type' => $this->data['_namespace'] . '\Entity\Entity',
+                ]),
+                ParameterGenerator::fromArray([
+                    //'type'         => 'bool',
+                    'name'         => 'useTransaction',
                     'defaultValue' => true,
-                )),
-            ),
-            'flags' => MethodGenerator::FLAG_PUBLIC,
-            'body' => $constructBody,
-            'docblock' => DocBlockGenerator::fromArray(
-                    array(
+                ]),
+            ],
+            'flags'      => MethodGenerator::FLAG_PUBLIC,
+            'body'       => $constructBody,
+            'docblock'   => DocBlockGenerator::fromArray(
+                    [
                         'shortDescription' => 'Deletes the current entity',
-                        'longDescription' => null,
-                        'tags' => array(
-                            new ParamTag('entity', array($this->data['_className'] . 'Entity'), 'Entity to delete'),
-                            new ParamTag('useTransaction', array('boolean'), 'Flag to indicate if delete should be done inside a database transaction'),
-                            new ReturnTag(array('int', 'array', 'false'), 'Inserted id'),
-                        )
-                    )
+                        'longDescription'  => null,
+                        'tags'             => [
+                            new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to delete'),
+                            new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if delete should be done inside a database transaction'),
+                            new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
+                        ]
+                    ]
             )
-        );
+        ];
         return $methods;
     }
 
@@ -313,16 +316,24 @@ class EntityManager extends AbstractGenerator {
                 $constructBody .= 'try {' . PHP_EOL;
                 $constructBody .= '    if ($exists === null) {' . PHP_EOL;
             }
-            $constructBody .= '        $this->insert($data);' . PHP_EOL;
-            $constructBody .= '        $primary_key = $this->getLastInsertValue();' . PHP_EOL;
-            $constructBody .= '        if ($primary_key) {' . PHP_EOL;
-            $constructBody .= '            $entity->set' . $this->data['_primaryKey']['capital'] . '($primary_key);' . PHP_EOL;
-            if ($this->data['_returnId']) {
-                $constructBody .= '            $success = $primary_key;' . PHP_EOL;
+            if ($this->data['_primaryKey']['phptype'] == 'string') {
+                $constructBody .= '        if ($this->insert($data)){' . PHP_EOL;
+                $constructBody .= '        $success = $primary_key;' . PHP_EOL;
+                $constructBody .= '        } else {' . PHP_EOL;
+                $constructBody .= '        $success = false;' . PHP_EOL;
+                $constructBody .= '        }' . PHP_EOL;
+            } else {
+                $constructBody .= '        $this->insert($data);' . PHP_EOL;
+                $constructBody .= '        $primary_key = $this->getLastInsertValue();' . PHP_EOL;
+                $constructBody .= '        if ($primary_key) {' . PHP_EOL;
+                $constructBody .= '            $entity->set' . $this->data['_primaryKey']['capital'] . '($primary_key);' . PHP_EOL;
+                if ($this->data['_returnId']) {
+                    $constructBody .= '            $success = $primary_key;' . PHP_EOL;
+                }
+                $constructBody .= '        } else {' . PHP_EOL;
+                $constructBody .= '            $success = false;' . PHP_EOL;
+                $constructBody .= '        }' . PHP_EOL;
             }
-            $constructBody .= '        } else {' . PHP_EOL;
-            $constructBody .= '            $success = false;' . PHP_EOL;
-            $constructBody .= '        }' . PHP_EOL;
         }
         $constructBody .= '    } else {' . PHP_EOL;
         $constructBody .= '        $this->update(' . PHP_EOL;
@@ -333,12 +344,12 @@ class EntityManager extends AbstractGenerator {
                 $constructBody .= '            \'' . $key['field'] . ' = ?\' => $primary_key[\'' . $key['field'] . '\'],' . PHP_EOL;
             }
         } else {
-            $constructBody .='             \'' . $this->data['_primaryKey']['field'] . ' = ?\' => $primary_key' . PHP_EOL;
+            $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . ' = ?\' => $primary_key' . PHP_EOL;
         }
         $constructBody .= '            )' . PHP_EOL;
         $constructBody .= '        );' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] != 'array') {
-            $constructBody .='     $success = $primary_key;' . PHP_EOL;
+            $constructBody .= '     $success = $primary_key;' . PHP_EOL;
         }
         $constructBody .= '    }' . PHP_EOL;
         if (count($this->data['dependentTables']) > 0) {
@@ -361,7 +372,7 @@ class EntityManager extends AbstractGenerator {
                     } else {
                         if (is_array($key['column_name'])) {
                             foreach (explode(',', $key['column_name'][0]) as $_column) {
-                                $column = trim(str_replace('`', '', $_column));
+                                $column        = trim(str_replace('`', '', $_column));
                                 $constructBody .= '                ->set' . $this->_getCapital($column) . '($primary_key[\'' . $column . '\'])' . PHP_EOL;
                             }
                         } else {
@@ -392,42 +403,45 @@ class EntityManager extends AbstractGenerator {
         $constructBody .= '    $success = false;' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
         $constructBody .= 'return $success;' . PHP_EOL;
-        $methods[] = array(
-            'name' => 'saveEntity',
-            'parameters' => array(
-                ParameterGenerator::fromArray(array(
+        $methods[]     = [
+            'name'       => 'saveEntity',
+            'parameters' => [
+                ParameterGenerator::fromArray([
                     'name' => 'entity',
-                    'type' => $this->data['_className'].'Entity',
-                )),
-                ParameterGenerator::fromArray(array(
-                    'name' => 'ignoreEmptyValues',
+                    //'type' => $this->data['_namespace'] . '\Entity\Entity',
+                ]),
+                ParameterGenerator::fromArray([
+                    //'type'         => 'bool',
+                    'name'         => 'ignoreEmptyValues',
                     'defaultValue' => true,
-                )),
-                ParameterGenerator::fromArray(array(
-                    'name' => 'recursive',
+                ]),
+                ParameterGenerator::fromArray([
+                    //'type'         => 'bool',
+                    'name'         => 'recursive',
                     'defaultValue' => false,
-                )),
-                ParameterGenerator::fromArray(array(
-                    'name' => 'useTransaction',
+                ]),
+                ParameterGenerator::fromArray([
+                    //'type'         => 'bool',
+                    'name'         => 'useTransaction',
                     'defaultValue' => true,
-                )),
-            ),
-            'flags' => MethodGenerator::FLAG_PUBLIC,
-            'body' => $constructBody,
-            'docblock' => DocBlockGenerator::fromArray(
-                    array(
+                ]),
+            ],
+            'flags'      => MethodGenerator::FLAG_PUBLIC,
+            'body'       => $constructBody,
+            'docblock'   => DocBlockGenerator::fromArray(
+                    [
                         'shortDescription' => 'Saves current row, and optionally dependent rows',
-                        'longDescription' => null,
-                        'tags' => array(
-                            new ParamTag('entity', array($this->data['_className'].'Entity'), 'Entity to save'),
-                            new ParamTag('ignoreEmptyValues', array('boolean'), 'Should empty values saved'),
-                            new ParamTag('recursive', array('boolean'), 'Should the object graph be walked for all related elements'),
-                            new ParamTag('useTransaction', array('boolean'), 'Flag to indicate if save should be done inside a database transaction'),
-                            new ReturnTag(array('int', 'array', 'false'), 'Inserted ID'),
-                        )
-                    )
+                        'longDescription'  => null,
+                        'tags'             => [
+                            new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to save'),
+                            new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),
+                            new ParamTag('recursive', ['boolean'], 'Should the object graph be walked for all related elements'),
+                            new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if save should be done inside a database transaction'),
+                            new ReturnTag(['int', 'array', 'false'], 'Inserted ID'),
+                        ]
+                    ]
             )
-        );
+        ];
         return $methods;
     }
 
@@ -436,10 +450,8 @@ class EntityManager extends AbstractGenerator {
      * @return type
      */
     public function generate() {
-        $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
+        $class         = ClassGenerator::fromArray($this->getClassArrayRepresentation());
         $class
-                ->addUse('Zend\Db\Adapter\Adapter')
-                ->addUse($this->data['_namespace'] . '\Entity\\Entity')
                 ->addUse($this->data['_namespace'] . '\Entity\\' . $this->data['_className'], $this->data['_className'] . 'Entity')
         ;
         $this->defineFileInfo($class);

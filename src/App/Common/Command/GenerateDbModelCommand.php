@@ -21,6 +21,7 @@ class GenerateDbModelCommand extends BaseCommand
             ->setDescription('Generate Model Class')
             ->setDefinition([
                 new InputArgument('config-file', InputArgument::REQUIRED, 'Path to config file'),
+                new InputArgument('database', InputArgument::REQUIRED, 'The Database'),
                 new InputArgument('namespace', InputArgument::REQUIRED, 'The namespace.'),
                 new InputArgument('location', InputArgument::REQUIRED, 'Where to store model files'),
                 new InputOption('--tables-all', null, InputOption::VALUE_NONE, '', null),
@@ -39,7 +40,7 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $database = null;
+        $database = $input->getArgument('database');
         $namespace = $input->getArgument('namespace');
         $location = $input->getArgument('location');
         $configfile = $input->getArgument('config-file');
@@ -68,10 +69,8 @@ EOT
                 'db.user' => $conf['database_user'],
                 'db.password' => $conf['database_password'],
             ];
-            $database = $conf['database_name'];
         } else {
             $config = require_once $configfile;
-            $database = $conf['db.name'];
         }
         $db_type = $config['db.type'];
         switch ($db_type) {
@@ -140,6 +139,19 @@ EOT
                 }
             );
             $input->setArgument('config-file', $configfile);
+        }
+        if (!$input->getArgument('database')) {
+            $database = $this->getHelper('dialog')->askAndValidate(
+                $output,
+                'Please choose a module database : ',
+                function ($database) {
+                    if (empty($database)) {
+                        throw new Exception('Database name can not be empty');
+                    }
+                    return $database;
+                }
+            );
+            $input->setArgument('database', $database);
         }
         if (!$input->getArgument('namespace')) {
             $namespace = $this->getHelper('dialog')->askAndValidate(
