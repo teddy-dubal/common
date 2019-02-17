@@ -266,7 +266,7 @@ class EntityItem extends AbstractGenerator
             } elseif ($column['phptype'] == 'boolean') {
                 $constructBody .= 'return $this->' . $column['capital'] . ' ? true : false;' . PHP_EOL;
             } else {
-                $constructBody .= 'return (' . $returnType . ')$this->' . $column['capital'] . ' ;' . PHP_EOL;
+                $constructBody .= 'return !empty($this->' . $column['capital'] . ') ? (' . $returnType . ')$this->' . $column['capital'] . ' : $this->' . $column['capital'] . ';' . PHP_EOL;
             }
 
             $methods[] = MethodGenerator::fromArray([
