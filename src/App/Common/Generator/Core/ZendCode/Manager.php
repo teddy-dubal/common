@@ -119,7 +119,7 @@ class Manager extends AbstractGenerator {
                     'parameters' => [
                         ParameterGenerator::fromArray(
                                 [
-                                    //'type'         => 'bool',
+                                    'type'         => 'bool',
                                     'name'         => 'debug',
                                     'defaultvalue' => true,
                                 ]
@@ -233,17 +233,17 @@ class Manager extends AbstractGenerator {
                             'defaultvalue' => null,
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'int',
+                            'type'         => 'int',
                             'name'         => 'limit',
                             'defaultvalue' => null,
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'int',
+                            'type'         => 'int',
                             'name'         => 'offset',
                             'defaultvalue' => null,
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'bool',
+                            'type'         => 'bool',
                             'name'         => 'toEntity',
                             'defaultvalue' => false,
                         ]),
@@ -291,17 +291,17 @@ class Manager extends AbstractGenerator {
                             'type' => 'array',
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'array',
+                            'type'         => 'array',
                             'name'         => 'join',
                             'defaultvalue' => [],
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'array',
+                            'type'         => 'array',
                             'name'         => 'where',
                             'defaultvalue' => [],
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'array',
+                            'type'         => 'array',
                             'name'         => 'orderBy',
                             'defaultvalue' => [],
                         ]),
@@ -310,17 +310,17 @@ class Manager extends AbstractGenerator {
                             'defaultvalue' => [],
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'array',
+                            'type'         => 'array',
                             'name'         => 'having',
                             'defaultvalue' => [],
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'int',
+                            'type'         => 'int',
                             'name'         => 'limit',
                             'defaultvalue' => null,
                         ]),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'int',
+                            'type'         => 'int',
                             'name'         => 'offset',
                             'defaultvalue' => null,
                         ]),
@@ -429,7 +429,7 @@ BODY
                                 ]
                         ),
                         ParameterGenerator::fromArray([
-                            //'type'         => 'bool',
+                            'type'         => 'bool',
                             'name'         => 'useTransaction',
                             'defaultValue' => true,
                         ])
