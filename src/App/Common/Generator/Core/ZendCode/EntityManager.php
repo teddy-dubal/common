@@ -157,7 +157,7 @@ class EntityManager extends AbstractGenerator {
             'parameters' => [
                 ParameterGenerator::fromArray([
                     'name' => 'id',
-                    //'type' => $this->data['_primaryKey']['phptype'],
+                    'type' => $this->data['_primaryKey']['phptype'],
                 ])
             ],
             'flags'      => MethodGenerator::FLAG_PUBLIC,
@@ -239,7 +239,7 @@ class EntityManager extends AbstractGenerator {
                     'type' => $this->data['_namespace'] . '\Entity\Entity',
                 ]),
                 ParameterGenerator::fromArray([
-                    //'type'         => 'bool',
+                    'type'         => 'bool',
                     'name'         => 'useTransaction',
                     'defaultValue' => true,
                 ]),
@@ -408,20 +408,20 @@ class EntityManager extends AbstractGenerator {
             'parameters' => [
                 ParameterGenerator::fromArray([
                     'name' => 'entity',
-                    //'type' => $this->data['_namespace'] . '\Entity\Entity',
+                    'type' => $this->data['_namespace'] . '\Entity\Entity',
                 ]),
                 ParameterGenerator::fromArray([
-                    //'type'         => 'bool',
+                    'type'         => 'bool',
                     'name'         => 'ignoreEmptyValues',
                     'defaultValue' => true,
                 ]),
                 ParameterGenerator::fromArray([
-                    //'type'         => 'bool',
+                    'type'         => 'bool',
                     'name'         => 'recursive',
                     'defaultValue' => false,
                 ]),
                 ParameterGenerator::fromArray([
-                    //'type'         => 'bool',
+                    'type'         => 'bool',
                     'name'         => 'useTransaction',
                     'defaultValue' => true,
                 ]),

@@ -249,7 +249,7 @@ class EntityItem extends AbstractGenerator
                 $parameters = [
                     ParameterGenerator::fromArray(
                         [
-                            //'type'         => 'bool',
+                            'type' => 'bool',
                             'name' => 'returnDateTime',
                             'defaultvalue' => false,
                         ]
@@ -513,7 +513,7 @@ class EntityItem extends AbstractGenerator
         $constructBody .= 'return $this;';
         $methods[] = MethodGenerator::fromArray([
             'name' => 'exchangeArray',
-            //'returntype' => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
+            'returntype' => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
             'parameters' => [
                 ParameterGenerator::fromArray(
                     [
@@ -545,7 +545,7 @@ class EntityItem extends AbstractGenerator
         $methods[] = MethodGenerator::fromArray([
             'name' => 'toArray',
             'parameters' => [],
-            //'returntype' => 'array',
+            'returntype' => 'array',
             'flags' => MethodGenerator::FLAG_PUBLIC,
             'body' => $constructBody,
             'docblock' => DocBlockGenerator::fromArray(
