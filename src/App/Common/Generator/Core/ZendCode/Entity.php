@@ -9,74 +9,109 @@
 namespace App\Common\Generator\Core\ZendCode;
 
 use Zend\Code\Generator\ClassGenerator;
+use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\DocBlockGenerator;
+use Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\ParameterGenerator;
+use Zend\Code\Generator\DocBlock\Tag\GenericTag;
+use App\Common\Generator\Core\ZendCode\AbstractGenerator;
 
 /**
  * Description of Entity
  *
  * @author teddy
  */
-class Entity extends AbstractGenerator {
+class Entity extends AbstractGenerator
+{
 
-    public function getClassArrayRepresentation() {
+    private function getProperties()
+    {
+        $classProperties = [];
+        $properties      = [
+            ['name' => 'primary_key'],
+            ['name' => '_columnsList'],
+            ['name' => '_parentList'],
+            ['name' => '_dependentList'],
+        ];
+        foreach ($properties as $column) {
+            $classProperties[] = PropertyGenerator::fromArray(
+                [
+                    'name'     => $column['name'],
+                    'flags'    => PropertyGenerator::FLAG_PROTECTED,
+                    'docblock' => DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription' => $column['name'],
+                            'tags'             => [
+                                new GenericTag('var', $column['name']),
+                            ],
+                        ]
+                    ),
+                ]
+            );
+
+        }
+        return $classProperties;
+    }
+
+    public function getClassArrayRepresentation()
+    {
         $data = $this->getData();
         return [
             'name'          => 'Entity',
             'namespacename' => $data['_namespace'] . '\Entity',
             'flags'         => ClassGenerator::FLAG_ABSTRACT,
             'docblock'      => DocBlockGenerator::fromArray(
-                    [
-                        'shortDescription' => 'Generic Entity Class',
-                        'longDescription'  => null,
-                        'tags'             => [
-                            [
-                                'name'        => 'package',
-                                'description' => $data['_namespace'],
-                            ],
-                            [
-                                'name'        => 'author',
-                                'description' => $data['_author'],
-                            ],
-                            [
-                                'name'        => 'copyright',
-                                'description' => $data['_copyright'],
-                            ],
-                            [
-                                'name'        => 'license',
-                                'description' => $data['_license'],
-                            ],
-                        ]
-                    ]
+                [
+                    'shortDescription' => 'Generic Entity Class',
+                    'longDescription'  => null,
+                    'tags'             => [
+                        [
+                            'name'        => 'package',
+                            'description' => $data['_namespace'],
+                        ],
+                        [
+                            'name'        => 'author',
+                            'description' => $data['_author'],
+                        ],
+                        [
+                            'name'        => 'copyright',
+                            'description' => $data['_copyright'],
+                        ],
+                        [
+                            'name'        => 'license',
+                            'description' => $data['_license'],
+                        ],
+                    ],
+                ]
             ),
+            'properties'    => $this->getProperties(),
             'methods'       => [
                 [
                     'name'       => 'setColumnsList',
                     'parameters' => [
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'data',
-                                    'type' => 'array',
-                                ]
-                        )
+                            [
+                                'name' => 'data',
+                                'type' => 'array',
+                            ]
+                        ),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => '$this->_columnsList = $data;' . "\n" . 'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Set the list of columns associated with this model',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('data', ['array'], 'array of field names'),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Set the list of columns associated with this model',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('data', ['array'], 'array of field names'),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'getColumnsList',
@@ -84,41 +119,41 @@ class Entity extends AbstractGenerator {
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->_columnsList;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Returns columns list array',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
-                                        'datatype' => 'array',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Returns columns list array',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag([
+                                    'datatype' => 'array',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'setParentList',
                     'parameters' => [
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'data',
-                                    'type' => 'array',
-                                ]
-                        )
+                            [
+                                'name' => 'data',
+                                'type' => 'array',
+                            ]
+                        ),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => '$this->_parentList = $data;' . "\n" . 'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Set the list of relationships associated with this model',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('data', ['array'], 'Array of relationship'),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Set the list of relationships associated with this model',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('data', ['array'], 'Array of relationship'),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'getParentList',
@@ -126,41 +161,41 @@ class Entity extends AbstractGenerator {
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->_parentList;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Returns relationship list array',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
-                                        'datatype' => 'array',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Returns relationship list array',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag([
+                                    'datatype' => 'array',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'setDependentList',
                     'parameters' => [
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'data',
-                                    'type' => 'array',
-                                ]
-                        )
+                            [
+                                'name' => 'data',
+                                'type' => 'array',
+                            ]
+                        ),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => '$this->_dependentList = $data;' . "\n" . 'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Set the list of relationships associated with this model',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('data', ['array'], 'array of relationships'),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Set the list of relationships associated with this model',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('data', ['array'], 'array of relationships'),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'getDependentList',
@@ -168,16 +203,16 @@ class Entity extends AbstractGenerator {
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->_dependentList;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Returns relationship list array',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
-                                        'datatype' => 'array',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Returns relationship list array',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag([
+                                    'datatype' => 'array',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'columnNameToVar',
@@ -188,17 +223,17 @@ class Entity extends AbstractGenerator {
                     '}' . "\n" .
                     'return $this->_columnsList[$column];',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Converts database column name to php setter/getter function name',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('column', ['string'], 'Column name'),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Converts database column name to php setter/getter function name',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('column', ['string'], 'Column name'),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'varNameToColumn',
@@ -212,83 +247,82 @@ class Entity extends AbstractGenerator {
                     '}' . "\n" .
                     'return null;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Converts database column name to PHP setter/getter function name',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('thevar', ['string'], 'Column name'),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Converts database column name to PHP setter/getter function name',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('thevar', ['string'], 'Column name'),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'setOptions',
                     'parameters' => [
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'options',
-                                    'type' => 'array',
-                                ]
-                        )
+                            [
+                                'name' => 'options',
+                                'type' => 'array',
+                            ]
+                        ),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
                     '$this->exchangeArray($options);' . "\n" .
                     'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Array of options/values to be set for this model.',
-                                'longDescription'  => 'Options without a matching method are ignored.',
-                                'tags'             => [
-                                    new ParamTag('options', ['array'], 'array of Options'),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Array of options/values to be set for this model.',
+                            'longDescription'  => 'Options without a matching method are ignored.',
+                            'tags'             => [
+                                new ParamTag('options', ['array'], 'array of Options'),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 MethodGenerator::fromArray([
                     'name'       => 'exchangeArray',
-//                    'returntype' => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
                     'parameters' => [
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'options',
-                                    'type' => 'array',
-                                ]
-                        )
+                            [
+                                'name' => 'options',
+                                'type' => 'array',
+                            ]
+                        ),
                     ],
                     'flags'      => MethodGenerator::FLAG_ABSTRACT,
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Array of options/values to be set for this model.',
-                                'longDescription'  => 'Options without a matching method are ignored.',
-                                'tags'             => [
-                                    new ParamTag('options', ['array'], 'array of Options'),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Array of options/values to be set for this model.',
+                            'longDescription'  => 'Options without a matching method are ignored.',
+                            'tags'             => [
+                                new ParamTag('options', ['array'], 'array of Options'),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ]),
                 [
                     'name'       => 'toArray',
                     'parameters' => [],
                     'flags'      => MethodGenerator::FLAG_ABSTRACT,
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Returns an array, keys are the field names.',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag(['datatype' => 'array']),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Returns an array, keys are the field names.',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag(['datatype' => 'array']),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'getPrimaryKey',
@@ -296,16 +330,16 @@ class Entity extends AbstractGenerator {
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return  $this->primary_key;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Returns primary key.',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag(['datatype' => 'array|string']),
-                                ]
-                            ]
-                    )
-                ]
-            ]
+                        [
+                            'shortDescription' => 'Returns primary key.',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag(['datatype' => 'array|string']),
+                            ],
+                        ]
+                    ),
+                ],
+            ],
         ];
     }
 
