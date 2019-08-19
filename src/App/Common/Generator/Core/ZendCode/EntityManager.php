@@ -3,13 +3,13 @@
 namespace App\Common\Generator\Core\ZendCode;
 
 use \Zend\Code\Generator\ClassGenerator;
-use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
-use \Zend\Code\Generator\DocBlock\Tag\GenericTag;
-use \Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use \Zend\Code\Generator\DocBlockGenerator;
 use \Zend\Code\Generator\MethodGenerator;
-use \Zend\Code\Generator\ParameterGenerator;
+use \Zend\Code\Generator\DocBlockGenerator;
 use \Zend\Code\Generator\PropertyGenerator;
+use \Zend\Code\Generator\ParameterGenerator;
+use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
+use \Zend\Code\Generator\DocBlock\Tag\ReturnTag;
+use \Zend\Code\Generator\DocBlock\Tag\GenericTag;
 
 /**
  * Description of Entity
@@ -104,7 +104,7 @@ class EntityManager extends AbstractGenerator {
     }
 
     private function getConstructor() {
-        $constructBody = 'parent::__construct($adapter, $entity ? $entity : new ' . $this->data['_className'] . 'Entity());' . PHP_EOL;
+        $constructBody = 'parent::__construct($adapter, $entity ? $entity : new \\' . $this->data['_namespace'] . '\Entity\\' . $this->data['_className'] . '());' . PHP_EOL;
         $methods       = [
             [
                 'name'       => '__construct',
@@ -116,7 +116,7 @@ class EntityManager extends AbstractGenerator {
                     ParameterGenerator::fromArray(
                             [
                                 'name'         => 'entity',
-                                'type'         => $this->data['_className'] . 'Entity',
+                                'type'         => $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
                                 'defaultvalue' => null,
                             ]
                     ),

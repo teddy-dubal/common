@@ -9,13 +9,13 @@
 namespace App\Common\Generator\Core\ZendCode;
 
 use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\DocBlock\Tag\GenericTag;
+use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\DocBlockGenerator;
+use Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\ParameterGenerator;
-use Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\DocBlock\Tag\GenericTag;
 
 /**
  * Description of Entity
@@ -180,7 +180,7 @@ class Manager extends AbstractGenerator {
                                 'longDescription'  => null,
                                 'tags'             => [
                                     new ReturnTag([
-                                        'datatype' => 'Pimple\Container',
+                                        'datatype' => '\Pimple\Container',
                                             ]),
                                 ]
                             ]
