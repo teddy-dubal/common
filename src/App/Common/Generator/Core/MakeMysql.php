@@ -225,6 +225,7 @@ class MakeMysql extends MakeDbTableFactory {
             }
 
             $columns[] = [
+                'index'    => in_array($row['Key'],['MUL','UNI']),
                 'field'    => $row['Field'],
                 'type'     => $row['Type'],
                 'required' => $row['Null'] == 'NO',

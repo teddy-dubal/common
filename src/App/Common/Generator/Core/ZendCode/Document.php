@@ -162,7 +162,7 @@ class Document extends AbstractGenerator
                     ),
                 ],
                 [
-                    'name'       => 'findBy',
+                    'name'       => 'findDocBy',
                     'parameters' => [
                         ParameterGenerator::fromArray([
                             'name'         => 'criteria',
@@ -237,7 +237,7 @@ class Document extends AbstractGenerator
                     ),
                 ],
                 [
-                    'name'      =>'deleteEntity',
+                    'name'      =>'deleteDocument',
                     'parameters'=>[
                         ParameterGenerator::fromArray(
                             [
@@ -263,7 +263,7 @@ class Document extends AbstractGenerator
                     ),
                 ],
                 [
-                    'name'      =>'findOneBy',
+                    'name'      =>'findOneDocBy',
                     'parameters'=>[
                         ParameterGenerator::fromArray([
                             'name'        =>'criteria',
@@ -272,7 +272,7 @@ class Document extends AbstractGenerator
                         ]),
                     ],
                     'flags'     =>MethodGenerator::FLAG_PUBLIC,
-                    'body'      =>'return current($this->findBy($criteria,[],1));',
+                    'body'      =>'return current($this->findDocBy($criteria,[],1));',
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Find one by criteria',

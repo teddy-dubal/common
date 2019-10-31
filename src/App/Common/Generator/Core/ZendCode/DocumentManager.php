@@ -98,6 +98,15 @@ class DocumentManager extends AbstractGenerator
         // $constructBody = 'parent::__construct($adapter, $entity ? $entity : new \\' . $this->data['_namespace'] . '\Document\\' . $this->data['_className'] . '());' . PHP_EOL;
         $constructBody = '$this->container = $app;' . PHP_EOL;
         $constructBody .= 'parent::__construct($app[\'document\']->getDb()->getManager(), $app[\'document\']->getDb()->getDatabaseName(), \''.$this->data['_tbname'].'\');' . PHP_EOL;
+        $indexes = [];
+        foreach ($this->data['_columns'] as $column) {
+            if ($column['index']) {
+                $indexes[$column['field']] = 1;
+            }
+        }
+        if (count($indexes)) {
+            $constructBody .= '$this->createIndex('.var_export($indexes,true).');';
+        }
         $methods       = [
             [
                 'name'       => '__construct',
