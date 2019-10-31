@@ -7,8 +7,9 @@ services:
       working_dir: "/app"
       links:
         - mariadb
+        - mongodb
     mariadb:
-      image: mariadb:10
+      image: bitnami/mariadb
       ports:
         - "3310:3306"
       expose:
@@ -16,8 +17,18 @@ services:
       volumes:
         - "./demo/scripts:/docker-entrypoint-initdb.d"
       environment:
-        MYSQL_ROOT_PASSWORD: "common"
-        MYSQL_USER: "common"
-        MYSQL_PASSWORD: "common"
-        MYSQL_DATABASE: "common"
-        MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+        MARIADB_HOST: "common"
+        MARIADB_DATABASE: "common"
+        MARIADB_USER: "common"
+        MARIADB_PASSWORD: "common"
+        MARIADB_ROOT_PASSWORD: "common"
+        ALLOW_EMPTY_PASSWORD: "yes"
+    mongodb:
+      image: bitnami/mongodb
+      expose:
+        - '27017'
+      environment:
+        MONGODB_HOST: "common"
+        MONGODB_USERNAME: "common"
+        MONGODB_PASSWORD: "common"
+        MONGODB_DATABASE: "common"
