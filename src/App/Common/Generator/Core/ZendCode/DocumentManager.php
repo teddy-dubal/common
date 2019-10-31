@@ -412,7 +412,7 @@ class DocumentManager extends AbstractGenerator
                         }
                     }
                     $constructBody .= '                 ;' . PHP_EOL;
-                    $constructBody .= '                if (! ($success && $entityManager->saveDocument($value,$ignoreEmptyValues, $recursive, false))) {' . PHP_EOL;
+                    $constructBody .= '                if (! ($success && $entityManager->saveDocument($value,$ignoreEmptyValues, $recursive))) {' . PHP_EOL;
                     $constructBody .= '                    break;' . PHP_EOL;
                     $constructBody .= '                }' . PHP_EOL;
                     $constructBody .= '            }' . PHP_EOL;
