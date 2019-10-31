@@ -134,9 +134,6 @@ class DocumentManager extends AbstractGenerator
         $constructBody .= 'if (! $entity instanceof ' . $this->data['_className'] . 'Document ){' . PHP_EOL;
         $constructBody .= '    throw new \Exception(\'Unable to delete: invalid entity\');' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
-        $constructBody .= 'if ($useTransaction) {' . PHP_EOL;
-        $constructBody .= '    $this->beginTransaction();' . PHP_EOL;
-        $constructBody .= '}' . PHP_EOL;
         $constructBody .= 'try {' . PHP_EOL;
         if ($this->data['_softDeleteColumn'] != null) {
             foreach ($this->data['_columns'] as $column) {
@@ -151,10 +148,10 @@ class DocumentManager extends AbstractGenerator
                     break;
                 }
             }
-            $constructBody .= '    $result = $this->saveDocument($entity, true, false, false);' . PHP_EOL;
+            $constructBody .= '    $result = $this->saveDocument($entity);' . PHP_EOL;
         } else {
             if ($this->data['_primaryKey']['phptype'] == 'array') {
-                $constructBody .= '     $where = array();' . PHP_EOL;
+                $constructBody .= '     $where =[];' . PHP_EOL;
                 foreach ($this->data['_primaryKey']['fields'] as $key) {
                     $constructBody .= '    $pk_val = $entity->get' . $key['capital'] . '();' . PHP_EOL;
                     $constructBody .= '    if ($pk_val === null) {' . PHP_EOL;
@@ -164,23 +161,17 @@ class DocumentManager extends AbstractGenerator
                     $constructBody .= '    }' . PHP_EOL;
                 }
             } else {
-                $constructBody .= '    $where = array(\'' . $this->data['_primaryKey']['field'] . '\' => $entity->get' . $this->data['_primaryKey']['capital'] . '());' . PHP_EOL;
+                $constructBody .= '    $where = [\'' . $this->data['_primaryKey']['field'] . '\' => $entity->get' . $this->data['_primaryKey']['capital'] . '()];' . PHP_EOL;
             }
-            $constructBody .= '    $result = $this->delete($where);' . PHP_EOL;
+            $constructBody .= '    $result = $this->deleteOne($where);' . PHP_EOL;
         }
 
-        $constructBody .= '    if ($useTransaction) {' . PHP_EOL;
-        $constructBody .= '        $this->commit();' . PHP_EOL;
-        $constructBody .= '    }' . PHP_EOL;
         $constructBody .= '} catch (\Exception $e) {' . PHP_EOL;
         $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->debug(__CLASS__ . \'|\' . __FUNCTION__, array(' . PHP_EOL;
         $constructBody .= '    \'error\'=>$e->getMessage()));' . PHP_EOL;
-        $constructBody .= '    if ($useTransaction) {' . PHP_EOL;
-        $constructBody .= '        $this->rollback();' . PHP_EOL;
-        $constructBody .= '    }' . PHP_EOL;
         $constructBody .= '    $result = false;' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
-        $constructBody .= 'return $result;' . PHP_EOL;
+        $constructBody .= 'return $result->getDeletedCount();' . PHP_EOL;
         $constructBody .= '' . PHP_EOL;
         $methods[] = [
             'name'       => 'deleteDocument',
@@ -188,11 +179,6 @@ class DocumentManager extends AbstractGenerator
                 ParameterGenerator::fromArray([
                     'name' => 'entity',
                     'type' => $this->data['_namespace'] . '\Document\Document',
-                ]),
-                ParameterGenerator::fromArray([
-                    'type'         => 'bool',
-                    'name'         => 'useTransaction',
-                    'defaultValue' => true,
                 ]),
             ],
             'flags'      => MethodGenerator::FLAG_PUBLIC,
@@ -203,7 +189,6 @@ class DocumentManager extends AbstractGenerator
                     'longDescription'  => null,
                     'tags'             => [
                         new ParamTag('entity', [$this->data['_namespace'] . '\Document\Document'], 'Document to delete'),
-                        new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if delete should be done inside a database transaction'),
                         new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
                     ],
                 ]
@@ -237,11 +222,8 @@ class DocumentManager extends AbstractGenerator
                     $constructBody .= '$primary_key[\'' . $key['field'] . '\'] =  $entity->get' . $key['capital'] . '();' . PHP_EOL;
                 }
             }
-            $constructBody .= '$exists = $this->find($primary_key);' . PHP_EOL;
+            $constructBody .= '$exists = $this->findOne($primary_key);' . PHP_EOL;
             $constructBody .= '$success = true;' . PHP_EOL;
-            $constructBody .= 'if ($useTransaction) {' . PHP_EOL;
-            $constructBody .= '    $this->beginTransaction();' . PHP_EOL;
-            $constructBody .= '}' . PHP_EOL;
             $constructBody .= 'try {' . PHP_EOL;
             $constructBody .= '    // Check for current existence to know if needs to be inserted' . PHP_EOL;
             $constructBody .= '    if ($exists === null) {' . PHP_EOL;
@@ -294,7 +276,7 @@ class DocumentManager extends AbstractGenerator
                 $constructBody .= '            \'' . $key['field'] . '\' => $primary_key[\'' . $key['field'] . '\'],' . PHP_EOL;
             }
         } else {
-            $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . '\' => $primary_key' . PHP_EOL;
+            $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key)' . PHP_EOL;
         }
         
         $constructBody .= '            ],' . PHP_EOL;

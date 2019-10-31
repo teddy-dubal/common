@@ -11,7 +11,7 @@ services:
     mariadb:
       image: bitnami/mariadb
       ports:
-        - "3310:3306"
+        - "3311:3306"
       expose:
         - "3306"
       volumes:
