@@ -95,7 +95,6 @@ class DocumentManager extends AbstractGenerator
 
     private function getConstructor()
     {
-        // $constructBody = 'parent::__construct($adapter, $entity ? $entity : new \\' . $this->data['_namespace'] . '\Document\\' . $this->data['_className'] . '());' . PHP_EOL;
         $constructBody = '$this->container = $app;' . PHP_EOL;
         $constructBody .= 'parent::__construct($app[\'document\']->getDb()->getManager(), $app[\'document\']->getDb()->getDatabaseName(), \''.$this->data['_tbname'].'\');' . PHP_EOL;
         $indexes = [];
@@ -134,7 +133,91 @@ class DocumentManager extends AbstractGenerator
 
     private function getMethods()
     {
-        return [];
+        $methods = [];
+        $body = '$return = $this->findOne(';
+        if ('array' !== $this->data['_primaryKey']['phptype']){
+            $body .= '[\''.$this->data['_primaryKey']['field'].'\' => new \MongoDB\BSON\ObjectId($id)]';
+        } else {
+                $body .= '$id';
+        }
+        $body .= ');'.PHP_EOL;
+        'if ($return) {' . PHP_EOL .
+        '   $return        = $return->getArrayCopy();' . PHP_EOL .
+        '   $return[\''.$this->data['_primaryKey']['field'].'\'] = $return[\''.$this->data['_primaryKey']['field'].'\']->__toString();' . PHP_EOL .
+        '}' . PHP_EOL .
+        'return $return;' . PHP_EOL .
+        '' . PHP_EOL;
+        $methods[] = [
+            'name'       => 'findDoc',
+            'parameters' => [
+                ParameterGenerator::fromArray([
+                    'name'         => 'id',
+                ])
+            ],
+            'flags'      => MethodGenerator::FLAG_PUBLIC,
+            'body'       => $body,
+            'docblock'   => DocBlockGenerator::fromArray(
+                [
+                    'shortDescription' => 'Find by criteria',
+                    'longDescription'  => null,
+                    'tags'             => [
+                        new ParamTag('id', ['mixed'], 'Search by primary key'),
+                        new ReturnTag(['array'], ''),
+                    ],
+                ]
+            ),
+        ];
+        $body = '$doc = $this->find($criteria,[\'limit\' => $limit,\'sort\' => $order,\'skip\' => $offset]);'. PHP_EOL;
+        $body .= '$res = [];'. PHP_EOL;
+        $body .= 'foreach ($doc as $d) {'. PHP_EOL;
+        $body .= '   $t        = json_decode(\MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($d)), true);' . PHP_EOL;
+        $body .= '  if ($d->'.$this->data['_primaryKey']['field'].' instanceof \MongoDB\BSON\ObjectId ){';
+        $body .= '      $t[\''.$this->data['_primaryKey']['field'].'\'] = $d->'.$this->data['_primaryKey']['field'].'->__toString();' . PHP_EOL;
+        $body .= '  }'. PHP_EOL;
+        $body .= '   $res[] = $t;' . PHP_EOL;
+        $body .= '}' . PHP_EOL;
+        $body .= 'return $res;' . PHP_EOL;
+        $body .= '' . PHP_EOL;
+        $methods[] = [
+            'name'       => 'findDocBy',
+            'parameters' => [
+                ParameterGenerator::fromArray([
+                    'name'         => 'criteria',
+                    'defaultvalue' => [],
+                    'type'         => 'Array',
+                ]),
+                ParameterGenerator::fromArray([
+                    'name'         => 'order',
+                    'defaultvalue' => null,
+                ]),
+                ParameterGenerator::fromArray([
+                    'type'         => 'int',
+                    'name'         => 'limit',
+                    'defaultvalue' => 0,
+                ]),
+                ParameterGenerator::fromArray([
+                    'type'         => 'int',
+                    'name'         => 'offset',
+                    'defaultvalue' => 0,
+                ])
+            ],
+            'flags'      => MethodGenerator::FLAG_PUBLIC,
+            'body'       => $body,
+            'docblock'   => DocBlockGenerator::fromArray(
+                [
+                    'shortDescription' => 'Find by criteria',
+                    'longDescription'  => null,
+                    'tags'             => [
+                        new ParamTag('criteria', ['array'], 'Search criteria'),
+                        new ParamTag('order', ['string'], 'sorting option'),
+                        new ParamTag('limit', ['int'], 'limit option'),
+                        new ParamTag('offset', ['int'], 'offset option'),
+                        new ReturnTag(['array'], ''),
+                    ],
+                ]
+            ),
+        ];
+        return $methods;
     }
 
     private function getDeleteDocumentMethod()
@@ -252,7 +335,7 @@ class DocumentManager extends AbstractGenerator
                 $constructBody .= 'try {' . PHP_EOL;
                 $constructBody .= '    if ($primary_key === null) {' . PHP_EOL;
             } else {
-                $constructBody .= '$exists = $this->find($primary_key);' . PHP_EOL;
+                $constructBody .= '$exists = $this->findOne($primary_key);' . PHP_EOL;
                 $constructBody .= 'try {' . PHP_EOL;
                 $constructBody .= '    if ($exists === null) {' . PHP_EOL;
             }
