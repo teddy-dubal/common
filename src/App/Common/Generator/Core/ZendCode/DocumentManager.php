@@ -141,12 +141,11 @@ class DocumentManager extends AbstractGenerator
                 $body .= '$id';
         }
         $body .= ');'.PHP_EOL;
-        'if ($return) {' . PHP_EOL .
-        '   $return        = $return->getArrayCopy();' . PHP_EOL .
-        '   $return[\''.$this->data['_primaryKey']['field'].'\'] = $return[\''.$this->data['_primaryKey']['field'].'\']->__toString();' . PHP_EOL .
-        '}' . PHP_EOL .
-        'return $return;' . PHP_EOL .
-        '' . PHP_EOL;
+        $body .='if ($return) {' . PHP_EOL .
+        $body .='   $return        = $return->getArrayCopy();' . PHP_EOL .
+        $body .='   $return[\''.$this->data['_primaryKey']['field'].'\'] = $return[\''.$this->data['_primaryKey']['field'].'\']->__toString();' . PHP_EOL .
+        $body .='}' . PHP_EOL .
+        $body .='return $return;';
         $methods[] = [
             'name'       => 'findDoc',
             'parameters' => [
