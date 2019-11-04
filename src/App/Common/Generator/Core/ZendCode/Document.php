@@ -167,7 +167,7 @@ class Document extends AbstractGenerator
                         ParameterGenerator::fromArray(
                             [
                                 'name'=>'entity',
-                                'type'=>$this->data['_namespace'].'\Entity\Entity',
+                                'type'=>$this->data['_namespace'].'\Document\Document',
                             ]
                         )
                     ],
@@ -178,7 +178,7 @@ class Document extends AbstractGenerator
                             'shortDescription'=>'Converts database column name to php setter/getter function name',
                             'longDescription' =>null,
                             'tags'            =>[
-                                new ParamTag('entity',[$this->data['_namespace'].'\Entity\Entity']),
+                                new ParamTag('entity',[$this->data['_namespace'].'\Document\Document']),
                                 new ParamTag('useTransaction',['boolean']),
                                 new ReturnTag([
                                     'datatype'=>'int',
