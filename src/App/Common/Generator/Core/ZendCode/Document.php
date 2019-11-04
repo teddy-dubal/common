@@ -67,29 +67,6 @@ class Document extends AbstractGenerator
             ],
             'methods'       => [
                 [
-                    'name'       => '__construct',
-                    'parameters' => [
-                        ParameterGenerator::fromArray(
-                            [
-                                'name' => 'container',
-                                'type' => '\Pimple\Container',
-                            ]
-                        )
-                    ],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       =>
-                    '$this->container = $container;' . PHP_EOL,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => 'Constructor',
-                            'longDescription'  => null,
-                            'tags'             => [
-                                new ParamTag('adapter', ['\Pimple\Container']),
-                            ],
-                        ]
-                    ),
-                ],
-                [
                     'name'       => 'setDebug',
                     'parameters' => [
                         ParameterGenerator::fromArray(
