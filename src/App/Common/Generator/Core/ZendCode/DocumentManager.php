@@ -340,7 +340,7 @@ class DocumentManager extends AbstractGenerator
                 $constructBody .= 'try {' . PHP_EOL;
                 $constructBody .= '    if ($primary_key === null) {' . PHP_EOL;
             } else {
-                $constructBody .= '$exists = $this->findOne($primary_key);' . PHP_EOL;
+                $constructBody .= '$exists = $this->findDoc($primary_key);' . PHP_EOL;
                 $constructBody .= 'try {' . PHP_EOL;
                 $constructBody .= '    if ($exists === null) {' . PHP_EOL;
             }
