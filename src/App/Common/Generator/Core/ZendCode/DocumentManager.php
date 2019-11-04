@@ -275,7 +275,7 @@ class DocumentManager extends AbstractGenerator
             'parameters' => [
                 ParameterGenerator::fromArray([
                     'name' => 'entity',
-                    'type' => $this->data['_namespace'] . '\Document\Document',
+                    'type' => $this->data['_namespace'] . '\Entity\Entity',
                 ]),
             ],
             'flags'      => MethodGenerator::FLAG_PUBLIC,
@@ -285,7 +285,7 @@ class DocumentManager extends AbstractGenerator
                     'shortDescription' => 'Deletes the current entity',
                     'longDescription'  => null,
                     'tags'             => [
-                        new ParamTag('entity', [$this->data['_namespace'] . '\Document\Document'], 'Document to delete'),
+                        new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Document to delete'),
                         new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
                     ],
                 ]
@@ -432,7 +432,7 @@ class DocumentManager extends AbstractGenerator
             'parameters' => [
                 ParameterGenerator::fromArray([
                     'name' => 'entity',
-                    'type' => $this->data['_namespace'] . '\Document\Document',
+                    'type' => $this->data['_namespace'] . '\Entity\Entity',
                 ]),
                 ParameterGenerator::fromArray([
                     'type'         => 'bool',
@@ -452,7 +452,7 @@ class DocumentManager extends AbstractGenerator
                     'shortDescription' => 'Saves current row, and optionally dependent rows',
                     'longDescription'  => null,
                     'tags'             => [
-                        new ParamTag('entity', [$this->data['_namespace'] . '\Document\Document'], 'Document to save'),
+                        new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Document to save'),
                         new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),
                         new ParamTag('recursive', ['boolean'], 'Should the object graph be walked for all related elements'),
                         new ReturnTag(['int', 'array', 'false'], 'Inserted ID'),
