@@ -319,7 +319,7 @@ class DocumentManager extends AbstractGenerator
                     $constructBody .= '$primary_key[\'' . $key['field'] . '\'] =  $entity->get' . $key['capital'] . '();' . PHP_EOL;
                 }
             }
-            $constructBody .= '$exists = $this->findOne($primary_key);' . PHP_EOL;
+            $constructBody .= '$exists = $this->findDoc($primary_key);' . PHP_EOL;
             $constructBody .= '$success = true;' . PHP_EOL;
             $constructBody .= 'try {' . PHP_EOL;
             $constructBody .= '    // Check for current existence to know if needs to be inserted' . PHP_EOL;
