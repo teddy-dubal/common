@@ -25,6 +25,8 @@ services:
         ALLOW_EMPTY_PASSWORD: "yes"
     mongodb:
       image: bitnami/mongodb
+      ports:
+        - "27019:27017"
       expose:
         - '27017'
       environment:

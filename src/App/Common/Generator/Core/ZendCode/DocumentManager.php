@@ -176,9 +176,17 @@ class DocumentManager extends AbstractGenerator
         $body .= '$res = [];' . PHP_EOL;
         $body .= 'foreach ($doc as $d) {' . PHP_EOL;
         $body .= '   $t        = json_decode(\MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($d)), true);' . PHP_EOL;
-        $body .= '  if ($d->' . $this->data['_primaryKey']['field'] . ' instanceof \MongoDB\BSON\ObjectId ){'. PHP_EOL;
-        $body .= '      $t[\'' . $this->data['_primaryKey']['field'] . '\'] = $d->' . $this->data['_primaryKey']['field'] . '->__toString();' . PHP_EOL;
-        $body .= '  }' . PHP_EOL;
+        if ('array' !== $this->data['_primaryKey']['phptype']) {
+            $body .= '  if ( $d->' . $this->data['_primaryKey']['field'] . ' instanceof \MongoDB\BSON\ObjectId ){'. PHP_EOL;
+            $body .= '      $t[\'' . $this->data['_primaryKey']['field'] . '\'] = $d->' . $this->data['_primaryKey']['field'] . '->__toString();' . PHP_EOL;
+            $body .= '  }' . PHP_EOL;
+        } else {
+            foreach ($this->data['_primaryKey']['fields'] as $key) {
+                $body .= '  if ( $d->' .$key['field'] . ' instanceof \MongoDB\BSON\ObjectId ){'. PHP_EOL;
+                $body .= '      $t[\'' .$key['field'] . '\'] = $d->' . $key['field'] . '->__toString();' . PHP_EOL;
+                $body .= '  }' . PHP_EOL;
+            }
+        }
         $body .= '   $res[] = $t;' . PHP_EOL;
         $body .= '}' . PHP_EOL;
         $body .= 'return $res;' . PHP_EOL;
@@ -254,11 +262,11 @@ class DocumentManager extends AbstractGenerator
                     $constructBody .= '    if ($pk_val === null) {' . PHP_EOL;
                     $constructBody .= '        throw new \Exception(\'The value for ' . $key['capital'] . ' cannot be null\');' . PHP_EOL;
                     $constructBody .= '    } else {' . PHP_EOL;
-                    $constructBody .= '        $where[\'' . $key['field'] . '\'] =  $pk_val; ' . PHP_EOL;
+                    $constructBody .= '        $where[\'' . $key['field'] . '\'] =  new \MongoDB\BSON\ObjectId($pk_val); ' . PHP_EOL;
                     $constructBody .= '    }' . PHP_EOL;
                 }
             } else {
-                $constructBody .= '    $where = [\'' . $this->data['_primaryKey']['field'] . '\' => $entity->get' . $this->data['_primaryKey']['capital'] . '()];' . PHP_EOL;
+                $constructBody .= '    $where = [\'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($entity->get' . $this->data['_primaryKey']['capital'] . '())];' . PHP_EOL;
             }
             $constructBody .= '    $result = $this->deleteOne($where);' . PHP_EOL;
         }
@@ -370,7 +378,7 @@ class DocumentManager extends AbstractGenerator
         $constructBody .= '            [' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] == 'array') {
             foreach ($this->data['_primaryKey']['fields'] as $key) {
-                $constructBody .= '            \'' . $key['field'] . '\' => $primary_key[\'' . $key['field'] . '\'],' . PHP_EOL;
+                $constructBody .= '            \'' . $key['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key[\'' . $key['field'] . '\']),' . PHP_EOL;
             }
         } else {
             $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key)' . PHP_EOL;
@@ -400,15 +408,15 @@ class DocumentManager extends AbstractGenerator
                     $constructBody .= '            foreach ($' . $this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name'] . ' as $value) {' . PHP_EOL;
                     $constructBody .= '                $value' . PHP_EOL;
                     if ($this->data['_primaryKey']['phptype'] !== 'array') {
-                        $constructBody .= '                    ->set' . $this->_getCapital($key['column_name']) . '($primary_key)' . PHP_EOL;
+                        $constructBody .= '                    ->set' . $this->_getCapital($key['column_name']) . '(new \MongoDB\BSON\ObjectId($primary_key))' . PHP_EOL;
                     } else {
                         if (is_array($key['column_name'])) {
                             foreach (explode(',', $key['column_name'][0]) as $_column) {
                                 $column = trim(str_replace('`', '', $_column));
-                                $constructBody .= '                ->set' . $this->_getCapital($column) . '($primary_key[\'' . $column . '\'])' . PHP_EOL;
+                                $constructBody .= '                ->set' . $this->_getCapital($column) . '(new \MongoDB\BSON\ObjectId($primary_key[\'' . $column . '\']))' . PHP_EOL;
                             }
                         } else {
-                            $constructBody .= '                ->set' . $this->_getCapital($key['column_name']) . '($primary_key[\'' . $key['foreign_tbl_column_name'] . '\'])' . PHP_EOL;
+                            $constructBody .= '                ->set' . $this->_getCapital($key['column_name']) . '(new \MongoDB\BSON\ObjectId($primary_key[\'' . $key['foreign_tbl_column_name'] . '\']))' . PHP_EOL;
                         }
                     }
                     $constructBody .= '                 ;' . PHP_EOL;
