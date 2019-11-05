@@ -38,6 +38,7 @@ abstract class MakeDbTableFactory extends MakeDbTableAbstract
         $vars                     = get_object_vars($this);
         $vars['foreignKeysInfo']  = $this->getForeignKeysInfo();
         $vars['dependentTables']  = $this->getDependentTables();
+        $vars['db-type']          = $options['db-type'];
         $getRelationNameDependent = [];
         $getRelationNameParent    = [];
         $getClassName             = [];
