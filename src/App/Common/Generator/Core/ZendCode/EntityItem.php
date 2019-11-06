@@ -266,7 +266,7 @@ class EntityItem extends AbstractGenerator
             } elseif ($column['phptype'] == 'boolean') {
                 $constructBody .= 'return $this->' . $column['capital'] . ' ? true : false;' . PHP_EOL;
             } else {
-                if ($this->data['db-type'] == 'mongodb'){
+                if ($this->data['db-type'] == 'mongodb' ){
                     $constructBody .= 'if (!empty($this->' . $column['capital'] . ')){'.PHP_EOL;
                     $constructBody .= ' if ($this->' . $column['capital']. ' instanceof \MongoDB\BSON\ObjectId){'.PHP_EOL;
                     $constructBody .= '     return $this->' . $column['capital'].';'.PHP_EOL;

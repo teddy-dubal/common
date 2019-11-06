@@ -139,6 +139,23 @@ class Document extends AbstractGenerator
                     ),
                 ],
                 [
+                    'name'       => 'getTableName',
+                    'parameters' => [],
+                    'flags'      => MethodGenerator::FLAG_PUBLIC,
+                    'body'       => 'return $this->table;',
+                    'docblock'   => DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription' => 'Get table name',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag([
+                                    'datatype' => 'String',
+                                ]),
+                            ],
+                        ]
+                    ),
+                ],
+                [
                     'name'      =>'deleteDocument',
                     'parameters'=>[
                         ParameterGenerator::fromArray(
