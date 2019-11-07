@@ -2,23 +2,27 @@
 
 namespace App\Common\Generator\Core;
 
-use Exception;
 use App\Common\Generator\Core\MakeDbTableFactory;
+use Exception;
 
 /**
  * MySQL specific class for model creation
  */
-class MakeMysql extends MakeDbTableFactory {
+class MakeMysql extends MakeDbTableFactory
+{
 
-    protected function getPDOString($host, $port = 3306, $dbname) {
+    protected function getPDOString($host, $port = 3306, $dbname)
+    {
         return "mysql:host=$host;port=$port;dbname=$dbname";
     }
 
-    protected function getPDOSocketString($host, $dbname) {
+    protected function getPDOSocketString($host, $dbname)
+    {
         return "mysql:unix_socket=$host;dbname=$dbname";
     }
 
-    public function getTablesNamesFromDb() {
+    public function getTablesNamesFromDb()
+    {
         $res    = $this->_pdo->query('show tables')->fetchAll();
         $tables = [];
         foreach ($res as $table) {
@@ -28,7 +32,8 @@ class MakeMysql extends MakeDbTableFactory {
         return $tables;
     }
 
-    public function getDateTimeFormat() {
+    public function getDateTimeFormat()
+    {
         return "'YYYY-MM-ddTHH:mm:ss.S'";
     }
 
@@ -38,7 +43,8 @@ class MakeMysql extends MakeDbTableFactory {
      * @param string $str
      * @return string
      */
-    protected function _convertTypeToPhp($str) {
+    protected function _convertTypeToPhp($str)
+    {
         if (preg_match('/(bit)/', $str)) {
             $res = 'boolean';
         } elseif (preg_match('/(datetime|timestamp|blob|char|enum|text|date)/', $str)) {
@@ -54,10 +60,11 @@ class MakeMysql extends MakeDbTableFactory {
         return $res;
     }
 
-    public function parseForeignKeys() {
+    public function parseForeignKeys()
+    {
         $tbname = $this->getTableName();
         $this->_pdo->query("SET NAMES UTF8");
-        $qry    = $this->_pdo->query("show create table `$tbname`");
+        $qry = $this->_pdo->query("show create table `$tbname`");
 
         if (!$qry) {
             throw new Exception("`show create table $tbname` returned false!.");
@@ -116,7 +123,8 @@ class MakeMysql extends MakeDbTableFactory {
         $this->setForeignKeysInfo($keys);
     }
 
-    public function parseDependentTables() {
+    public function parseDependentTables()
+    {
         $tbname = $this->getTableName();
         $tables = $this->getTableList();
         $this->_pdo->query("SET NAMES UTF8");
@@ -161,17 +169,17 @@ class MakeMysql extends MakeDbTableFactory {
                         'type'                    => ($pk_string == $tblinfo[2] ? 'one' : 'many'),
                         'column_name'             => $column_name,
                         'foreign_tbl_name'        => $table,
-                        'foreign_tbl_column_name' => $foreign_column_name
+                        'foreign_tbl_column_name' => $foreign_column_name,
                     ];
                 }
             }
         }
 
-
         $this->setDependentTables($dependents);
     }
 
-    public function parseDescribeTable() {
+    public function parseDescribeTable()
+    {
 
         $tbname = $this->getTableName();
         $this->_pdo->query("SET NAMES UTF8");
@@ -225,7 +233,8 @@ class MakeMysql extends MakeDbTableFactory {
             }
 
             $columns[] = [
-                'index'    => in_array($row['Key'],['MUL','UNI']),
+                'index'    => in_array($row['Key'], ['MUL']),
+                'unique'   => in_array($row['Key'], ['UNI']),
                 'field'    => $row['Field'],
                 'type'     => $row['Type'],
                 'required' => $row['Null'] == 'NO',
@@ -233,7 +242,6 @@ class MakeMysql extends MakeDbTableFactory {
                 'capital'  => $this->_getCapital($row['Field']),
                 'comment'  => $comment,
             ];
-
 
             if (in_array(strtolower($row['Field']), $this->_softDeleteColumnNames)) {
                 $this->_softDeleteColumn = $row['Field'];

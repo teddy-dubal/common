@@ -99,13 +99,20 @@ class DocumentManager extends AbstractGenerator
         $constructBody = '$this->container = $app;' . PHP_EOL;
         $constructBody .= 'parent::__construct($app[\'document\']->getDb()->getManager(), $app[\'document\']->getDb()->getDatabaseName(), \'' . $this->data['_tbname'] . '\');' . PHP_EOL;
         $indexes = [];
+        $unique  = [];
         foreach ($this->data['_columns'] as $column) {
             if ($column['index']) {
                 $indexes[$column['field']] = 1;
             }
+            if ($column['unique']) {
+                $unique[$column['field']] = 1;
+            }
         }
         if (count($indexes)) {
             $constructBody .= '$this->createIndex(' . var_export($indexes, true) . ');';
+        }
+        if (count($unique)) {
+            $constructBody .= '$this->createIndex(' . var_export($unique, true) . ',[ \'unique\' => true]);';
         }
         $methods = [
             [
@@ -143,7 +150,9 @@ class DocumentManager extends AbstractGenerator
         $body .= ');' . PHP_EOL;
         $body .= 'if ($return) {' . PHP_EOL;
         $body .= '   $return        = $return->getArrayCopy();' . PHP_EOL;
-        $body .= '   $return[\'' . $this->data['_primaryKey']['field'] . '\'] = ($return[\'' . $this->data['_primaryKey']['field'] . '\'] instanceof \MongoDB\BSON\ObjectId ) ? $return[\'' . $this->data['_primaryKey']['field'] . '\']->__toString() : $return[\'' . $this->data['_primaryKey']['field'] . '\'];' . PHP_EOL;
+        if ('array' !== $this->data['_primaryKey']['phptype']) {
+            $body .= '   $return[\'' . $this->data['_primaryKey']['field'] . '\'] = ($return[\'' . $this->data['_primaryKey']['field'] . '\'] instanceof \MongoDB\BSON\ObjectId ) ? $return[\'' . $this->data['_primaryKey']['field'] . '\']->__toString() : $return[\'' . $this->data['_primaryKey']['field'] . '\'];' . PHP_EOL;
+        }
         $body .= '}' . PHP_EOL;
         $body .= 'return $return;';
         return [
@@ -177,13 +186,13 @@ class DocumentManager extends AbstractGenerator
         $body .= 'foreach ($doc as $d) {' . PHP_EOL;
         $body .= '   $t        = json_decode(\MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($d)), true);' . PHP_EOL;
         if ('array' !== $this->data['_primaryKey']['phptype']) {
-            $body .= '  if ( $d->' . $this->data['_primaryKey']['field'] . ' instanceof \MongoDB\BSON\ObjectId ){'. PHP_EOL;
+            $body .= '  if ( $d->' . $this->data['_primaryKey']['field'] . ' instanceof \MongoDB\BSON\ObjectId ){' . PHP_EOL;
             $body .= '      $t[\'' . $this->data['_primaryKey']['field'] . '\'] = $d->' . $this->data['_primaryKey']['field'] . '->__toString();' . PHP_EOL;
             $body .= '  }' . PHP_EOL;
         } else {
             foreach ($this->data['_primaryKey']['fields'] as $key) {
-                $body .= '  if ( $d->' .$key['field'] . ' instanceof \MongoDB\BSON\ObjectId ){'. PHP_EOL;
-                $body .= '      $t[\'' .$key['field'] . '\'] = $d->' . $key['field'] . '->__toString();' . PHP_EOL;
+                $body .= '  if ( $d->' . $key['field'] . ' instanceof \MongoDB\BSON\ObjectId ){' . PHP_EOL;
+                $body .= '      $t[\'' . $key['field'] . '\'] = $d->' . $key['field'] . '->__toString();' . PHP_EOL;
                 $body .= '  }' . PHP_EOL;
             }
         }
