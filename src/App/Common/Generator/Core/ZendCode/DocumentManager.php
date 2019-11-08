@@ -383,6 +383,7 @@ class DocumentManager extends AbstractGenerator
             }
         }
         $constructBody .= '    } else {' . PHP_EOL;
+        $constructBody .= '     unset($data[\'' . $this->data['_primaryKey']['field'] . '\']);' . PHP_EOL;
         $constructBody .= '     $update = $this->updateOne(' . PHP_EOL;
         $constructBody .= '            [' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] == 'array') {
