@@ -494,7 +494,7 @@ class DocumentManager extends AbstractGenerator
     {
         $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
         $class
-            ->addUse($this->data['_namespace'] . '\Document\\' . $this->data['_className'], $this->data['_className'] . 'Document')
+            ->addUse($this->data['_namespace'] . '\Entity\\' . $this->data['_className'], $this->data['_className'] . 'Document')
         ;
         $this->defineFileInfo($class);
         $fileGenerator = $this->getFileGenerator();
