@@ -383,21 +383,26 @@ class DocumentManager extends AbstractGenerator
             }
         }
         $constructBody .= '    } else {' . PHP_EOL;
-        $constructBody .= '        $this->updateOne(' . PHP_EOL;
+        $constructBody .= '     $update = $this->updateOne(' . PHP_EOL;
         $constructBody .= '            [' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] == 'array') {
             foreach ($this->data['_primaryKey']['fields'] as $key) {
                 $constructBody .= '            \'' . $key['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key[\'' . $key['field'] . '\']),' . PHP_EOL;
             }
         } else {
+
             $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key)' . PHP_EOL;
         }
 
         $constructBody .= '            ],' . PHP_EOL;
-        $constructBody .= '            $data' . PHP_EOL;
+        $constructBody .= '         [\'$set\' => $data ]' . PHP_EOL;
         $constructBody .= '        );' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] != 'array') {
-            $constructBody .= '     $success = $primary_key;' . PHP_EOL;
+            $constructBody .= '     if ($update){' . PHP_EOL;
+            $constructBody .= '         $success = $primary_key;' . PHP_EOL;
+            $constructBody .= '     } else {' . PHP_EOL;
+            $constructBody .= '         $success = false;' . PHP_EOL;
+            $constructBody .= '     }' . PHP_EOL;
         }
         $constructBody .= '    }' . PHP_EOL;
         if (count($this->data['dependentTables']) > 0) {
