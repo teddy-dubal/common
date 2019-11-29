@@ -2,14 +2,14 @@
 
 namespace App\Common\Generator\Core\ZendCode;
 
+use Zend\Code\Generator\DocBlock\Tag\GenericTag;
 use \Zend\Code\Generator\ClassGenerator;
-use \Zend\Code\Generator\MethodGenerator;
 use \Zend\Code\Generator\DocBlockGenerator;
-use \Zend\Code\Generator\PropertyGenerator;
-use \Zend\Code\Generator\ParameterGenerator;
 use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use \Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\DocBlock\Tag\GenericTag;
+use \Zend\Code\Generator\MethodGenerator;
+use \Zend\Code\Generator\ParameterGenerator;
+use \Zend\Code\Generator\PropertyGenerator;
 
 /**
  * Description of Entity
@@ -75,6 +75,22 @@ class EntityItem extends AbstractGenerator
                 'docblock'     => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => 'Primary key name',
+                        'longDescription'  => '',
+                        'tags'             => [
+                            new GenericTag('var', $this->data['_primaryKey']['phptype'] . ' primary_key'),
+                        ],
+                    ]
+                ),
+            ]
+        );
+        $classProperties[] = PropertyGenerator::fromArray(
+            [
+                'name'         => 'isDoc',
+                'defaultvalue' => 'boolean',
+                'flags'        => PropertyGenerator::FLAG_PROTECTED,
+                'docblock'     => DocBlockGenerator::fromArray(
+                    [
+                        'shortDescription' => '',
                         'longDescription'  => '',
                         'tags'             => [
                             new GenericTag('var', $this->data['_primaryKey']['phptype'] . ' primary_key'),
@@ -266,15 +282,15 @@ class EntityItem extends AbstractGenerator
             } elseif ($column['phptype'] == 'boolean') {
                 $constructBody .= 'return $this->' . $column['capital'] . ' ? true : false;' . PHP_EOL;
             } else {
-                if ($this->data['db-type'] == 'mongodb' ){
-                    $constructBody .= 'if (!empty($this->' . $column['capital'] . ')){'.PHP_EOL;
-                    $constructBody .= ' if ($this->' . $column['capital']. ' instanceof \MongoDB\BSON\ObjectId){'.PHP_EOL;
-                    $constructBody .= '     return $this->' . $column['capital'].';'.PHP_EOL;
-                    $constructBody .= ' } else {'.PHP_EOL;
-                    $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'].';'.PHP_EOL;
-                    $constructBody .= ' }'.PHP_EOL;
-                    $constructBody .= '}'.PHP_EOL;
-                    $constructBody .= 'return $this->' . $column['capital'].';'.PHP_EOL;
+                if ($this->data['db-type'] == 'mongodb') {
+                    $constructBody .= 'if (!empty($this->' . $column['capital'] . ')){' . PHP_EOL;
+                    $constructBody .= ' if ($this->' . $column['capital'] . ' instanceof \MongoDB\BSON\ObjectId){' . PHP_EOL;
+                    $constructBody .= '     return $this->' . $column['capital'] . ';' . PHP_EOL;
+                    $constructBody .= ' } else {' . PHP_EOL;
+                    $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
+                    $constructBody .= ' }' . PHP_EOL;
+                    $constructBody .= '}' . PHP_EOL;
+                    $constructBody .= 'return $this->' . $column['capital'] . ';' . PHP_EOL;
                 } else {
                     $constructBody .= 'return !empty($this->' . $column['capital'] . ') ? (' . $returnType . ')$this->' . $column['capital'] . ' : $this->' . $column['capital'] . ';' . PHP_EOL;
                 }
@@ -565,6 +581,24 @@ class EntityItem extends AbstractGenerator
                     'longDescription'  => null,
                     'tags'             => [
                         new ReturnTag(['datatype' => 'array']),
+                    ],
+                ]
+            ),
+        ]);
+        $constructBody = '$this->isDoc = true;' . PHP_EOL;
+        $constructBody .= 'return $this;' . PHP_EOL;
+        $methods[] = MethodGenerator::fromArray([
+            'name'       => 'toDoc',
+            'parameters' => [],
+            'returntype' => 'self',
+            'flags'      => MethodGenerator::FLAG_PUBLIC,
+            'body'       => $constructBody,
+            'docblock'   => DocBlockGenerator::fromArray(
+                [
+                    'shortDescription' => '',
+                    'longDescription'  => null,
+                    'tags'             => [
+                        new ReturnTag(['datatype' => 'self']),
                     ],
                 ]
             ),
