@@ -9,10 +9,9 @@
 namespace App\Common\Generator\Core\ZendCode;
 
 use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Generator\DocBlock\Tag\GenericTag;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
+use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\PropertyGenerator;
@@ -63,7 +62,8 @@ class Document extends AbstractGenerator
             ),
             'properties'    => [
                 ['container', null, PropertyGenerator::FLAG_PROTECTED],
-                ['debug', false, PropertyGenerator::FLAG_PROTECTED]
+                ['table', null, PropertyGenerator::FLAG_PROTECTED],
+                ['debug', false, PropertyGenerator::FLAG_PROTECTED],
             ],
             'methods'       => [
                 [
@@ -79,7 +79,7 @@ class Document extends AbstractGenerator
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
-                    '$this->debug = $debug;' . "\n" .
+                    '$this->debug = $debug;' . PHP_EOL .
                     'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
@@ -106,7 +106,7 @@ class Document extends AbstractGenerator
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
-                    '$this->container = $c;' . "\n" .
+                    '$this->container = $c;' . PHP_EOL .
                     'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
@@ -156,49 +156,74 @@ class Document extends AbstractGenerator
                     ),
                 ],
                 [
-                    'name'      =>'deleteDocument',
-                    'parameters'=>[
+                    'name'       => 'setTableName',
+                    'parameters' => [
                         ParameterGenerator::fromArray(
                             [
-                                'name'=>'entity',
-                                'type'=>$this->data['_namespace'].'\Entity\Entity',
+                                'name' => 's',
+                                'type' => 'String',
                             ]
-                        )
+                        ),
                     ],
-                    'flags'     =>[MethodGenerator::FLAG_PUBLIC,MethodGenerator::FLAG_ABSTRACT],
-                    'body'      =>null,
-                    'docblock'  =>DocBlockGenerator::fromArray(
+                    'flags'      => MethodGenerator::FLAG_PUBLIC,
+                    'body'       => '$this->table = $s;' . PHP_EOL .
+                    'return $this;',
+                    'docblock'   => DocBlockGenerator::fromArray(
                         [
-                            'shortDescription'=>'Converts database column name to php setter/getter function name',
-                            'longDescription' =>null,
-                            'tags'            =>[
-                                new ParamTag('entity',[$this->data['_namespace'].'\Entity\Entity']),
-                                new ParamTag('useTransaction',['boolean']),
+                            'shortDescription' => 'Set table name',
+                            'longDescription'  => null,
+                            'tags'             => [
                                 new ReturnTag([
-                                    'datatype'=>'int',
+                                    'datatype' => 'self',
                                 ]),
                             ],
                         ]
                     ),
                 ],
                 [
-                    'name'      =>'findOneDocBy',
-                    'parameters'=>[
+                    'name'       => 'deleteDocument',
+                    'parameters' => [
+                        ParameterGenerator::fromArray(
+                            [
+                                'name' => 'entity',
+                                'type' => $this->data['_namespace'] . '\Entity\Entity',
+                            ]
+                        ),
+                    ],
+                    'flags'      => [MethodGenerator::FLAG_PUBLIC, MethodGenerator::FLAG_ABSTRACT],
+                    'body'       => null,
+                    'docblock'   => DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription' => 'Converts database column name to php setter/getter function name',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
+                                new ParamTag('useTransaction', ['boolean']),
+                                new ReturnTag([
+                                    'datatype' => 'int',
+                                ]),
+                            ],
+                        ]
+                    ),
+                ],
+                [
+                    'name'       => 'findOneDocBy',
+                    'parameters' => [
                         ParameterGenerator::fromArray([
-                            'name'        =>'criteria',
-                            'defaultvalue'=>[],
-                            'type'        =>'array',
+                            'name'         => 'criteria',
+                            'defaultvalue' => [],
+                            'type'         => 'array',
                         ]),
                     ],
-                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
-                    'body'      =>'return current($this->findDocBy($criteria,[],1));',
-                    'docblock'  =>DocBlockGenerator::fromArray(
+                    'flags'      => MethodGenerator::FLAG_PUBLIC,
+                    'body'       => 'return current($this->findDocBy($criteria,[],1));',
+                    'docblock'   => DocBlockGenerator::fromArray(
                         [
-                            'shortDescription'=>'Find one by criteria',
-                            'longDescription' =>null,
-                            'tags'            =>[
-                                new ParamTag('criteria',['array'],'Search criteria'),
-                                new ReturnTag(['array|boolean'],''),
+                            'shortDescription' => 'Find one by criteria',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('criteria', ['array'], 'Search criteria'),
+                                new ReturnTag(['array|boolean'], ''),
                             ],
                         ]
                     ),

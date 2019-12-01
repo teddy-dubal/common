@@ -66,19 +66,19 @@ class DocumentManager extends AbstractGenerator
 
     private function getProperties()
     {
-        $classProperties   = [];
-        $classProperties[] = PropertyGenerator::fromArray([
-            'name'         => 'table',
-            'defaultvalue' => $this->data['_tbname'],
-            'flags'        => PropertyGenerator::FLAG_PROTECTED,
-            'docblock'     => DocBlockGenerator::fromArray([
-                'shortDescription' => 'Name of database table ',
-                'longDescription'  => null,
-                'tags'             => [
-                    new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
-                ],
-            ]),
-        ]);
+        $classProperties = [];
+        // $classProperties[] = PropertyGenerator::fromArray([
+        //     'name'         => 'table',
+        //     'defaultvalue' => $this->data['_tbname'],
+        //     'flags'        => PropertyGenerator::FLAG_PROTECTED,
+        //     'docblock'     => DocBlockGenerator::fromArray([
+        //         'shortDescription' => 'Name of database table ',
+        //         'longDescription'  => null,
+        //         'tags'             => [
+        //             new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
+        //         ],
+        //     ]),
+        // ]);
         $classProperties[] = PropertyGenerator::fromArray([
             'name'         => 'id',
             'defaultvalue' => 'array' !== $this->data['_primaryKey']['phptype'] ? $this->data['_primaryKey']['field'] : eval('return ' . $this->data['_primaryKey']['field'] . ';'),
