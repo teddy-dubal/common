@@ -314,7 +314,7 @@ class DocumentManager extends AbstractGenerator
     private function getSaveDocumentMethod()
     {
         $constructBody = '';
-        $constructBody .= '$data = $entity->toArray();' . PHP_EOL;
+        $constructBody .= '$data = $entity->setIsDoc()->toArray();' . PHP_EOL;
         $constructBody .= 'if ($ignoreEmptyValues) {' . PHP_EOL;
         $constructBody .= '    foreach ($data as $key => $value) {' . PHP_EOL;
         $constructBody .= '        if ($value === null or $value === \'\') {' . PHP_EOL;

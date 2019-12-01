@@ -233,6 +233,7 @@ class MakeMysql extends MakeDbTableFactory
             }
 
             $columns[] = [
+                'primary'  => $row['Key'] == 'PRI',
                 'index'    => in_array($row['Key'], ['MUL']),
                 'unique'   => in_array($row['Key'], ['UNI']),
                 'field'    => $row['Field'],
