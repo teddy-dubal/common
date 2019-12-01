@@ -345,7 +345,7 @@ class DocumentManager extends AbstractGenerator
             if ($this->data['_primaryKey']['phptype'] == 'array') {
                 foreach ($this->data['_primaryKey']['fields'] as $key) {
                     if ($key['ai']) {
-                        $constructBody .= '        $success = $primary_key[\'' . $key['field'] . '\'] =  $this->getInsertedId();' . PHP_EOL;
+                        $constructBody .= '        $success = $primary_key[\'' . $key['field'] . '\'] =  $insert->getInsertedId();' . PHP_EOL;
                     }
                 }
             }
