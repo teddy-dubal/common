@@ -3,10 +3,10 @@
 namespace App\Common\Generator\Core\ZendCode;
 
 use \Zend\Code\Generator\ClassGenerator;
-use \Zend\Code\Generator\DocBlockGenerator;
 use \Zend\Code\Generator\DocBlock\Tag\GenericTag;
 use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use \Zend\Code\Generator\DocBlock\Tag\ReturnTag;
+use \Zend\Code\Generator\DocBlockGenerator;
 use \Zend\Code\Generator\MethodGenerator;
 use \Zend\Code\Generator\ParameterGenerator;
 use \Zend\Code\Generator\PropertyGenerator;
@@ -341,11 +341,11 @@ class DocumentManager extends AbstractGenerator
             $constructBody .= 'try {' . PHP_EOL;
             $constructBody .= '    // Check for current existence to know if needs to be inserted' . PHP_EOL;
             $constructBody .= '    if ($exists === null) {' . PHP_EOL;
-            $constructBody .= '        $this->insertOne($data);' . PHP_EOL;
+            $constructBody .= '        $insert = $this->insertOne($data);' . PHP_EOL;
             if ($this->data['_primaryKey']['phptype'] == 'array') {
                 foreach ($this->data['_primaryKey']['fields'] as $key) {
                     if ($key['ai']) {
-                        $constructBody .= '        $success = $primary_key[\'' . $key['field'] . '\'] =  $this->getLastInsertValue();' . PHP_EOL;
+                        $constructBody .= '        $success = $primary_key[\'' . $key['field'] . '\'] =  $this->getInsertedId();' . PHP_EOL;
                     }
                 }
             }
