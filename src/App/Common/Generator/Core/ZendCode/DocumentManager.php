@@ -323,7 +323,7 @@ class DocumentManager extends AbstractGenerator
         $constructBody .= '    }' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] == 'array') {
-            $constructBody .= '$primary_key = array();' . PHP_EOL;
+            $constructBody .= '$primary_key = [];' . PHP_EOL;
             foreach ($this->data['_primaryKey']['fields'] as $key) {
                 if (!$key['ai']) {
                     $constructBody .= '$pk_val = $entity->get' . $key['capital'] . '();' . PHP_EOL;
@@ -383,7 +383,13 @@ class DocumentManager extends AbstractGenerator
             }
         }
         $constructBody .= '    } else {' . PHP_EOL;
-        $constructBody .= '     unset($data[\'' . $this->data['_primaryKey']['field'] . '\']);' . PHP_EOL;
+        if ($this->data['_primaryKey']['phptype'] == 'array') {
+            foreach ($this->data['_primaryKey']['fields'] as $key) {
+                $constructBody .= '     unset($data[\'' . $key['field'] . '\']);' . PHP_EOL;
+            }
+        } else {
+            $constructBody .= '     unset($data[\'' . $this->data['_primaryKey']['field'] . '\']);' . PHP_EOL;
+        }
         $constructBody .= '     $update = $this->updateOne(' . PHP_EOL;
         $constructBody .= '            [' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] == 'array') {
@@ -391,7 +397,6 @@ class DocumentManager extends AbstractGenerator
                 $constructBody .= '            \'' . $key['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key[\'' . $key['field'] . '\']),' . PHP_EOL;
             }
         } else {
-
             $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key)' . PHP_EOL;
         }
 
