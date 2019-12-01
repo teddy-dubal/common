@@ -341,7 +341,7 @@ class DocumentManager extends AbstractGenerator
             $constructBody .= 'try {' . PHP_EOL;
             $constructBody .= '    // Check for current existence to know if needs to be inserted' . PHP_EOL;
             $constructBody .= '    if ($exists === null) {' . PHP_EOL;
-            $constructBody .= '        $this->insert($data);' . PHP_EOL;
+            $constructBody .= '        $this->insertOne($data);' . PHP_EOL;
             if ($this->data['_primaryKey']['phptype'] == 'array') {
                 foreach ($this->data['_primaryKey']['fields'] as $key) {
                     if ($key['ai']) {
