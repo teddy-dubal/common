@@ -3,12 +3,12 @@
 namespace App\Common\Generator\Core\ZendCode;
 
 use \Zend\Code\Generator\ClassGenerator;
-use \Zend\Code\Generator\MethodGenerator;
-use \Zend\Code\Generator\DocBlockGenerator;
-use \Zend\Code\Generator\PropertyGenerator;
-use \Zend\Code\Generator\ParameterGenerator;
 use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use \Zend\Code\Generator\DocBlock\Tag\ReturnTag;
+use \Zend\Code\Generator\DocBlockGenerator;
+use \Zend\Code\Generator\MethodGenerator;
+use \Zend\Code\Generator\ParameterGenerator;
+use \Zend\Code\Generator\PropertyGenerator;
 use Zend\Code\Generator\DocBlock\Tag\GenericTag;
 
 /**
@@ -266,15 +266,16 @@ class EntityItem extends AbstractGenerator
             } elseif ($column['phptype'] == 'boolean') {
                 $constructBody .= 'return $this->' . $column['capital'] . ' ? true : false;' . PHP_EOL;
             } else {
-                if ($this->data['db-type'] == 'mongodb' ){
-                    $constructBody .= 'if (!empty($this->' . $column['capital'] . ')){'.PHP_EOL;
-                    $constructBody .= ' if ($this->' . $column['capital']. ' instanceof \MongoDB\BSON\ObjectId){'.PHP_EOL;
-                    $constructBody .= '     return $this->' . $column['capital'].';'.PHP_EOL;
-                    $constructBody .= ' } else {'.PHP_EOL;
-                    $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'].';'.PHP_EOL;
-                    $constructBody .= ' }'.PHP_EOL;
-                    $constructBody .= '}'.PHP_EOL;
-                    $constructBody .= 'return $this->' . $column['capital'].';'.PHP_EOL;
+                // var_dump($column['index']);
+                if ($this->data['db-type'] == 'mongodb') {
+                    $constructBody .= 'if (!empty($this->' . $column['capital'] . ')){' . PHP_EOL;
+                    if ($column['index']) {
+                        $constructBody .= '     return $this->' . $column['capital'] . ';' . PHP_EOL;
+                    } else {
+                        $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
+                    }
+                    $constructBody .= '}' . PHP_EOL;
+                    $constructBody .= 'return $this->' . $column['capital'] . ';' . PHP_EOL;
                 } else {
                     $constructBody .= 'return !empty($this->' . $column['capital'] . ') ? (' . $returnType . ')$this->' . $column['capital'] . ' : $this->' . $column['capital'] . ';' . PHP_EOL;
                 }
