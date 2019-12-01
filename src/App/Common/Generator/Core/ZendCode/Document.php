@@ -206,28 +206,6 @@ class Document extends AbstractGenerator
                         ]
                     ),
                 ],
-                [
-                    'name'       => 'findOneDocBy',
-                    'parameters' => [
-                        ParameterGenerator::fromArray([
-                            'name'         => 'criteria',
-                            'defaultvalue' => [],
-                            'type'         => 'array',
-                        ]),
-                    ],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => 'return current($this->findDocBy($criteria,[],1));',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => 'Find one by criteria',
-                            'longDescription'  => null,
-                            'tags'             => [
-                                new ParamTag('criteria', ['array'], 'Search criteria'),
-                                new ReturnTag(['array|boolean'], ''),
-                            ],
-                        ]
-                    ),
-                ],
             ],
         ];
     }

@@ -28,6 +28,7 @@ class DocumentManager extends AbstractGenerator
         $methods = $this->getConstructor();
         $methods = array_merge($methods, $this->getMethodsFindDoc());
         $methods = array_merge($methods, $this->getMethodsfindDocBy());
+        $methods = array_merge($methods, $this->getMethodsfindOneDocBy());
         $methods = array_merge($methods, $this->getSaveDocumentMethod());
         $methods = array_merge($methods, $this->getDeleteDocumentMethod());
 
@@ -179,6 +180,33 @@ class DocumentManager extends AbstractGenerator
         ];
     }
 
+    private function getMethodsfindOneDocBy()
+    {
+        return [
+            [
+                'name'       => 'findOneDocBy',
+                'parameters' => [
+                    ParameterGenerator::fromArray([
+                        'name'         => 'criteria',
+                        'defaultvalue' => [],
+                        'type'         => 'array',
+                    ]),
+                ],
+                'flags'      => MethodGenerator::FLAG_PUBLIC,
+                'body'       => 'return current($this->findDocBy($criteria,[],1));',
+                'docblock'   => DocBlockGenerator::fromArray(
+                    [
+                        'shortDescription' => 'Find one by criteria',
+                        'longDescription'  => null,
+                        'tags'             => [
+                            new ParamTag('criteria', ['array'], 'Search criteria'),
+                            new ReturnTag(['array|boolean'], ''),
+                        ],
+                    ]
+                ),
+            ],
+        ];
+    }
     private function getMethodsfindDocBy()
     {
         $body = '$doc = $this->find($criteria,[\'limit\' => $limit,\'sort\' => $order,\'skip\' => $offset]);' . PHP_EOL;
