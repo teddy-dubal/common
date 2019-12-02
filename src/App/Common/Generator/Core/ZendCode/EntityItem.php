@@ -620,24 +620,6 @@ class EntityItem extends AbstractGenerator
                 ]
             ),
         ]);
-        $constructBody = '$this->isDoc = true;' . PHP_EOL;
-        $constructBody .= 'return $this;' . PHP_EOL;
-        $methods[] = MethodGenerator::fromArray([
-            'name'       => 'toDoc',
-            'parameters' => [],
-            'returntype' => 'self',
-            'flags'      => MethodGenerator::FLAG_PUBLIC,
-            'body'       => $constructBody,
-            'docblock'   => DocBlockGenerator::fromArray(
-                [
-                    'shortDescription' => '',
-                    'longDescription'  => null,
-                    'tags'             => [
-                        new ReturnTag(['datatype' => 'self']),
-                    ],
-                ]
-            ),
-        ]);
         return $methods;
     }
 
