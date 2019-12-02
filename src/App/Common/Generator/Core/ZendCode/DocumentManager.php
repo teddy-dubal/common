@@ -3,10 +3,10 @@
 namespace App\Common\Generator\Core\ZendCode;
 
 use \Zend\Code\Generator\ClassGenerator;
-use \Zend\Code\Generator\DocBlockGenerator;
 use \Zend\Code\Generator\DocBlock\Tag\GenericTag;
 use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use \Zend\Code\Generator\DocBlock\Tag\ReturnTag;
+use \Zend\Code\Generator\DocBlockGenerator;
 use \Zend\Code\Generator\MethodGenerator;
 use \Zend\Code\Generator\ParameterGenerator;
 use \Zend\Code\Generator\PropertyGenerator;
@@ -28,6 +28,7 @@ class DocumentManager extends AbstractGenerator
         $methods = $this->getConstructor();
         $methods = array_merge($methods, $this->getMethodsFindDoc());
         $methods = array_merge($methods, $this->getMethodsfindDocBy());
+        $methods = array_merge($methods, $this->getMethodsfindOneDocBy());
         $methods = array_merge($methods, $this->getSaveDocumentMethod());
         $methods = array_merge($methods, $this->getDeleteDocumentMethod());
 
@@ -66,19 +67,19 @@ class DocumentManager extends AbstractGenerator
 
     private function getProperties()
     {
-        $classProperties   = [];
-        $classProperties[] = PropertyGenerator::fromArray([
-            'name'         => 'table',
-            'defaultvalue' => $this->data['_tbname'],
-            'flags'        => PropertyGenerator::FLAG_PROTECTED,
-            'docblock'     => DocBlockGenerator::fromArray([
-                'shortDescription' => 'Name of database table ',
-                'longDescription'  => null,
-                'tags'             => [
-                    new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
-                ],
-            ]),
-        ]);
+        $classProperties = [];
+        // $classProperties[] = PropertyGenerator::fromArray([
+        //     'name'         => 'table',
+        //     'defaultvalue' => $this->data['_tbname'],
+        //     'flags'        => PropertyGenerator::FLAG_PROTECTED,
+        //     'docblock'     => DocBlockGenerator::fromArray([
+        //         'shortDescription' => 'Name of database table ',
+        //         'longDescription'  => null,
+        //         'tags'             => [
+        //             new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
+        //         ],
+        //     ]),
+        // ]);
         $classProperties[] = PropertyGenerator::fromArray([
             'name'         => 'id',
             'defaultvalue' => 'array' !== $this->data['_primaryKey']['phptype'] ? $this->data['_primaryKey']['field'] : eval('return ' . $this->data['_primaryKey']['field'] . ';'),
@@ -179,6 +180,33 @@ class DocumentManager extends AbstractGenerator
         ];
     }
 
+    private function getMethodsfindOneDocBy()
+    {
+        return [
+            [
+                'name'       => 'findOneDocBy',
+                'parameters' => [
+                    ParameterGenerator::fromArray([
+                        'name'         => 'criteria',
+                        'defaultvalue' => [],
+                        'type'         => 'array',
+                    ]),
+                ],
+                'flags'      => MethodGenerator::FLAG_PUBLIC,
+                'body'       => 'return current($this->findDocBy($criteria,[],1));',
+                'docblock'   => DocBlockGenerator::fromArray(
+                    [
+                        'shortDescription' => 'Find one by criteria',
+                        'longDescription'  => null,
+                        'tags'             => [
+                            new ParamTag('criteria', ['array'], 'Search criteria'),
+                            new ReturnTag(['array|boolean'], ''),
+                        ],
+                    ]
+                ),
+            ],
+        ];
+    }
     private function getMethodsfindDocBy()
     {
         $body = '$doc = $this->find($criteria,[\'limit\' => $limit,\'sort\' => $order,\'skip\' => $offset]);' . PHP_EOL;
@@ -314,7 +342,7 @@ class DocumentManager extends AbstractGenerator
     private function getSaveDocumentMethod()
     {
         $constructBody = '';
-        $constructBody .= '$data = $entity->toArray();' . PHP_EOL;
+        $constructBody .= '$data = $entity->setIsDoc()->toArray();' . PHP_EOL;
         $constructBody .= 'if ($ignoreEmptyValues) {' . PHP_EOL;
         $constructBody .= '    foreach ($data as $key => $value) {' . PHP_EOL;
         $constructBody .= '        if ($value === null or $value === \'\') {' . PHP_EOL;
@@ -323,7 +351,7 @@ class DocumentManager extends AbstractGenerator
         $constructBody .= '    }' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] == 'array') {
-            $constructBody .= '$primary_key = array();' . PHP_EOL;
+            $constructBody .= '$primary_key = [];' . PHP_EOL;
             foreach ($this->data['_primaryKey']['fields'] as $key) {
                 if (!$key['ai']) {
                     $constructBody .= '$pk_val = $entity->get' . $key['capital'] . '();' . PHP_EOL;
@@ -341,11 +369,11 @@ class DocumentManager extends AbstractGenerator
             $constructBody .= 'try {' . PHP_EOL;
             $constructBody .= '    // Check for current existence to know if needs to be inserted' . PHP_EOL;
             $constructBody .= '    if ($exists === null) {' . PHP_EOL;
-            $constructBody .= '        $this->insert($data);' . PHP_EOL;
+            $constructBody .= '        $insert = $this->insertOne($data);' . PHP_EOL;
             if ($this->data['_primaryKey']['phptype'] == 'array') {
                 foreach ($this->data['_primaryKey']['fields'] as $key) {
                     if ($key['ai']) {
-                        $constructBody .= '        $success = $primary_key[\'' . $key['field'] . '\'] =  $this->getLastInsertValue();' . PHP_EOL;
+                        $constructBody .= '        $success = $primary_key[\'' . $key['field'] . '\'] =  $insert->getInsertedId();' . PHP_EOL;
                     }
                 }
             }
@@ -383,7 +411,13 @@ class DocumentManager extends AbstractGenerator
             }
         }
         $constructBody .= '    } else {' . PHP_EOL;
-        $constructBody .= '     unset($data[\'' . $this->data['_primaryKey']['field'] . '\']);' . PHP_EOL;
+        if ($this->data['_primaryKey']['phptype'] == 'array') {
+            foreach ($this->data['_primaryKey']['fields'] as $key) {
+                $constructBody .= '     unset($data[\'' . $key['field'] . '\']);' . PHP_EOL;
+            }
+        } else {
+            $constructBody .= '     unset($data[\'' . $this->data['_primaryKey']['field'] . '\']);' . PHP_EOL;
+        }
         $constructBody .= '     $update = $this->updateOne(' . PHP_EOL;
         $constructBody .= '            [' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] == 'array') {
@@ -391,7 +425,6 @@ class DocumentManager extends AbstractGenerator
                 $constructBody .= '            \'' . $key['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key[\'' . $key['field'] . '\']),' . PHP_EOL;
             }
         } else {
-
             $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key)' . PHP_EOL;
         }
 

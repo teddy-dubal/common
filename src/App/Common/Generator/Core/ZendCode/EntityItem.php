@@ -86,14 +86,14 @@ class EntityItem extends AbstractGenerator
         $classProperties[] = PropertyGenerator::fromArray(
             [
                 'name'         => 'isDoc',
-                'defaultvalue' => 'boolean',
+                'defaultvalue' => false,
                 'flags'        => PropertyGenerator::FLAG_PROTECTED,
                 'docblock'     => DocBlockGenerator::fromArray(
                     [
-                        'shortDescription' => '',
+                        'shortDescription' => 'Set Entity type',
                         'longDescription'  => '',
                         'tags'             => [
-                            new GenericTag('var', $this->data['_primaryKey']['phptype'] . ' primary_key'),
+                            new GenericTag('var', 'boolean isDoc'),
                         ],
                     ]
                 ),
@@ -228,7 +228,15 @@ class EntityItem extends AbstractGenerator
                 $constructBody .= '    if (! $data instanceof \DateTime) {' . PHP_EOL;
                 $constructBody .= '        $data = new \DateTime($data);' . PHP_EOL;
                 $constructBody .= '    }' . PHP_EOL;
-                $constructBody .= '    $data = $data->format(\'Y-m-d H:i:s\');' . PHP_EOL;
+                if ($this->data['db-type'] == 'mongodb') {
+                    $constructBody .= 'if ($this->isDoc){' . PHP_EOL;
+                    $constructBody .= '    $data = $data->format(\DateTime::ISO8601);' . PHP_EOL;
+                    $constructBody .= '} else {' . PHP_EOL;
+                    $constructBody .= '    $data = $data->format(\'Y-m-d H:i:s\');' . PHP_EOL;
+                    $constructBody .= '}' . PHP_EOL;
+                } else {
+                    $constructBody .= '    $data = $data->format(\'Y-m-d H:i:s\');' . PHP_EOL;
+                }
                 $constructBody .= '}' . PHP_EOL;
             }
             $constructBody .= '$this->' . $column['capital'] . ' = $data;' . PHP_EOL;
@@ -284,11 +292,15 @@ class EntityItem extends AbstractGenerator
             } else {
                 if ($this->data['db-type'] == 'mongodb') {
                     $constructBody .= 'if (!empty($this->' . $column['capital'] . ')){' . PHP_EOL;
-                    $constructBody .= ' if ($this->' . $column['capital'] . ' instanceof \MongoDB\BSON\ObjectId){' . PHP_EOL;
-                    $constructBody .= '     return $this->' . $column['capital'] . ';' . PHP_EOL;
-                    $constructBody .= ' } else {' . PHP_EOL;
-                    $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
-                    $constructBody .= ' }' . PHP_EOL;
+                    if ($column['primary']) {
+                        $constructBody .= ' if ($this->' . $column['capital'] . ' instanceof \MongoDB\BSON\ObjectId){' . PHP_EOL;
+                        $constructBody .= '     return $this->' . $column['capital'] . ';' . PHP_EOL;
+                        $constructBody .= ' } else {' . PHP_EOL;
+                        $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
+                        $constructBody .= ' }' . PHP_EOL;
+                    } else {
+                        $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
+                    }
                     $constructBody .= '}' . PHP_EOL;
                     $constructBody .= 'return $this->' . $column['capital'] . ';' . PHP_EOL;
                 } else {
@@ -558,6 +570,32 @@ class EntityItem extends AbstractGenerator
                     'tags'             => [
                         new ParamTag('data', ['array'], 'array of values to set'),
                         new ReturnTag(['datatype' => 'self']),
+                    ],
+                ]
+            ),
+        ]);
+        $constructBody = '$this->isDoc = $val;' . PHP_EOL;
+        $constructBody .= 'return $this;' . PHP_EOL;
+        $methods[] = MethodGenerator::fromArray([
+            'name'       => 'setIsDoc',
+            'parameters' => [
+                ParameterGenerator::fromArray(
+                    [
+                        'name'         => 'val',
+                        'type'         => 'bool',
+                        'defaultvalue' => true,
+                    ]
+                ),
+            ],
+            // 'returntype' => 'self',
+            'flags'      => MethodGenerator::FLAG_PUBLIC,
+            'body'       => $constructBody,
+            'docblock'   => DocBlockGenerator::fromArray(
+                [
+                    'shortDescription' => 'Set type of entity',
+                    'longDescription'  => null,
+                    'tags'             => [
+                        new ParamTag('val', ['boolean']),
                     ],
                 ]
             ),
