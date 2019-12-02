@@ -228,15 +228,7 @@ class EntityItem extends AbstractGenerator
                 $constructBody .= '    if (! $data instanceof \DateTime) {' . PHP_EOL;
                 $constructBody .= '        $data = new \DateTime($data);' . PHP_EOL;
                 $constructBody .= '    }' . PHP_EOL;
-                if ($this->data['db-type'] == 'mongodb') {
-                    $constructBody .= 'if ($this->isDoc){' . PHP_EOL;
-                    $constructBody .= '    $data = $data->format(\DateTime::ISO8601);' . PHP_EOL;
-                    $constructBody .= '} else {' . PHP_EOL;
-                    $constructBody .= '    $data = $data->format(\'Y-m-d H:i:s\');' . PHP_EOL;
-                    $constructBody .= '}' . PHP_EOL;
-                } else {
-                    $constructBody .= '    $data = $data->format(\'Y-m-d H:i:s\');' . PHP_EOL;
-                }
+                $constructBody .= '    $data = $data->format(\'Y-m-d H:i:s\');' . PHP_EOL;
                 $constructBody .= '}' . PHP_EOL;
             }
             $constructBody .= '$this->' . $column['capital'] . ' = $data;' . PHP_EOL;
@@ -286,6 +278,11 @@ class EntityItem extends AbstractGenerator
                 $constructBody .= '    }' . PHP_EOL;
                 $constructBody .= '    return new \DateTime($this->' . $column['capital'] . ');' . PHP_EOL;
                 $constructBody .= '}' . PHP_EOL;
+                if ($this->data['db-type'] == 'mongodb') {
+                    $constructBody .= 'if ($this->isDoc){' . PHP_EOL;
+                    $constructBody .= '    return (new \DateTime($this->' . $column['capital'] . '))->format(\DateTime::ISO8601);' . PHP_EOL;
+                    $constructBody .= '}' . PHP_EOL;
+                }
                 $constructBody .= 'return $this->' . $column['capital'] . ';' . PHP_EOL;
             } elseif ($column['phptype'] == 'boolean') {
                 $constructBody .= 'return $this->' . $column['capital'] . ' ? true : false;' . PHP_EOL;
