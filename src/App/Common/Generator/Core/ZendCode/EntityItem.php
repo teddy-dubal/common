@@ -279,7 +279,7 @@ class EntityItem extends AbstractGenerator
                 $constructBody .= '    return new \DateTime($this->' . $column['capital'] . ');' . PHP_EOL;
                 $constructBody .= '}' . PHP_EOL;
                 if ($this->data['db-type'] == 'mongodb') {
-                    $constructBody .= 'if ($this->isDoc){' . PHP_EOL;
+                    $constructBody .= 'if ($this->isDoc && $this->' . $column['capital'] . '){' . PHP_EOL;
                     $constructBody .= '    return (new \DateTime($this->' . $column['capital'] . '))->format(\DateTime::ISO8601);' . PHP_EOL;
                     $constructBody .= '}' . PHP_EOL;
                 }
