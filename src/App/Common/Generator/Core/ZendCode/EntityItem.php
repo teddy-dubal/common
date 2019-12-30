@@ -296,6 +296,9 @@ class EntityItem extends AbstractGenerator
                         $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
                         $constructBody .= ' }' . PHP_EOL;
                     } else {
+                        $constructBody .= 'if ($this->isDoc && $this->' . $column['capital'] . ' instanceof \MongoDB\BSON\ObjectId){' . PHP_EOL;
+                        $constructBody .= '    return $this->' . $column['capital'] . ';' . PHP_EOL;
+                        $constructBody .= '}' . PHP_EOL;
                         $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
                     }
                     $constructBody .= '}' . PHP_EOL;
