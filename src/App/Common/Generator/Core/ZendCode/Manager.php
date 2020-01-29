@@ -360,15 +360,15 @@ BODY
                             'shortDescription'=>'Manage params of sql request and return results',
                             'longDescription' =>null,
                             'tags'            =>[
-                                newParamTag('columns',['array'],''),
-                                newParamTag('join',['array'],''),
-                                newParamTag('where',['array'],''),
-                                newParamTag('orderBy',['array'],''),
-                                newParamTag('groupBy',['array'],''),
-                                newParamTag('having',['array'],''),
-                                newParamTag('limit',['int'],''),
-                                newParamTag('offset',['int'],''),
-                                newReturnTag(['array','null'],'Found results'),
+                                new ParamTag('columns',['array'],''),
+                                new ParamTag('join',['array'],''),
+                                new ParamTag('where',['array'],''),
+                                new ParamTag('orderBy',['array'],''),
+                                new ParamTag('groupBy',['array'],''),
+                                new ParamTag('having',['array'],''),
+                                new ParamTag('limit',['int'],''),
+                                new ParamTag('offset',['int'],''),
+                                new ReturnTag(['array','null'],'Found results'),
                             ],
                         ]
                     )
@@ -390,8 +390,8 @@ BODY
                             'shortDescription'=>'Count by criteria',
                             'longDescription' =>null,
                             'tags'            =>[
-                                newParamTag('criteria',['array'],'Criteria'),
-                                newReturnTag(['int'],''),
+                                new ParamTag('criteria',['array'],'Criteria'),
+                                new ReturnTag(['int'],''),
                             ],
                         ]
                     ),
@@ -415,8 +415,8 @@ BODY
                             'shortDescription'=>'Is a least one row exists with criteria',
                             'longDescription' =>null,
                             'tags'            =>[
-                                newParamTag('criteria',['array'],'Criteria'),
-                                newReturnTag(['bool'],''),
+                                new ParamTag('criteria',['array'],'Criteria'),
+                                new ReturnTag(['bool'],''),
                             ],
                         ]
                     ),
@@ -443,9 +443,9 @@ BODY
                             'shortDescription'=>'Converts database column name to php setter/getter function name',
                             'longDescription' =>null,
                             'tags'            =>[
-                                newParamTag('entity',[$this->data['_namespace'].'\Entity\Entity']),
-                                newParamTag('useTransaction',['boolean']),
-                                newReturnTag([
+                                new ParamTag('entity',[$this->data['_namespace'].'\Entity\Entity']),
+                                new ParamTag('useTransaction',['boolean']),
+                                new ReturnTag([
                                     'datatype'=>'int',
                                 ]),
                             ],
@@ -537,8 +537,8 @@ BODY
                             'shortDescription'=>' @see Zend\Db\TableGateway\AbstractTableGateway::selectWith',
                             'longDescription' =>null,
                             'tags'            =>[
-                                newParamTag('select',['Zend\Db\Sql\Select']),
-                                newReturnTag([
+                                new ParamTag('select',['Zend\Db\Sql\Select']),
+                                new ReturnTag([
                                     'datatype'=>'ResultSet',
                                 ]),
                             ],
@@ -565,8 +565,8 @@ BODY
                             'shortDescription'=>'Find one by criteria',
                             'longDescription' =>null,
                             'tags'            =>[
-                                newParamTag('criteria',['array'],'Search criteria'),
-                                newReturnTag(['array|boolean'],''),
+                                new ParamTag('criteria',['array'],'Search criteria'),
+                                new ReturnTag(['array|boolean'],''),
                             ],
                         ]
                     ),
@@ -591,8 +591,8 @@ BODY
                             'shortDescription'=>'Find Entity one by criteria',
                             'longDescription' =>null,
                             'tags'            =>[
-                                newParamTag('criteria',['array'],'Search criteria'),
-                                newReturnTag(['boolean|Entity'],''),
+                                new ParamTag('criteria',['array'],'Search criteria'),
+                                new ReturnTag(['boolean|Entity'],''),
                             ],
                         ]
                     ),
