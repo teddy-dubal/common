@@ -1,0 +1,45 @@
+{
+    "name": "app/common",
+    "description": "Common Lib",
+    "authors": [
+        {
+            "name": "Teddy Dona",
+            "email": "teddy.dona@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "3.4.*",
+        "symfony/filesystem": "3.4.*",
+        "symfony/finder": "3.4.*",
+        "zendframework/zend-db": "~2.9",
+        "zendframework/zend-inputfilter": "~2.8",
+        "zendframework/zend-code": "^3.3",
+        "pimple/pimple": "~3.0",
+        "defuse/php-encryption": "^2.1",
+        "symfony/yaml": "3.4.*"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "v1.6.0",
+        "mockery/mockery": "^0.9.5",
+        "phpunit/phpunit": "^6.1",
+        "monolog/monolog": "~1.7",
+        "friendsofphp/php-cs-fixer": "v2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/App/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "": "demo/"
+        },
+        "psr-4": {
+            "App\\Model\\": "demo/models",
+            "Tests\\App\\": "tests/src"
+        }
+    },
+    "bin": [
+        "appcmd"
+    ]
+}

@@ -1,0 +1,65 @@
+# Created by http://www.gitignore.io
+
+### Composer ###
+composer.phar
+vendor/
+
+# Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+# composer.lock
+
+
+### NetBeans ###
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Local configs
+config/autoload/*local.php
+
+# Binary gettext files
+*.po
+
+# Data
+log/
+logs/
+cache/
+temp/
+tmp/
+
+# ZF1
+demos/
+extras/documentation
+
+
+### Symfony2 ###
+# Cache and logs
+/app/cache/*
+/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+
+# Parameters
+/app/config/parameters.yml
+/app/config/parameters.ini
+
+# Managed by Composer
+/app/bootstrap.php.cache
+/bin/
+
+# Assets and user uploads
+/web/bundles/
+/web/uploads/
+
+# PHPUnit
+/app/phpunit.xml
+
+/.project
+
+# phpstorm metadata
+/.idea
+/composer.lock
