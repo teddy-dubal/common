@@ -8,17 +8,18 @@
 
 namespace App\Common\Generator\Core\ZendCode;
 
-use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Generator\FileGenerator;
-use Zend\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\FileGenerator;
+use Laminas\Code\Generator\MethodGenerator;
 
 /**
  * Description of Entity
  *
  * @author teddy
  */
-abstract class AbstractGenerator {
+abstract class AbstractGenerator
+{
 
     private $fileGenerator;
     private $classGenerator;
@@ -26,31 +27,37 @@ abstract class AbstractGenerator {
     private $data;
     private $entityClass;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->fileGenerator   = new FileGenerator();
         $this->classGenerator  = new ClassGenerator();
         $this->methodGenerator = new MethodGenerator();
     }
 
-    public function setData($data = []) {
+    public function setData($data = [])
+    {
         $this->data = $data;
     }
 
-    public function setNamespace($data) {
+    public function setNamespace($data)
+    {
         $this->data = array_merge($this->data, ['namespace' => $data]);
     }
 
-    public function getData() {
+    public function getData()
+    {
         return $this->data;
     }
 
-    public function getFileGenerator() {
+    public function getFileGenerator()
+    {
         return $this->fileGenerator;
     }
 
     abstract public function getClassArrayRepresentation();
 
-    public function generate() {
+    public function generate()
+    {
         $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
         $this->defineFileInfo($class);
         return $this->fileGenerator->setClass($class)->generate();
@@ -61,26 +68,27 @@ abstract class AbstractGenerator {
      *
      * @param ClassGenerator $class contained class
      */
-    protected function defineFileInfo(ClassGenerator $class) {
+    protected function defineFileInfo(ClassGenerator $class)
+    {
         $doc = DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => 'Contains ' . $class->getName() . ' class file',
-                            'longDescription'  => 'Generated Automatically.' . PHP_EOL . 'Please do not modify',
-                            'tags'             => [
-                                [
-                                    'name'        => 'author',
-                                    'description' => $this->data['_author'],
-                                ],
-                                [
-                                    'name'        => 'license',
-                                    'description' => $this->data['_license'],
-                                ],
-                                [
-                                    'name'        => 'package',
-                                    'description' => $class->getNamespaceName(),
-                                ],
-                            ],
-                        ]
+            [
+                'shortDescription' => 'Contains ' . $class->getName() . ' class file',
+                'longDescription'  => 'Generated Automatically.' . PHP_EOL . 'Please do not modify',
+                'tags'             => [
+                    [
+                        'name'        => 'author',
+                        'description' => $this->data['_author'],
+                    ],
+                    [
+                        'name'        => 'license',
+                        'description' => $this->data['_license'],
+                    ],
+                    [
+                        'name'        => 'package',
+                        'description' => $class->getNamespaceName(),
+                    ],
+                ],
+            ]
         );
         $this->fileGenerator->setDocBlock($doc);
     }
@@ -93,7 +101,8 @@ abstract class AbstractGenerator {
      * @param String $str
      * @return String
      */
-    protected function _getCapital($str) {
+    protected function _getCapital($str)
+    {
         $temp = '';
         foreach (explode("_", $str) as $part) {
             $temp .= ucfirst($part);
