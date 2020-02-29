@@ -2,14 +2,14 @@
 
 namespace App\Common\Generator\Core\ZendCode;
 
+use Zend\Code\Generator\DocBlock\Tag\GenericTag;
 use \Zend\Code\Generator\ClassGenerator;
-use \Zend\Code\Generator\MethodGenerator;
 use \Zend\Code\Generator\DocBlockGenerator;
-use \Zend\Code\Generator\PropertyGenerator;
-use \Zend\Code\Generator\ParameterGenerator;
 use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use \Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\DocBlock\Tag\GenericTag;
+use \Zend\Code\Generator\MethodGenerator;
+use \Zend\Code\Generator\ParameterGenerator;
+use \Zend\Code\Generator\PropertyGenerator;
 
 /**
  * Description of Entity
@@ -78,6 +78,22 @@ class EntityItem extends AbstractGenerator
                         'longDescription'  => '',
                         'tags'             => [
                             new GenericTag('var', $this->data['_primaryKey']['phptype'] . ' primary_key'),
+                        ],
+                    ]
+                ),
+            ]
+        );
+        $classProperties[] = PropertyGenerator::fromArray(
+            [
+                'name'         => 'isDoc',
+                'defaultvalue' => false,
+                'flags'        => PropertyGenerator::FLAG_PROTECTED,
+                'docblock'     => DocBlockGenerator::fromArray(
+                    [
+                        'shortDescription' => 'Set Entity type',
+                        'longDescription'  => '',
+                        'tags'             => [
+                            new GenericTag('var', 'boolean isDoc'),
                         ],
                     ]
                 ),
@@ -262,11 +278,34 @@ class EntityItem extends AbstractGenerator
                 $constructBody .= '    }' . PHP_EOL;
                 $constructBody .= '    return new \DateTime($this->' . $column['capital'] . ');' . PHP_EOL;
                 $constructBody .= '}' . PHP_EOL;
+                if ($this->data['db-type'] == 'mongodb') {
+                    $constructBody .= 'if ($this->isDoc && $this->' . $column['capital'] . '){' . PHP_EOL;
+                    $constructBody .= '    return (new \DateTime($this->' . $column['capital'] . '))->format(\DateTime::ISO8601);' . PHP_EOL;
+                    $constructBody .= '}' . PHP_EOL;
+                }
                 $constructBody .= 'return $this->' . $column['capital'] . ';' . PHP_EOL;
             } elseif ($column['phptype'] == 'boolean') {
                 $constructBody .= 'return $this->' . $column['capital'] . ' ? true : false;' . PHP_EOL;
             } else {
-                $constructBody .= 'return !empty($this->' . $column['capital'] . ') ? (' . $returnType . ')$this->' . $column['capital'] . ' : $this->' . $column['capital'] . ';' . PHP_EOL;
+                if ($this->data['db-type'] == 'mongodb') {
+                    $constructBody .= 'if (!empty($this->' . $column['capital'] . ')){' . PHP_EOL;
+                    if ($column['primary']) {
+                        $constructBody .= ' if ($this->' . $column['capital'] . ' instanceof \MongoDB\BSON\ObjectId){' . PHP_EOL;
+                        $constructBody .= '     return $this->' . $column['capital'] . ';' . PHP_EOL;
+                        $constructBody .= ' } else {' . PHP_EOL;
+                        $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
+                        $constructBody .= ' }' . PHP_EOL;
+                    } else {
+                        $constructBody .= 'if ($this->isDoc && $this->' . $column['capital'] . ' instanceof \MongoDB\BSON\ObjectId){' . PHP_EOL;
+                        $constructBody .= '    return $this->' . $column['capital'] . ';' . PHP_EOL;
+                        $constructBody .= '}' . PHP_EOL;
+                        $constructBody .= '     return (' . $returnType . ')$this->' . $column['capital'] . ';' . PHP_EOL;
+                    }
+                    $constructBody .= '}' . PHP_EOL;
+                    $constructBody .= 'return $this->' . $column['capital'] . ';' . PHP_EOL;
+                } else {
+                    $constructBody .= 'return !empty($this->' . $column['capital'] . ') ? (' . $returnType . ')$this->' . $column['capital'] . ' : $this->' . $column['capital'] . ';' . PHP_EOL;
+                }
             }
 
             $methods[] = MethodGenerator::fromArray([
@@ -531,6 +570,32 @@ class EntityItem extends AbstractGenerator
                     'tags'             => [
                         new ParamTag('data', ['array'], 'array of values to set'),
                         new ReturnTag(['datatype' => 'self']),
+                    ],
+                ]
+            ),
+        ]);
+        $constructBody = '$this->isDoc = $val;' . PHP_EOL;
+        $constructBody .= 'return $this;' . PHP_EOL;
+        $methods[] = MethodGenerator::fromArray([
+            'name'       => 'setIsDoc',
+            'parameters' => [
+                ParameterGenerator::fromArray(
+                    [
+                        'name'         => 'val',
+                        'type'         => 'bool',
+                        'defaultvalue' => true,
+                    ]
+                ),
+            ],
+            // 'returntype' => 'self',
+            'flags'      => MethodGenerator::FLAG_PUBLIC,
+            'body'       => $constructBody,
+            'docblock'   => DocBlockGenerator::fromArray(
+                [
+                    'shortDescription' => 'Set type of entity',
+                    'longDescription'  => null,
+                    'tags'             => [
+                        new ParamTag('val', ['boolean']),
                     ],
                 ]
             ),

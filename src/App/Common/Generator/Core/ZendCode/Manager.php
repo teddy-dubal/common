@@ -9,25 +9,27 @@
 namespace App\Common\Generator\Core\ZendCode;
 
 use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Generator\PropertyGenerator;
-use Zend\Code\Generator\ParameterGenerator;
+use Zend\Code\Generator\DocBlock\Tag\GenericTag;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\DocBlock\Tag\GenericTag;
+use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\ParameterGenerator;
+use Zend\Code\Generator\PropertyGenerator;
 
 /**
  * Description of Entity
  *
  * @author teddy
  */
-class Manager extends AbstractGenerator {
+class Manager extends AbstractGenerator
+{
 
     private $useTableGatewayClass = 'Zend\Db\TableGateway\AbstractTableGateway';
     private $data;
 
-    public function getClassArrayRepresentation() {
+    public function getClassArrayRepresentation()
+    {
         $this->data = $this->getData();
 
         return [
@@ -36,48 +38,48 @@ class Manager extends AbstractGenerator {
             'extendedclass' => $this->useTableGatewayClass,
             'flags'         => ClassGenerator::FLAG_ABSTRACT,
             'docblock'      => DocBlockGenerator::fromArray(
-                    [
-                        'shortDescription' => 'Application Model DbTables',
-                        'longDescription'  => null,
-                        'tags'             => [
-                            [
-                                'name'        => 'package',
-                                'description' => $this->data['_namespace'],
-                            ],
-                            [
-                                'name'        => 'author',
-                                'description' => $this->data['_author'],
-                            ],
-                            [
-                                'name'        => 'copyright',
-                                'description' => $this->data['_copyright'],
-                            ],
-                            [
-                                'name'        => 'license',
-                                'description' => $this->data['_license'],
-                            ],
-                        ]
-                    ]
+                [
+                    'shortDescription' => 'Application Model DbTables',
+                    'longDescription'  => null,
+                    'tags'             => [
+                        [
+                            'name'        => 'package',
+                            'description' => $this->data['_namespace'],
+                        ],
+                        [
+                            'name'        => 'author',
+                            'description' => $this->data['_author'],
+                        ],
+                        [
+                            'name'        => 'copyright',
+                            'description' => $this->data['_copyright'],
+                        ],
+                        [
+                            'name'        => 'license',
+                            'description' => $this->data['_license'],
+                        ],
+                    ],
+                ]
             ),
             'properties'    => [
                 ['entity', null, PropertyGenerator::FLAG_PROTECTED],
                 ['container', null, PropertyGenerator::FLAG_PROTECTED],
                 ['debug', false, PropertyGenerator::FLAG_PROTECTED],
                 PropertyGenerator::fromArray(
-                        [
-                            'name'         => 'wasInTransaction',
-                            'defaultvalue' => false,
-                            'flags'        => PropertyGenerator::FLAG_PROTECTED,
-                            'docblock'     => DocBlockGenerator::fromArray(
-                                    [
-                                        'shortDescription' => 'True if we were already in a transaction when try to start a new one',
-                                        'longDescription'  => '',
-                                        'tags'             => [
-                                            new GenericTag('var', 'bool'),
-                                        ]
-                                    ]
-                            )
-                        ]
+                    [
+                        'name'         => 'wasInTransaction',
+                        'defaultvalue' => false,
+                        'flags'        => PropertyGenerator::FLAG_PROTECTED,
+                        'docblock'     => DocBlockGenerator::fromArray(
+                            [
+                                'shortDescription' => 'True if we were already in a transaction when try to start a new one',
+                                'longDescription'  => '',
+                                'tags'             => [
+                                    new GenericTag('var', 'bool'),
+                                ],
+                            ]
+                        ),
+                    ]
                 ),
             ],
             'methods'       => [
@@ -85,16 +87,16 @@ class Manager extends AbstractGenerator {
                     'name'       => '__construct',
                     'parameters' => [
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'adapter',
+                            [
+                                'name' => 'adapter',
                                 //'type' => 'Adapter',
-                                ]
+                            ]
                         ),
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'entity',
-                                    'type' => $this->data['_namespace'] . '\Entity\Entity',
-                                ]
+                            [
+                                'name' => 'entity',
+                                'type' => $this->data['_namespace'] . '\Entity\Entity',
+                            ]
                         ),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
@@ -104,70 +106,70 @@ class Manager extends AbstractGenerator {
                     '$this->featureSet = new Feature\FeatureSet();' . "\n" .
                     '$this->initialize();',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Constructor',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('adapter', ['Adapter']),
-                                    new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Constructor',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('adapter', ['Adapter']),
+                                new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'setDebug',
                     'parameters' => [
                         ParameterGenerator::fromArray(
-                                [
-                                    'type'         => 'bool',
-                                    'name'         => 'debug',
-                                    'defaultvalue' => true,
-                                ]
-                        )
+                            [
+                                'type'         => 'bool',
+                                'name'         => 'debug',
+                                'defaultvalue' => true,
+                            ]
+                        ),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
                     '$this->debug = $debug;' . "\n" .
                     'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Set debug mode',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('debug', ['boolean']),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Set debug mode',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('debug', ['boolean']),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'setContainer',
                     'parameters' => [
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'c',
-                                    'type' => 'Pimple\Container',
-                                ]
-                        )
+                            [
+                                'name' => 'c',
+                                'type' => 'Pimple\Container',
+                            ]
+                        ),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
                     '$this->container = $c;' . "\n" .
                     'return $this;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Inject container',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('c', ['Pimple\Container']),
-                                    new ReturnTag([
-                                        'datatype' => 'self',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Inject container',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('c', ['Pimple\Container']),
+                                new ReturnTag([
+                                    'datatype' => 'self',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'getContainer',
@@ -175,16 +177,16 @@ class Manager extends AbstractGenerator {
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->container;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => '',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
-                                        'datatype' => '\Pimple\Container',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => '',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag([
+                                    'datatype' => '\Pimple\Container',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'getPrimaryKeyName',
@@ -192,16 +194,16 @@ class Manager extends AbstractGenerator {
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->id;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => '',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
-                                        'datatype' => 'array|string',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => '',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag([
+                                    'datatype' => 'array|string',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'getTableName',
@@ -209,16 +211,16 @@ class Manager extends AbstractGenerator {
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->table;',
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => '',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ReturnTag([
-                                        'datatype' => 'array|string',
-                                            ]),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => '',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ReturnTag([
+                                    'datatype' => 'array|string',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'findBy',
@@ -269,19 +271,19 @@ class Manager extends AbstractGenerator {
                     '}' . PHP_EOL .
                     'return $result;' . PHP_EOL,
                     'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Find by criteria',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('criteria', ['array'], 'Search criteria'),
-                                    new ParamTag('order', ['string'], 'sorting option'),
-                                    new ParamTag('limit', ['int'], 'limit option'),
-                                    new ParamTag('offset', ['int'], 'offset option'),
-                                    new ParamTag('toEntity', ['boolean'], 'return entity result'),
-                                    new ReturnTag(['array'], ''),
-                                ]
-                            ]
-                    )
+                        [
+                            'shortDescription' => 'Find by criteria',
+                            'longDescription'  => null,
+                            'tags'             => [
+                                new ParamTag('criteria', ['array'], 'Search criteria'),
+                                new ParamTag('order', ['string'], 'sorting option'),
+                                new ParamTag('limit', ['int'], 'limit option'),
+                                new ParamTag('offset', ['int'], 'offset option'),
+                                new ParamTag('toEntity', ['boolean'], 'return entity result'),
+                                new ReturnTag(['array'], ''),
+                            ],
+                        ]
+                    ),
                 ],
                 [
                     'name'       => 'getResult',
@@ -353,108 +355,108 @@ $select = $this->sql->select();
         return $this->selectWith($select)->toArray();
 BODY
                     ,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Manage params of sql request and return results',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('columns', ['array'], ''),
-                                    new ParamTag('join', ['array'], ''),
-                                    new ParamTag('where', ['array'], ''),
-                                    new ParamTag('orderBy', ['array'], ''),
-                                    new ParamTag('groupBy', ['array'], ''),
-                                    new ParamTag('having', ['array'], ''),
-                                    new ParamTag('limit', ['int'], ''),
-                                    new ParamTag('offset', ['int'], ''),
-                                    new ReturnTag(['array', 'null'], 'Found results'),
-                                ]
-                            ]
+                    'docblock'   =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>'Manage params of sql request and return results',
+                            'longDescription' =>null,
+                            'tags'            =>[
+                                new ParamTag('columns',['array'],''),
+                                new ParamTag('join',['array'],''),
+                                new ParamTag('where',['array'],''),
+                                new ParamTag('orderBy',['array'],''),
+                                new ParamTag('groupBy',['array'],''),
+                                new ParamTag('having',['array'],''),
+                                new ParamTag('limit',['int'],''),
+                                new ParamTag('offset',['int'],''),
+                                new ReturnTag(['array','null'],'Found results'),
+                            ],
+                        ]
                     )
                 ],
                 [
-                    'name'       => 'countBy',
-                    'parameters' => [
+                    'name'      =>'countBy',
+                    'parameters'=>[
                         ParameterGenerator::fromArray([
-                            'name'         => 'criteria',
-                            'defaultvalue' => [],
-                            'type'         => 'array',
+                            'name'        =>'criteria',
+                            'defaultvalue'=>[],
+                            'type'        =>'array',
                         ]),
                     ],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => '$r = $this->sql->select()->columns(array("count" => new Expression("count(*)")))->where($criteria);' . PHP_EOL .
-                    'return  (int)current($this->selectWith($r)->toArray())["count"];' . PHP_EOL,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Count by criteria',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('criteria', ['array'], 'Criteria'),
-                                    new ReturnTag(['int'], ''),
-                                ]
-                            ]
-                    )
+                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
+                    'body'      =>'$r = $this->sql->select()->columns(array("count" => new Expression("count(*)")))->where($criteria);'.PHP_EOL.
+                    'return  (int)current($this->selectWith($r)->toArray())["count"];'.PHP_EOL,
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>'Count by criteria',
+                            'longDescription' =>null,
+                            'tags'            =>[
+                                new ParamTag('criteria',['array'],'Criteria'),
+                                new ReturnTag(['int'],''),
+                            ],
+                        ]
+                    ),
                 ],
                 [
-                    'name'       => 'exists',
-                    'parameters' => [
+                    'name'      =>'exists',
+                    'parameters'=>[
                         ParameterGenerator::fromArray([
-                            'name'         => 'criteria',
-                            'defaultvalue' => [],
-                            'type'         => 'array',
+                            'name'        =>'criteria',
+                            'defaultvalue'=>[],
+                            'type'        =>'array',
                         ]),
                     ],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => '$r = $this->sql->select()->where($criteria);' . PHP_EOL .
-                    '$r->limit(1);' . PHP_EOL .
-                    '$result = $this->selectWith($r);' . PHP_EOL . PHP_EOL .
+                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
+                    'body'      =>'$r = $this->sql->select()->where($criteria);'.PHP_EOL.
+                    '$r->limit(1);'.PHP_EOL.
+                    '$result = $this->selectWith($r);'.PHP_EOL.PHP_EOL.
                     'return $result->count() === 1;',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Is a least one row exists with criteria',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('criteria', ['array'], 'Criteria'),
-                                    new ReturnTag(['bool'], ''),
-                                ]
-                            ]
-                    )
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>'Is a least one row exists with criteria',
+                            'longDescription' =>null,
+                            'tags'            =>[
+                                new ParamTag('criteria',['array'],'Criteria'),
+                                new ReturnTag(['bool'],''),
+                            ],
+                        ]
+                    ),
                 ],
                 [
-                    'name'       => 'deleteEntity',
-                    'parameters' => [
+                    'name'      =>'deleteEntity',
+                    'parameters'=>[
                         ParameterGenerator::fromArray(
-                                [
-                                    'name' => 'entity',
-                                    'type' => $this->data['_namespace'] . '\Entity\Entity',
-                                ]
+                            [
+                                'name'=>'entity',
+                                'type'=>$this->data['_namespace'].'\Entity\Entity',
+                            ]
                         ),
                         ParameterGenerator::fromArray([
-                            'type'         => 'bool',
-                            'name'         => 'useTransaction',
-                            'defaultValue' => true,
-                        ])
+                            'type'        =>'bool',
+                            'name'        =>'useTransaction',
+                            'defaultValue'=>true,
+                        ]),
                     ],
-                    'flags'      => [MethodGenerator::FLAG_PUBLIC, MethodGenerator::FLAG_ABSTRACT],
-                    'body'       => null,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Converts database column name to php setter/getter function name',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
-                                    new ParamTag('useTransaction', ['boolean']),
-                                    new ReturnTag([
-                                        'datatype' => 'int',
-                                            ]),
-                                ]
-                            ]
-                    )
+                    'flags'     =>[MethodGenerator::FLAG_PUBLIC,MethodGenerator::FLAG_ABSTRACT],
+                    'body'      =>null,
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>'Converts database column name to php setter/getter function name',
+                            'longDescription' =>null,
+                            'tags'            =>[
+                                new ParamTag('entity',[$this->data['_namespace'].'\Entity\Entity']),
+                                new ParamTag('useTransaction',['boolean']),
+                                new ReturnTag([
+                                    'datatype'=>'int',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
-                    'name'       => 'beginTransaction',
-                    'parameters' => [],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => <<<'BODY'
+                    'name'      =>'beginTransaction',
+                    'parameters'=>[],
+                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
+                    'body'      =><<<'BODY'
 if ($this->adapter->getDriver()->getConnection()->inTransaction()) {
     $this->wasInTransaction = true;
 
@@ -463,61 +465,61 @@ if ($this->adapter->getDriver()->getConnection()->inTransaction()) {
 $this->adapter->getDriver()->getConnection()->beginTransaction();
 BODY
                     ,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Begin a transaction',
-                                'longDescription'  => null,
-                                'tags'             => [],
-                            ]
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>'Begin a transaction',
+                            'longDescription' =>null,
+                            'tags'            =>[],
+                        ]
                     )
                 ],
                 [
-                    'name'       => 'rollback',
-                    'parameters' => [],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => <<<'BODY'
+                    'name'      =>'rollback',
+                    'parameters'=>[],
+                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
+                    'body'      =><<<'BODY'
 if ($this->wasInTransaction) {
     throw new \Exception('Inside transaction rollback call');
 }
 $this->adapter->getDriver()->getConnection()->rollback();
 BODY
                     ,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Rollback a transaction',
-                                'longDescription'  => null,
-                                'tags'             => [],
-                            ]
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>'Rollback a transaction',
+                            'longDescription' =>null,
+                            'tags'            =>[],
+                        ]
                     )
                 ],
                 [
-                    'name'       => 'commit',
-                    'parameters' => [],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => <<<'BODY'
+                    'name'      =>'commit',
+                    'parameters'=>[],
+                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
+                    'body'      =><<<'BODY'
 if (!$this->wasInTransaction) {
     $this->adapter->getDriver()->getConnection()->commit();
 }
 BODY
                     ,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => ' Commit a transaction',
-                                'longDescription'  => null,
-                                'tags'             => [],
-                            ]
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>' Commit a transaction',
+                            'longDescription' =>null,
+                            'tags'            =>[],
+                        ]
                     )
                 ],
                 [
-                    'name'       => 'selectWith',
-                    'parameters' => [
+                    'name'      =>'selectWith',
+                    'parameters'=>[
                         ParameterGenerator::fromArray([
-                            'name' => 'select',
-                            'type' => 'Zend\Db\Sql\Select',
+                            'name'=>'select',
+                            'type'=>'Zend\Db\Sql\Select',
                         ]),
                     ],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => <<<'BODY'
+                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
+                    'body'      =><<<'BODY'
    if ($this->debug) {
     !isset($this->getContainer()['logger']) ? : $this->getContainer()['logger']->debug(__CLASS__ . '|' . __FUNCTION__, array(
     'sql' => $select->getSqlString($this->getAdapter()->getPlatform())));
@@ -530,81 +532,90 @@ BODY
     }
 BODY
                     ,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => ' @see Zend\Db\TableGateway\AbstractTableGateway::selectWith',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('select', ['Zend\Db\Sql\Select']),
-                                    new ReturnTag([
-                                        'datatype' => 'ResultSet',
-                                            ]),
-                                ]
-                            ]
-                    )
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>' @see Zend\Db\TableGateway\AbstractTableGateway::selectWith',
+                            'longDescription' =>null,
+                            'tags'            =>[
+                                new ParamTag('select',['Zend\Db\Sql\Select']),
+                                new ReturnTag([
+                                    'datatype'=>'ResultSet',
+                                ]),
+                            ],
+                        ]
+                    ),
                 ],
                 [
-                    'name'       => 'findOneBy',
-                    'parameters' => [
+                    'name'      =>'findOneBy',
+                    'parameters'=>[
                         ParameterGenerator::fromArray([
-                            'name'         => 'criteria',
-                            'defaultvalue' => [],
-                            'type'         => 'array',
+                            'name'        =>'criteria',
+                            'defaultvalue'=>[],
+                            'type'        =>'array',
+                        ]),
+                        ParameterGenerator::fromArray([
+                            'name'        =>'order',
+                            'defaultvalue'=>null,
                         ]),
                     ],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => 'return current($this->findBy($criteria,[],1,null));',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Find one by criteria',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('criteria', ['array'], 'Search criteria'),
-                                    new ReturnTag(['array|boolean'], '')
-                                ]
-                            ]
-                    )
+                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
+                    'body'      =>'return current($this->findBy($criteria,$order,1));',
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>'Find one by criteria',
+                            'longDescription' =>null,
+                            'tags'            =>[
+                                new ParamTag('criteria',['array'],'Search criteria'),
+                                new ReturnTag(['array|boolean'],''),
+                            ],
+                        ]
+                    ),
                 ],
                 [
-                    'name'       => 'findOneEntityBy',
-                    'parameters' => [
+                    'name'      =>'findOneEntityBy',
+                    'parameters'=>[
                         ParameterGenerator::fromArray([
-                            'name'         => 'criteria',
-                            'defaultvalue' => [],
-                            'type'         => 'array',
+                            'name'        =>'criteria',
+                            'defaultvalue'=>[],
+                            'type'        =>'array',
+                        ]),
+                        ParameterGenerator::fromArray([
+                            'name'        =>'order',
+                            'defaultvalue'=>null,
                         ]),
                     ],
-                    'flags'      => MethodGenerator::FLAG_PUBLIC,
-                    'body'       => 'return current($this->findBy($criteria,[],1,null,true));',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                            [
-                                'shortDescription' => 'Find Entity one by criteria',
-                                'longDescription'  => null,
-                                'tags'             => [
-                                    new ParamTag('criteria', ['array'], 'Search criteria'),
-                                    new ReturnTag(['boolean|Entity'], ''),
-                                ]
-                            ]
-                    )
-                ]
-            ]
+                    'flags'     =>MethodGenerator::FLAG_PUBLIC,
+                    'body'      =>'return current($this->findBy($criteria,$order,1,null,true));',
+                    'docblock'  =>DocBlockGenerator::fromArray(
+                        [
+                            'shortDescription'=>'Find Entity one by criteria',
+                            'longDescription' =>null,
+                            'tags'            =>[
+                                new ParamTag('criteria',['array'],'Search criteria'),
+                                new ReturnTag(['boolean|Entity'],''),
+                            ],
+                        ]
+                    ),
+                ],
+            ],
         ];
     }
 
-    public function generate() {
-        $class         = ClassGenerator::fromArray($this->getClassArrayRepresentation());
+    public function generate()
+    {
+        $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
         $class->addUse($this->useTableGatewayClass)
-                ->addUse('Zend\Db\TableGateway\Feature')
-                ->addUse('Zend\Db\Sql\Expression')
-                ->addUse($this->data['_namespace'] . '\Entity\Entity')
-                ->addUse('Zend\Db\Adapter\Adapter')
-                ->addUse('Zend\Db\ResultSet\ResultSet');
+            ->addUse('Zend\Db\TableGateway\Feature')
+            ->addUse('Zend\Db\Sql\Expression')
+            ->addUse($this->data['_namespace'] . '\Entity\Entity')
+            ->addUse('Zend\Db\Adapter\Adapter')
+            ->addUse('Zend\Db\ResultSet\ResultSet');
         $this->defineFileInfo($class);
         $fileGenerator = $this->getFileGenerator();
 
         return $fileGenerator
-                        ->setClass($class)
-                        ->generate();
+            ->setClass($class)
+            ->generate();
     }
 
     /**
@@ -613,17 +624,18 @@ BODY
      * @return self
      */
 //    public function setTableGatewayClass($tableGatewayClass) {
-//        $this->tableGatewayClass = $tableGatewayClass;
-//
-//        return $this;
-//    }
+    //        $this->tableGatewayClass = $tableGatewayClass;
+    //
+    //        return $this;
+    //    }
 
     /**
      * @param string $useTableGatewayClass
      *
      * @return self
      */
-    public function setUseTableGatewayClass($useTableGatewayClass) {
+    public function setUseTableGatewayClass($useTableGatewayClass)
+    {
         $this->useTableGatewayClass = $useTableGatewayClass;
 
         return $this;
