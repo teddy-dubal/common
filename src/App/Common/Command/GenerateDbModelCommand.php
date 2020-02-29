@@ -2,13 +2,16 @@
 
 namespace App\Common\Command;
 
+use App\Common\Command\BaseCommand;
+use App\Common\Generator\Core\MakeMysql;
 use Exception;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Filesystem\Filesystem;
-use App\Common\Generator\Core\MakeMysql;
 use Symfony\Component\Yaml\Yaml;
 
 class GenerateDbModelCommand extends BaseCommand
@@ -25,27 +28,21 @@ class GenerateDbModelCommand extends BaseCommand
                 new InputArgument('namespace', InputArgument::REQUIRED, 'The namespace.'),
                 new InputArgument('location', InputArgument::REQUIRED, 'Where to store model files'),
                 new InputOption('--tables-all', null, InputOption::VALUE_NONE, '', null),
+                new InputOption('--tables-type', null, InputOption::VALUE_REQUIRED, 'Type of file to generate Mysql [mysql] - MongoDb [mongodb]', 'mysql'),
                 new InputOption('--tables-regex', null, InputOption::VALUE_REQUIRED, '', false),
                 new InputOption('--tables-prefix', null, InputOption::VALUE_REQUIRED, '', []),
-            ])
-            ->setHelp(
-<<<EOT
-                        <info>info</info>
-                        <comment>foo</comment>
-                        <question>foo</question>
-                        <error>foo</error>
-EOT
-);
+            ]);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $database = $input->getArgument('database');
-        $namespace = $input->getArgument('namespace');
-        $location = $input->getArgument('location');
-        $configfile = $input->getArgument('config-file');
-        $tablesAll = $input->getOption('tables-all');
-        $tablesRegex = $input->getOption('tables-regex');
+        $database     = $input->getArgument('database');
+        $namespace    = $input->getArgument('namespace');
+        $location     = $input->getArgument('location');
+        $configfile   = $input->getArgument('config-file');
+        $tablesAll    = $input->getOption('tables-all');
+        $tablesType   = $input->getOption('tables-type');
+        $tablesRegex  = $input->getOption('tables-regex');
         $tablesPrefix = $input->getOption('tables-prefix');
 
         if (!file_exists($configfile)) {
@@ -57,17 +54,17 @@ EOT
             PATHINFO_EXTENSION
         ), ['yaml', 'yml'])) {
             $configValues = Yaml::parse(file_get_contents($configfile));
-            $conf = $configValues['parameters'];
-            $config = [
-                'docs.author' => '',
-                'docs.license' => 'http://framework.zend.com/license/new-bsd     New BSD License',
+            $conf         = $configValues['parameters'];
+            $config       = [
+                'docs.author'    => '',
+                'docs.license'   => 'http://framework.zend.com/license/new-bsd     New BSD License',
                 'docs.copyright' => '',
-                'db.type' => 'Mysql',
-                'db.socket' => '',
-                'db.host' => $conf['database_host'],
-                'db.port' => $conf['database_port'],
-                'db.user' => $conf['database_user'],
-                'db.password' => $conf['database_password'],
+                'db.type'        => 'Mysql',
+                'db.socket'      => '',
+                'db.host'        => $conf['database_host'],
+                'db.port'        => $conf['database_port'],
+                'db.user'        => $conf['database_user'],
+                'db.password'    => $conf['database_password'],
             ];
         } else {
             $config = require_once $configfile;
@@ -93,7 +90,11 @@ EOT
         $location .= DIRECTORY_SEPARATOR;
         $dbAdapter->addTablePrefixes($tablesPrefix);
         $dbAdapter->setLocation($location);
-        foreach (['Table', 'Entity'] as $name) {
+        $a = ['Table', 'Entity'];
+        if ($tablesType == 'mongodb') {
+            $a[] = 'Document';
+        }
+        foreach ($a as $name) {
             $dir = $location . $name;
             if (!is_dir($dir)) {
                 if (!@mkdir($dir, 0755, true)) {
@@ -111,7 +112,7 @@ EOT
             $dbAdapter->setTableName($table);
             try {
                 $dbAdapter->parseTable();
-                $dbAdapter->generate();
+                $dbAdapter->generate(['db-type' => $tablesType]);
             } catch (Exception $e) {
                 $output->writeln(sprintf('<error>Warning: Failed to process "%s" : %s ... Skipping</error>', $table, $e->getMessage()));
             }
@@ -127,58 +128,53 @@ EOT
     protected function interact(InputInterface $input, OutputInterface $output)
     {
 
+        $helper = $this->getHelper('question');
         if (!$input->getArgument('config-file')) {
-            $configfile = $this->getHelper('dialog')->askAndValidate(
-                $output,
-                'Please set the config file path : ',
-                function ($configfile) {
-                    if (empty($configfile)) {
-                        throw new Exception('Config path name can not be empty');
-                    }
-                    return $configfile;
+            $question = new Question('Please set the config file path : ');
+            $question->setValidator(function ($answer) {
+                if (empty($answer)) {
+                    throw new RuntimeException('Config path name can not be empty');
                 }
-            );
-            $input->setArgument('config-file', $configfile);
+                return $answer;
+            });
+            $item = $helper->ask($input, $output, $question);
+            $input->setArgument('config-file', $item);
         }
+        $helper = $this->getHelper('question');
         if (!$input->getArgument('database')) {
-            $database = $this->getHelper('dialog')->askAndValidate(
-                $output,
-                'Please choose a module database : ',
-                function ($database) {
-                    if (empty($database)) {
-                        throw new Exception('Database name can not be empty');
-                    }
-                    return $database;
+            $question = new Question('Please choose a module database : ');
+            $question->setValidator(function ($answer) {
+                if (empty($answer)) {
+                    throw new RuntimeException('Database name can not be empty');
                 }
-            );
-            $input->setArgument('database', $database);
+                return $answer;
+            });
+            $item = $helper->ask($input, $output, $question);
+            $input->setArgument('database', $item);
         }
+        $helper = $this->getHelper('question');
         if (!$input->getArgument('namespace')) {
-            $namespace = $this->getHelper('dialog')->askAndValidate(
-                $output,
-                'Please choose a namespace : ',
-                function ($namespace) {
-                    if (empty($namespace)) {
-                        throw new Exception('Namespace can not be empty');
-                    }
-
-                    return $namespace;
+            $question = new Question('Please choose a namespace : ');
+            $question->setValidator(function ($answer) {
+                if (empty($answer)) {
+                    throw new RuntimeException('Namespace can not be empty');
                 }
-            );
-            $input->setArgument('namespace', $namespace);
+                return $answer;
+            });
+            $item = $helper->ask($input, $output, $question);
+            $input->setArgument('namespace', $item);
         }
+        $helper = $this->getHelper('question');
         if (!$input->getArgument('location')) {
-            $location = $this->getHelper('dialog')->askAndValidate(
-                $output,
-                'Please choose an location : ',
-                function ($location) {
-                    if (empty($location)) {
-                        throw new Exception('Location can not be empty');
-                    }
-                    return $location;
+            $question = new Question('Please choose a location : ');
+            $question->setValidator(function ($answer) {
+                if (empty($answer)) {
+                    throw new RuntimeException('Location can not be empty');
                 }
-            );
-            $input->setArgument('location', $location);
+                return $answer;
+            });
+            $item = $helper->ask($input, $output, $question);
+            $input->setArgument('location', $item);
         }
     }
 
