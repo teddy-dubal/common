@@ -8,14 +8,14 @@
 
 namespace App\Common\Generator\Core\ZendCode;
 
-use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Generator\DocBlock\Tag\GenericTag;
-use Zend\Code\Generator\DocBlock\Tag\ParamTag;
-use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\ParameterGenerator;
-use Zend\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\DocBlock\Tag\GenericTag;
+use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
+use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
+use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\ParameterGenerator;
+use Laminas\Code\Generator\PropertyGenerator;
 
 /**
  * Description of Entity
@@ -25,7 +25,7 @@ use Zend\Code\Generator\PropertyGenerator;
 class Manager extends AbstractGenerator
 {
 
-    private $useTableGatewayClass = 'Zend\Db\TableGateway\AbstractTableGateway';
+    private $useTableGatewayClass = 'Laminas\Db\TableGateway\AbstractTableGateway';
     private $data;
 
     public function getClassArrayRepresentation()
@@ -515,7 +515,7 @@ BODY
                     'parameters'=>[
                         ParameterGenerator::fromArray([
                             'name'=>'select',
-                            'type'=>'Zend\Db\Sql\Select',
+                            'type'=>'Laminas\Db\Sql\Select',
                         ]),
                     ],
                     'flags'     =>MethodGenerator::FLAG_PUBLIC,
@@ -534,10 +534,10 @@ BODY
                     ,
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
-                            'shortDescription'=>' @see Zend\Db\TableGateway\AbstractTableGateway::selectWith',
+                            'shortDescription'=>' @see Laminas\Db\TableGateway\AbstractTableGateway::selectWith',
                             'longDescription' =>null,
                             'tags'            =>[
-                                new ParamTag('select',['Zend\Db\Sql\Select']),
+                                new ParamTag('select',['Laminas\Db\Sql\Select']),
                                 new ReturnTag([
                                     'datatype'=>'ResultSet',
                                 ]),
@@ -605,11 +605,11 @@ BODY
     {
         $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
         $class->addUse($this->useTableGatewayClass)
-            ->addUse('Zend\Db\TableGateway\Feature')
-            ->addUse('Zend\Db\Sql\Expression')
+            ->addUse('Laminas\Db\TableGateway\Feature')
+            ->addUse('Laminas\Db\Sql\Expression')
             ->addUse($this->data['_namespace'] . '\Entity\Entity')
-            ->addUse('Zend\Db\Adapter\Adapter')
-            ->addUse('Zend\Db\ResultSet\ResultSet');
+            ->addUse('Laminas\Db\Adapter\Adapter')
+            ->addUse('Laminas\Db\ResultSet\ResultSet');
         $this->defineFileInfo($class);
         $fileGenerator = $this->getFileGenerator();
 

@@ -2,14 +2,14 @@
 
 namespace App\Common\Generator\Core\ZendCode;
 
-use \Zend\Code\Generator\ClassGenerator;
-use \Zend\Code\Generator\MethodGenerator;
-use \Zend\Code\Generator\DocBlockGenerator;
-use \Zend\Code\Generator\PropertyGenerator;
-use \Zend\Code\Generator\ParameterGenerator;
-use \Zend\Code\Generator\DocBlock\Tag\ParamTag;
-use \Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use \Zend\Code\Generator\DocBlock\Tag\GenericTag;
+use \Laminas\Code\Generator\ClassGenerator;
+use \Laminas\Code\Generator\MethodGenerator;
+use \Laminas\Code\Generator\DocBlockGenerator;
+use \Laminas\Code\Generator\PropertyGenerator;
+use \Laminas\Code\Generator\ParameterGenerator;
+use \Laminas\Code\Generator\DocBlock\Tag\ParamTag;
+use \Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
+use \Laminas\Code\Generator\DocBlock\Tag\GenericTag;
 
 /**
  * Description of Entity
@@ -111,7 +111,7 @@ class EntityManager extends AbstractGenerator {
                 'parameters' => [
                     ParameterGenerator::fromArray([
                         'name' => 'adapter',
-                        'type' => 'Zend\Db\Adapter\Adapter',
+                        'type' => 'Laminas\Db\Adapter\Adapter',
                     ]),
                     ParameterGenerator::fromArray(
                             [
@@ -128,7 +128,7 @@ class EntityManager extends AbstractGenerator {
                             'shortDescription' => 'Constructor',
                             'longDescription'  => 'Pass a DB Adapter to handle connection',
                             'tags'             => [
-                                new ParamTag('adapter', ['Zend\Db\Adapter\Adapter'], 'Zend DB Adapter'),
+                                new ParamTag('adapter', ['Laminas\Db\Adapter\Adapter'], 'Laminas DB Adapter'),
                                 new ParamTag('entity', [$this->data['_className'] . 'Entity'], 'Reference entity'),
                             ]
                         ]
