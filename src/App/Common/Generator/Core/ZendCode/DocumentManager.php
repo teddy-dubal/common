@@ -109,12 +109,22 @@ class DocumentManager extends AbstractGenerator
                 $unique[$column['field']] = 1;
             }
         }
+        $constructBody .= '$indexes = iterator_to_array($this->listIndexes());'. PHP_EOL;
+        $constructBody .= '$acc = [];'. PHP_EOL;
+        $constructBody .= 'foreach ($indexes as $val) {'. PHP_EOL;
+        $constructBody .= ' if ($val->getName() != \'_id\'){'. PHP_EOL;
+        $constructBody .= ' continue;'. PHP_EOL;
+        $constructBody .= ' }'. PHP_EOL;
+        $constructBody .= ' $acc[]=$val->getName();'. PHP_EOL;
+        $constructBody .= '}'. PHP_EOL;
+        $constructBody .= 'if (empty($acc)){'. PHP_EOL;
         if (count($indexes)) {
             $constructBody .= '$this->createIndex(' . var_export($indexes, true) . ');';
         }
         if (count($unique)) {
             $constructBody .= '$this->createIndex(' . var_export($unique, true) . ',[ \'unique\' => true]);';
         }
+        $constructBody .= '}'. PHP_EOL;
         $methods = [
             [
                 'name'       => '__construct',
