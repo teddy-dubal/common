@@ -112,7 +112,7 @@ class DocumentManager extends AbstractGenerator
         $constructBody .= '$indexes = iterator_to_array($this->listIndexes());'. PHP_EOL;
         $constructBody .= '$acc = [];'. PHP_EOL;
         $constructBody .= 'foreach ($indexes as $val) {'. PHP_EOL;
-        $constructBody .= ' if ($val->getName() != \'_id\'){'. PHP_EOL;
+        $constructBody .= ' if ($val->getName() == \'_id\'){'. PHP_EOL;
         $constructBody .= ' continue;'. PHP_EOL;
         $constructBody .= ' }'. PHP_EOL;
         $constructBody .= ' $acc[]=$val->getName();'. PHP_EOL;
