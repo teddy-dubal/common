@@ -107,7 +107,7 @@ abstract class MakeDbTableFactory extends MakeDbTableAbstract
             die("Error: could not write Manager file $managerFile.");
         }
 
-        if (!file_put_contents($documentFile, $document->generate())) {
+        if ($options['db-type'] == 'mongodb' && !file_put_contents($documentFile, $document->generate())) {
             die("Error: could not write Manager file $documentFile.");
         }
 
@@ -119,7 +119,7 @@ abstract class MakeDbTableFactory extends MakeDbTableAbstract
             die("Error: could not write model file $entityManagerFile.");
         }
 
-        if (!file_put_contents($documentManagerFile, $documentManager->generate())) {
+        if ($options['db-type'] == 'mongodb' && !file_put_contents($documentManagerFile, $documentManager->generate())) {
             die("Error: could not write model file $documentManagerFile.");
         }
 
