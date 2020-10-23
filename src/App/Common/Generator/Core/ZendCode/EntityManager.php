@@ -222,8 +222,13 @@ class EntityManager extends AbstractGenerator {
         $constructBody .= '        $this->commit();' . PHP_EOL;
         $constructBody .= '    }' . PHP_EOL;
         $constructBody .= '} catch (\Exception $e) {' . PHP_EOL;
-        $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->debug(__CLASS__ . \'|\' . __FUNCTION__, array(' . PHP_EOL;
-        $constructBody .= '    \'error\'=>$e->getMessage()));' . PHP_EOL;
+        $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->error($e->getMessage(), [\'extra\'=>[
+            \'class\'=> __CLASS__,
+            \'function\'=> __FUNCTION__,
+            \'msg\'=> $e->getMessage(),
+            \'data\'=> $where,
+        ],' . PHP_EOL;
+        $constructBody .= ']);' . PHP_EOL;
         $constructBody .= '    if ($useTransaction) {' . PHP_EOL;
         $constructBody .= '        $this->rollback();' . PHP_EOL;
         $constructBody .= '    }' . PHP_EOL;
@@ -395,8 +400,13 @@ class EntityManager extends AbstractGenerator {
         $constructBody .= '        $this->rollback();' . PHP_EOL;
         $constructBody .= '    }' . PHP_EOL;
         $constructBody .= '} catch (\Exception $e) {' . PHP_EOL;
-        $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->debug(__CLASS__ . \'|\' . __FUNCTION__, array(' . PHP_EOL;
-        $constructBody .= '    \'error\'=>$e->getMessage()));' . PHP_EOL;
+        $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->error($e->getMessage(), [\'extra\'=>[
+            \'class\'=> __CLASS__,
+            \'function\'=> __FUNCTION__,
+            \'msg\'=> $e->getMessage(),
+            \'data\'=> $data,
+        ],' . PHP_EOL;
+        $constructBody .= ']);' . PHP_EOL;
         $constructBody .= '    if ($useTransaction) {' . PHP_EOL;
         $constructBody .= '        $this->rollback();' . PHP_EOL;
         $constructBody .= '    }' . PHP_EOL;
