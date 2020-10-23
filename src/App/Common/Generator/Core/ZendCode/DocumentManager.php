@@ -319,8 +319,13 @@ class DocumentManager extends AbstractGenerator
         }
 
         $constructBody .= '} catch (\Exception $e) {' . PHP_EOL;
-        $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->debug(__CLASS__ . \'|\' . __FUNCTION__, array(' . PHP_EOL;
-        $constructBody .= '    \'error\'=>$e->getMessage()));' . PHP_EOL;
+            $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->error($e->getMessage(), [\'extra\'=>[
+                \'class\'=> __CLASS__,
+                \'function\'=> __FUNCTION__,
+                \'msg\'=> $e->getMessage(),
+                \'data\'=> $where,
+            ],' . PHP_EOL;
+            $constructBody .= ']);' . PHP_EOL;
         $constructBody .= '    $result = false;' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
         $constructBody .= 'return $result->getDeletedCount();' . PHP_EOL;
@@ -488,8 +493,13 @@ class DocumentManager extends AbstractGenerator
             $constructBody .= '    }' . PHP_EOL;
         }
         $constructBody .= '} catch (\Exception $e) {' . PHP_EOL;
-        $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->debug(__CLASS__ . \'|\' . __FUNCTION__, array(' . PHP_EOL;
-        $constructBody .= '    \'error\'=>$e->getMessage()));' . PHP_EOL;
+        $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->error($e->getMessage(), [\'extra\'=>[
+            \'class\'=> __CLASS__,
+            \'function\'=> __FUNCTION__,
+            \'msg\'=> $e->getMessage(),
+            \'data\'=> $data,
+        ],' . PHP_EOL;
+        $constructBody .= ']);' . PHP_EOL;
         $constructBody .= '    $success = false;' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
         $constructBody .= 'return $success;' . PHP_EOL;
