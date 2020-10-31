@@ -521,14 +521,21 @@ BODY
                     'flags'     =>MethodGenerator::FLAG_PUBLIC,
                     'body'      =><<<'BODY'
    if ($this->debug) {
-    !isset($this->getContainer()['logger']) ? : $this->getContainer()['logger']->debug(__CLASS__ . '|' . __FUNCTION__, array(
-    'sql' => $select->getSqlString($this->getAdapter()->getPlatform())));
+    !isset($this->getContainer()['logger']) ? : $this->getContainer()['logger']->debug('debug.sql', ['extra'=>[
+        'class'=> __CLASS__,
+        'function'=> __FUNCTION__,
+        'sql' => $select->getSqlString($this->getAdapter()->getPlatform())
+    ]]);
     }
     try {
     return parent::selectWith($select);
     } catch(\Exception $e){
-    !isset($this->getContainer()['logger']) ? : $this->getContainer()['logger']->error(__CLASS__ . '|' . __FUNCTION__, array(
-    'error' => $e->getMessage()));
+    !isset($this->getContainer()['logger']) ? : $this->getContainer()['logger']->error($e->getMessage(), ['extra'=>[
+        'class'=> __CLASS__,
+        'function'=> __FUNCTION__,
+        'sql' => $select->getSqlString($this->getAdapter()->getPlatform())
+    ]]);
+    return false;
     }
 BODY
                     ,
