@@ -535,7 +535,7 @@ BODY
         'function'=> __FUNCTION__,
         'sql' => $select->getSqlString($this->getAdapter()->getPlatform())
     ]]);
-    return false;
+    return (new ResultSet())->initialize([]);
     }
 BODY
                     ,
