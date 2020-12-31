@@ -61,7 +61,7 @@ abstract class MakeDbTableFactory extends MakeDbTableAbstract
 
         $entity = new Entity();
         $entity->setData($vars);
-        $entityFile = $this->getLocation() . DIRECTORY_SEPARATOR . "Entity" . DIRECTORY_SEPARATOR . "Entity.php";
+        $entityFile = rtrim($this->getLocation(), '/') . DIRECTORY_SEPARATOR . "Entity" . DIRECTORY_SEPARATOR . "Entity.php";
 
         $manager = new Manager();
         $manager->setData($vars);
@@ -83,21 +83,21 @@ abstract class MakeDbTableFactory extends MakeDbTableAbstract
                 );
         }
 
-        $managerFile = $this->getLocation() . DIRECTORY_SEPARATOR . "Table" . DIRECTORY_SEPARATOR . "Manager.php";
+        $managerFile = rtrim($this->getLocation(), '/') . DIRECTORY_SEPARATOR . "Table" . DIRECTORY_SEPARATOR . "Manager.php";
 
         $entityItem = new EntityItem();
         $entityItem->setData($vars);
-        $entityItemFile = $this->getLocation() . DIRECTORY_SEPARATOR . "Entity" . DIRECTORY_SEPARATOR . $this->_className . ".php";
+        $entityItemFile = rtrim($this->getLocation(), '/') . DIRECTORY_SEPARATOR . "Entity" . DIRECTORY_SEPARATOR . $this->_className . ".php";
 
         $entityManager = new EntityManager();
         $entityManager->setData($vars);
-        $entityManagerFile = $this->getLocation() . DIRECTORY_SEPARATOR . "Table" . DIRECTORY_SEPARATOR . $this->_className . ".php";
+        $entityManagerFile = rtrim($this->getLocation(), '/') . DIRECTORY_SEPARATOR . "Table" . DIRECTORY_SEPARATOR . $this->_className . ".php";
 
         if ($options['db-type'] == 'mongodb') {
-            $documentFile    = $this->getLocation() . DIRECTORY_SEPARATOR . "Document" . DIRECTORY_SEPARATOR . "Document.php";
+            $documentFile    = rtrim($this->getLocation(), '/') . DIRECTORY_SEPARATOR . "Document" . DIRECTORY_SEPARATOR . "Document.php";
             $documentManager = new DocumentManager();
             $documentManager->setData($vars);
-            $documentManagerFile = $this->getLocation() . DIRECTORY_SEPARATOR . "Document" . DIRECTORY_SEPARATOR . $this->_className . ".php";
+            $documentManagerFile = rtrim($this->getLocation(), '/') . DIRECTORY_SEPARATOR . "Document" . DIRECTORY_SEPARATOR . $this->_className . ".php";
         }
         if (!file_put_contents($entityFile, $entity->generate())) {
             die("Error: could not write Entity file $entityFile.");
