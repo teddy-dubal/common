@@ -109,22 +109,22 @@ class DocumentManager extends AbstractGenerator
                 $unique[$column['field']] = 1;
             }
         }
-        $constructBody .= '$indexes = iterator_to_array($this->listIndexes());'. PHP_EOL;
-        $constructBody .= '$acc = [];'. PHP_EOL;
-        $constructBody .= 'foreach ($indexes as $val) {'. PHP_EOL;
-        $constructBody .= ' if ($val->getName() == \'_id_\'){'. PHP_EOL;
-        $constructBody .= ' continue;'. PHP_EOL;
-        $constructBody .= ' }'. PHP_EOL;
-        $constructBody .= ' $acc[]=$val->getName();'. PHP_EOL;
-        $constructBody .= '}'. PHP_EOL;
-        $constructBody .= 'if (empty($acc)){'. PHP_EOL;
+        $constructBody .= '$indexes = iterator_to_array($this->listIndexes());' . PHP_EOL;
+        $constructBody .= '$acc = [];' . PHP_EOL;
+        $constructBody .= 'foreach ($indexes as $val) {' . PHP_EOL;
+        $constructBody .= ' if ($val->getName() == \'_id_\'){' . PHP_EOL;
+        $constructBody .= ' continue;' . PHP_EOL;
+        $constructBody .= ' }' . PHP_EOL;
+        $constructBody .= ' $acc[]=$val->getName();' . PHP_EOL;
+        $constructBody .= '}' . PHP_EOL;
+        $constructBody .= 'if (empty($acc)){' . PHP_EOL;
         if (count($indexes)) {
             $constructBody .= '$this->createIndex(' . var_export($indexes, true) . ');';
         }
         if (count($unique)) {
             $constructBody .= '$this->createIndex(' . var_export($unique, true) . ',[ \'unique\' => true]);';
         }
-        $constructBody .= '}'. PHP_EOL;
+        $constructBody .= '}' . PHP_EOL;
         $methods = [
             [
                 'name'       => '__construct',
@@ -319,13 +319,15 @@ class DocumentManager extends AbstractGenerator
         }
 
         $constructBody .= '} catch (\Exception $e) {' . PHP_EOL;
-            $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->error($e->getMessage(), [\'extra\'=>[
+        $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->error($e->getMessage(), [\'extra\'=>[
                 \'class\'=> __CLASS__,
                 \'function\'=> __FUNCTION__,
-                \'msg\'=> $e->getMessage(),
-                \'data\'=> $where,
-            ],' . PHP_EOL;
-            $constructBody .= ']);' . PHP_EOL;
+                    \'msg\'=> $e->getMessage(),' . PHP_EOL;
+        if ($this->data['_softDeleteColumn'] == null) {
+            $constructBody .= '\'data\'=> $where,' . PHP_EOL;
+        }
+        $constructBody .= ']' . PHP_EOL;
+        $constructBody .= ']);' . PHP_EOL;
         $constructBody .= '    $result = false;' . PHP_EOL;
         $constructBody .= '}' . PHP_EOL;
         $constructBody .= 'return $result->getDeletedCount();' . PHP_EOL;
