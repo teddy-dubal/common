@@ -42,7 +42,7 @@ $result   = $userManager->findDocBy([]);
 $id_Users = array();
 foreach ($result as $v) {
     var_dump($v);
-    $id_Users[] = current($v['_id']);
+    $id_Users[] = $v['_id'];
 }
 echo "***********************************************" . PHP_EOL;
 $name = 'Teddy';
@@ -77,7 +77,7 @@ var_dump($u);
 echo "***********************************************" . PHP_EOL;
 echo sprintf('Suppression des %s users', $nbUser) . PHP_EOL;
 foreach ($id_Users as $v) {
-    // $res = $userManager->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($v)]);
+    $res = $userManager->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($v)]);
 }
 
 echo "***********************************************" . PHP_EOL;

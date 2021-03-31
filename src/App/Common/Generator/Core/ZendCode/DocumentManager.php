@@ -152,20 +152,27 @@ class DocumentManager extends AbstractGenerator
 
     private function getMethodsFindDoc()
     {
-        $body = '$return = $this->findOne(';
+        $body = '$dc = $this->findOne(';
         if ('array' !== $this->data['_primaryKey']['phptype']) {
             $body .= '[\'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($id)]';
         } else {
             $body .= '$id';
         }
         $body .= ');' . PHP_EOL;
-        $body .= 'if ($return) {' . PHP_EOL;
-        $body .= '   $return        = $return->getArrayCopy();' . PHP_EOL;
+        $body .= 'if ($dc) {' . PHP_EOL;
+        $body .= '   $dc        = $dc->getArrayCopy();' . PHP_EOL;
         if ('array' !== $this->data['_primaryKey']['phptype']) {
-            $body .= '   $return[\'' . $this->data['_primaryKey']['field'] . '\'] = ($return[\'' . $this->data['_primaryKey']['field'] . '\'] instanceof \MongoDB\BSON\ObjectId ) ? $return[\'' . $this->data['_primaryKey']['field'] . '\']->__toString() : $return[\'' . $this->data['_primaryKey']['field'] . '\'];' . PHP_EOL;
+            $body .= '  foreach ($dc as $k => $d) {' . PHP_EOL;
+            $body .= '      if ($d instanceof \MongoDB\BSON\ObjectId) {' . PHP_EOL;
+            $body .= '          $t[$k] = $d->__toString();' . PHP_EOL;
+            $body .= '      }' . PHP_EOL;
+            $body .= '      if ($d instanceof \MongoDB\BSON\UTCDateTime) {' . PHP_EOL;
+            $body .= '          $t[$k] = $d->toDateTime()->format(\DateTime::ISO8601);' . PHP_EOL;
+            $body .= '      }' . PHP_EOL;
+            $body .= '  }' . PHP_EOL;
         }
         $body .= '}' . PHP_EOL;
-        $body .= 'return $return;';
+        $body .= 'return $dc;';
         return [
             [
                 'name'       => 'findDoc',
@@ -221,11 +228,16 @@ class DocumentManager extends AbstractGenerator
     {
         $body = '$doc = $this->find($criteria,[\'limit\' => $limit,\'sort\' => $order,\'skip\' => $offset]);' . PHP_EOL;
         $body .= '$res = [];' . PHP_EOL;
-        $body .= 'foreach ($doc as $d) {' . PHP_EOL;
-        $body .= '   $t        = json_decode(\MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($d)), true);' . PHP_EOL;
+        $body .= 'foreach ($doc as $dc) {' . PHP_EOL;
+        $body .= '   $t        = json_decode(\MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($dc)), true);' . PHP_EOL;
         if ('array' !== $this->data['_primaryKey']['phptype']) {
-            $body .= '  if ( $d->' . $this->data['_primaryKey']['field'] . ' instanceof \MongoDB\BSON\ObjectId ){' . PHP_EOL;
-            $body .= '      $t[\'' . $this->data['_primaryKey']['field'] . '\'] = $d->' . $this->data['_primaryKey']['field'] . '->__toString();' . PHP_EOL;
+            $body .= '  foreach ($dc as $k => $d) {' . PHP_EOL;
+            $body .= '      if ($d instanceof \MongoDB\BSON\ObjectId) {' . PHP_EOL;
+            $body .= '          $t[$k] = $d->__toString();' . PHP_EOL;
+            $body .= '      }' . PHP_EOL;
+            $body .= '      if ($d instanceof \MongoDB\BSON\UTCDateTime) {' . PHP_EOL;
+            $body .= '          $t[$k] = $d->toDateTime()->format(\DateTime::ISO8601);' . PHP_EOL;
+            $body .= '      }' . PHP_EOL;
             $body .= '  }' . PHP_EOL;
         } else {
             foreach ($this->data['_primaryKey']['fields'] as $key) {
