@@ -16,7 +16,8 @@
         "symfony/yaml": "3.4.*",
         "laminas/laminas-db": "^2.11",
         "laminas/laminas-inputfilter": "^2.10",
-        "laminas/laminas-code": "^3.4"
+        "laminas/laminas-code": "^3.4",
+        "mongodb/mongodb": "^1.8"
     },
     "require-dev": {
         "fzaninotto/faker": "v1.6.0",
