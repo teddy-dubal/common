@@ -15,6 +15,7 @@ php appcmd app:model-generator demo/config/config.yml common App\\Model demo/mod
 * Pseudo Unit Test
 
 ```
-php demo/index.php
+php demo/mysql.php
+php demo/mongodb.php
 
 ```

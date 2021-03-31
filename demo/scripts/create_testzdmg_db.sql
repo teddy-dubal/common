@@ -97,6 +97,7 @@ DROP TABLE IF EXISTS `common`.`user` ;
 CREATE TABLE IF NOT EXISTS `common`.`user` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(20) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
