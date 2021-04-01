@@ -225,6 +225,9 @@ class EntityItem extends AbstractGenerator
             $constructBody = '';
             if (!$is_date) {
                 $constructBody .= 'if (! empty($data)) {' . PHP_EOL;
+                $constructBody .= '    if ($data instanceof \MongoDB\BSON\UTCDateTime) {' . PHP_EOL;
+                $constructBody .= '        $data = $data->toDateTime();' . PHP_EOL;
+                $constructBody .= '    }' . PHP_EOL;
                 $constructBody .= '    if (! $data instanceof \DateTime) {' . PHP_EOL;
                 $constructBody .= '        $data = new \DateTime($data);' . PHP_EOL;
                 $constructBody .= '    }' . PHP_EOL;
