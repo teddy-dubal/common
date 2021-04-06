@@ -334,9 +334,9 @@ class DocumentManager extends AbstractGenerator
         $constructBody .= '    !isset($this->getContainer()[\'logger\']) ? : $this->getContainer()[\'logger\']->error($e->getMessage(), [\'extra\'=>[
                 \'class\'=> __CLASS__,
                 \'function\'=> __FUNCTION__,
-                    \'msg\'=> $e->getMessage(),' . PHP_EOL;
+                \'msg\'=> $e->getMessage(),' . PHP_EOL;
         if ($this->data['_softDeleteColumn'] == null) {
-            $constructBody .= '\'data\'=> $where,' . PHP_EOL;
+            $constructBody .= '             \'data\'=> $where,' . PHP_EOL;
         }
         $constructBody .= ']' . PHP_EOL;
         $constructBody .= ']);' . PHP_EOL;
@@ -473,7 +473,6 @@ class DocumentManager extends AbstractGenerator
             foreach ($this->data['dependentTables'] as $key) {
                 $constructBody .= '        if ($success && $entity->get' . $this->data['relationNameDependent'][$key['key_name']] . '() !== null) {' . PHP_EOL;
                 if ($key['type'] !== 'many') {
-                    var_dump('Not Manage DocumentManager', __LINE__);
                     // $constructBody .= '$success = $success &&  $entity->get' . $this->data['relationNameDependent'][$key['key_name']] . '()' . PHP_EOL;
                     // if ($this->data['_primaryKey']['phptype'] !== 'array') {
                     //     $constructBody .= '->set' . $this->_getCapital($key['column_name']) . '($primary_key)' . PHP_EOL;
