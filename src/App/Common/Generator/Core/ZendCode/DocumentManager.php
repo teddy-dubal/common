@@ -164,10 +164,10 @@ class DocumentManager extends AbstractGenerator
         if ('array' !== $this->data['_primaryKey']['phptype']) {
             $body .= '  foreach ($dc as $k => $d) {' . PHP_EOL;
             $body .= '      if ($d instanceof \MongoDB\BSON\ObjectId) {' . PHP_EOL;
-            $body .= '          $t[$k] = $d->__toString();' . PHP_EOL;
+            $body .= '          $dc[$k] = $d->__toString();' . PHP_EOL;
             $body .= '      }' . PHP_EOL;
             $body .= '      if ($d instanceof \MongoDB\BSON\UTCDateTime) {' . PHP_EOL;
-            $body .= '          $t[$k] = $d->toDateTime()->format(\DateTime::ISO8601);' . PHP_EOL;
+            $body .= '          $dc[$k] = $d->toDateTime()->format(\DateTime::ISO8601);' . PHP_EOL;
             $body .= '      }' . PHP_EOL;
             $body .= '  }' . PHP_EOL;
         }
