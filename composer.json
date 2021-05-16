@@ -8,15 +8,15 @@
         }
     ],
     "require": {
-        "symfony/console": "3.4.*",
-        "symfony/filesystem": "3.4.*",
-        "symfony/finder": "3.4.*",
+        "symfony/console": "^5.2",
+        "symfony/filesystem": "^5.2",
+        "symfony/finder": "^5.2",
         "pimple/pimple": "~3.0",
-        "defuse/php-encryption": "^2.1",
-        "symfony/yaml": "3.4.*",
-        "laminas/laminas-db": "^2.11",
-        "laminas/laminas-inputfilter": "^2.10",
-        "laminas/laminas-code": "^3.4",
+        "defuse/php-encryption": "^2.3",
+        "symfony/yaml": "^5.2",
+        "laminas/laminas-db": "^2.12",
+        "laminas/laminas-inputfilter": "^2.12",
+        "laminas/laminas-code": "^4.3",
         "mongodb/mongodb": "^1.8"
     },
     "require-dev": {

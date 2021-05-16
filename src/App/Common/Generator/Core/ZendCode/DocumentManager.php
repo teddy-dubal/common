@@ -39,7 +39,7 @@ class DocumentManager extends AbstractGenerator
             'docblock'      => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Application Document',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         [
                             'name'        => 'package',
@@ -74,7 +74,7 @@ class DocumentManager extends AbstractGenerator
         //     'flags'        => PropertyGenerator::FLAG_PROTECTED,
         //     'docblock'     => DocBlockGenerator::fromArray([
         //         'shortDescription' => 'Name of database table ',
-        //         'longDescription'  => null,
+        //         'longDescription'  => '',
         //         'tags'             => [
         //             new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
         //         ],
@@ -86,7 +86,7 @@ class DocumentManager extends AbstractGenerator
             'flags'        => PropertyGenerator::FLAG_PROTECTED,
             'docblock'     => DocBlockGenerator::fromArray([
                 'shortDescription' => 'Primary key name',
-                'longDescription'  => null,
+                'longDescription'  => '',
                 'tags'             => [
                     new GenericTag('var', 'string|array' . ' ' . 'Primary key name'),
                 ],
@@ -186,7 +186,7 @@ class DocumentManager extends AbstractGenerator
                 'docblock'   => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => 'Find by criteria',
-                        'longDescription'  => null,
+                        'longDescription'  => '',
                         'tags'             => [
                             new ParamTag('id', ['mixed'], 'Search by primary key'),
                             new ReturnTag(['array'], ''),
@@ -214,7 +214,7 @@ class DocumentManager extends AbstractGenerator
                 'docblock'   => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => 'Find one by criteria',
-                        'longDescription'  => null,
+                        'longDescription'  => '',
                         'tags'             => [
                             new ParamTag('criteria', ['array'], 'Search criteria'),
                             new ReturnTag(['array|boolean'], ''),
@@ -279,7 +279,7 @@ class DocumentManager extends AbstractGenerator
                 'docblock'   => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => 'Find by criteria',
-                        'longDescription'  => null,
+                        'longDescription'  => '',
                         'tags'             => [
                             new ParamTag('criteria', ['array'], 'Search criteria'),
                             new ParamTag('order', ['string'], 'sorting option'),
@@ -357,7 +357,7 @@ class DocumentManager extends AbstractGenerator
             'docblock'   => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Deletes the current entity',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Document to delete'),
                         new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
@@ -539,7 +539,7 @@ class DocumentManager extends AbstractGenerator
             'docblock'   => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Saves current row, and optionally dependent rows',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Document to save'),
                         new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),

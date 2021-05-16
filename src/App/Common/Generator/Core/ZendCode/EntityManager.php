@@ -37,7 +37,7 @@ class EntityManager extends AbstractGenerator
             'docblock'      => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Application Entity Manager',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         [
                             'name'        => 'package',
@@ -72,7 +72,7 @@ class EntityManager extends AbstractGenerator
             'flags'        => PropertyGenerator::FLAG_PROTECTED,
             'docblock'     => DocBlockGenerator::fromArray([
                 'shortDescription' => 'Name of database table ',
-                'longDescription'  => null,
+                'longDescription'  => '',
                 'tags'             => [
                     new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
                 ],
@@ -84,7 +84,7 @@ class EntityManager extends AbstractGenerator
             'flags'        => PropertyGenerator::FLAG_PROTECTED,
             'docblock'     => DocBlockGenerator::fromArray([
                 'shortDescription' => 'Primary key name',
-                'longDescription'  => null,
+                'longDescription'  => '',
                 'tags'             => [
                     new GenericTag('var', 'string|array' . ' ' . 'Primary key name'),
                 ],
@@ -96,7 +96,7 @@ class EntityManager extends AbstractGenerator
             'flags'        => PropertyGenerator::FLAG_PROTECTED,
             'docblock'     => DocBlockGenerator::fromArray([
                 'shortDescription' => 'Is primary Key auto increment',
-                'longDescription'  => null,
+                'longDescription'  => '',
                 'tags'             => [
                     new GenericTag('var', 'boolean' . ' ' . 'Is primary Key auto increment'),
                 ],
@@ -169,7 +169,7 @@ class EntityManager extends AbstractGenerator
             'docblock'   => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Finds row by primary key',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         new ParamTag('id', [$this->data['_primaryKey']['phptype']], 'Primary key value'),
                         new ReturnTag([$this->data['_className'] . 'Entity',
@@ -261,7 +261,7 @@ class EntityManager extends AbstractGenerator
             'docblock'   => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Deletes the current entity',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to delete'),
                         new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if delete should be done inside a database transaction'),
@@ -449,7 +449,7 @@ class EntityManager extends AbstractGenerator
             'docblock'   => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Saves current row, and optionally dependent rows',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to save'),
                         new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),
