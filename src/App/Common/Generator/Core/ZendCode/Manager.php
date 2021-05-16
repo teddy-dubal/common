@@ -40,7 +40,7 @@ class Manager extends AbstractGenerator
             'docblock'      => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Application Model DbTables',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         [
                             'name'        => 'package',
@@ -108,7 +108,7 @@ class Manager extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Constructor',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('adapter', ['Adapter']),
                                 new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
@@ -134,7 +134,7 @@ class Manager extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Set debug mode',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('debug', ['boolean']),
                                 new ReturnTag([
@@ -161,7 +161,7 @@ class Manager extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Inject container',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('c', ['Pimple\Container']),
                                 new ReturnTag([
@@ -179,7 +179,7 @@ class Manager extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => '',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => '\Pimple\Container',
@@ -196,7 +196,7 @@ class Manager extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => '',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => 'array|string',
@@ -213,7 +213,7 @@ class Manager extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => '',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => 'array|string',
@@ -273,7 +273,7 @@ class Manager extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Find by criteria',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('criteria', ['array'], 'Search criteria'),
                                 new ParamTag('order', ['string'], 'sorting option'),
@@ -358,7 +358,7 @@ BODY
                     'docblock'   =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Manage params of sql request and return results',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[
                                 new ParamTag('columns',['array'],''),
                                 new ParamTag('join',['array'],''),
@@ -388,7 +388,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Count by criteria',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[
                                 new ParamTag('criteria',['array'],'Criteria'),
                                 new ReturnTag(['int'],''),
@@ -413,7 +413,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Is a least one row exists with criteria',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[
                                 new ParamTag('criteria',['array'],'Criteria'),
                                 new ReturnTag(['bool'],''),
@@ -441,7 +441,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Converts database column name to php setter/getter function name',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[
                                 new ParamTag('entity',[$this->data['_namespace'].'\Entity\Entity']),
                                 new ParamTag('useTransaction',['boolean']),
@@ -468,7 +468,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Begin a transaction',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[],
                         ]
                     )
@@ -487,7 +487,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Rollback a transaction',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[],
                         ]
                     )
@@ -505,7 +505,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>' Commit a transaction',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[],
                         ]
                     )
@@ -542,7 +542,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>' @see Laminas\Db\TableGateway\AbstractTableGateway::selectWith',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[
                                 new ParamTag('select',['Laminas\Db\Sql\Select']),
                                 new ReturnTag([
@@ -570,7 +570,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Find one by criteria',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[
                                 new ParamTag('criteria',['array'],'Search criteria'),
                                 new ReturnTag(['array|boolean'],''),
@@ -596,7 +596,7 @@ BODY
                     'docblock'  =>DocBlockGenerator::fromArray(
                         [
                             'shortDescription'=>'Find Entity one by criteria',
-                            'longDescription' =>null,
+                            'longDescription' =>'',
                             'tags'            =>[
                                 new ParamTag('criteria',['array'],'Search criteria'),
                                 new ReturnTag(['boolean|Entity'],''),

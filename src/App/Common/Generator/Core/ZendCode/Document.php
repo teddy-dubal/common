@@ -39,7 +39,7 @@ class Document extends AbstractGenerator
             'docblock'      => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Application Model MongoDb',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         [
                             'name'        => 'package',
@@ -84,7 +84,7 @@ class Document extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Set debug mode',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('debug', ['boolean']),
                                 new ReturnTag([
@@ -111,7 +111,7 @@ class Document extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Inject container',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('c', ['Pimple\Container']),
                                 new ReturnTag([
@@ -129,7 +129,7 @@ class Document extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => '',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => '\Pimple\Container',
@@ -146,7 +146,7 @@ class Document extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Get table name',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => 'String',
@@ -171,7 +171,7 @@ class Document extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Set table name',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => 'self',
@@ -195,7 +195,7 @@ class Document extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Converts database column name to php setter/getter function name',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
                                 new ParamTag('useTransaction', ['boolean']),

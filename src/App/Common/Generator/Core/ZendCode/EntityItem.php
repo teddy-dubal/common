@@ -38,7 +38,7 @@ class EntityItem extends AbstractGenerator
             'docblock'      => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Application Entity',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         [
                             'name'        => 'package',
@@ -100,7 +100,7 @@ class EntityItem extends AbstractGenerator
             ]
         );
         foreach ($this->data['_columns'] as $column) {
-            $comment           = !empty($column['comment']) ? $column['comment'] : null;
+            $comment           = !empty($column['comment']) ? $column['comment'] : '';
             $classProperties[] = PropertyGenerator::fromArray(
                 [
                     'name'     => $column['capital'],
@@ -129,7 +129,7 @@ class EntityItem extends AbstractGenerator
                         'docblock' => DocBlockGenerator::fromArray(
                             [
                                 'shortDescription' => 'Parent relation',
-                                'longDescription'  => null,
+                                'longDescription'  => '',
                                 'tags'             => [
                                     new GenericTag('var', $this->data['className'][$key['key_name']]['foreign_tbl_name'] . ' ' . $name),
                                 ],
@@ -206,7 +206,7 @@ class EntityItem extends AbstractGenerator
                 'docblock'   => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => 'Sets up column and relationship lists',
-                        'longDescription'  => null,
+                        'longDescription'  => '',
                     ]
                 ),
             ],
@@ -244,7 +244,7 @@ class EntityItem extends AbstractGenerator
                 'docblock'   => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => $comment,
-                        'longDescription'  => null,
+                        'longDescription'  => '',
                         'tags'             => [
                             new ParamTag('data', $column['phptype'], $column['field']),
                             new ReturnTag([
@@ -319,7 +319,7 @@ class EntityItem extends AbstractGenerator
                 'docblock'   => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => $comment,
-                        'longDescription'  => null,
+                        'longDescription'  => '',
                         'tags'             => $tags,
                     ]
                 ),
@@ -376,7 +376,7 @@ class EntityItem extends AbstractGenerator
                 'docblock'   => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => $comment,
-                        'longDescription'  => null,
+                        'longDescription'  => '',
                         'tags'             => [
                             new ParamTag('data', [$this->data['_namespace'] . '\Entity\\' . $this->data['className'][$key['key_name']]['foreign_tbl_name']]),
                             new ReturnTag(['datatype' => 'self']),
@@ -399,7 +399,7 @@ class EntityItem extends AbstractGenerator
                 'docblock'   => DocBlockGenerator::fromArray(
                     [
                         'shortDescription' => $comment,
-                        'longDescription'  => null,
+                        'longDescription'  => '',
                         'tags'             => [
                             new ReturnTag(['datatype' => $this->data['className'][$key['key_name']]['foreign_tbl_name']]),
                         ],
@@ -435,7 +435,7 @@ class EntityItem extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => $comment,
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('data', [$this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name']]),
                                 new ReturnTag(['datatype' => 'self']),
@@ -454,7 +454,7 @@ class EntityItem extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => $comment,
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([$this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name']]),
                             ],
@@ -483,7 +483,7 @@ class EntityItem extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => $comment,
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('data', ['array'], ' array of ' . $this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name']),
                                 new ReturnTag(['datatype' => 'self']),
@@ -502,7 +502,7 @@ class EntityItem extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => $comment,
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag(['datatype' => 'array'], 'array of ' . $this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name']),
                             ],
@@ -527,7 +527,7 @@ class EntityItem extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => $comment,
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('data', [$this->data['classNameDependent'][$key['key_name']]['foreign_tbl_name']], $comment),
                                 new ReturnTag(['datatype' => 'self']),
@@ -596,7 +596,7 @@ class EntityItem extends AbstractGenerator
             'docblock'   => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Set type of entity',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         new ParamTag('val', ['boolean']),
                     ],
@@ -619,7 +619,7 @@ class EntityItem extends AbstractGenerator
             'docblock'   => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Returns an array, keys are the field names.',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         new ReturnTag(['datatype' => 'array']),
                     ],
