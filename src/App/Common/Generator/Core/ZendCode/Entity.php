@@ -65,7 +65,7 @@ class Entity extends AbstractGenerator
             'docblock'      => DocBlockGenerator::fromArray(
                 [
                     'shortDescription' => 'Generic Entity Class',
-                    'longDescription'  => null,
+                    'longDescription'  => '',
                     'tags'             => [
                         [
                             'name'        => 'package',
@@ -103,7 +103,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Set the list of columns associated with this model',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('data', ['array'], 'array of field names'),
                                 new ReturnTag([
@@ -121,7 +121,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Returns columns list array',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => 'array',
@@ -145,7 +145,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Set the list of relationships associated with this model',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('data', ['array'], 'Array of relationship'),
                                 new ReturnTag([
@@ -163,7 +163,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Returns relationship list array',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => 'array',
@@ -187,7 +187,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Set the list of relationships associated with this model',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('data', ['array'], 'array of relationships'),
                                 new ReturnTag([
@@ -205,7 +205,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Returns relationship list array',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag([
                                     'datatype' => 'array',
@@ -225,7 +225,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Converts database column name to php setter/getter function name',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('column', ['string'], 'Column name'),
                                 new ReturnTag([
@@ -249,7 +249,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Converts database column name to PHP setter/getter function name',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ParamTag('thevar', ['string'], 'Column name'),
                                 new ReturnTag([
@@ -286,7 +286,7 @@ class Entity extends AbstractGenerator
                         ]
                     ),
                 ],
-                MethodGenerator::fromArray([
+                [
                     'name'       => 'exchangeArray',
                     'parameters' => [
                         ParameterGenerator::fromArray(
@@ -297,6 +297,7 @@ class Entity extends AbstractGenerator
                         ),
                     ],
                     'flags'      => MethodGenerator::FLAG_ABSTRACT,
+                    'body'       => '',
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Array of options/values to be set for this model.',
@@ -309,15 +310,16 @@ class Entity extends AbstractGenerator
                             ],
                         ]
                     ),
-                ]),
+                ],
                 [
                     'name'       => 'toArray',
                     'parameters' => [],
                     'flags'      => MethodGenerator::FLAG_ABSTRACT,
+                    'body'       => '',
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Returns an array, keys are the field names.',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag(['datatype' => 'array']),
                             ],
@@ -332,7 +334,7 @@ class Entity extends AbstractGenerator
                     'docblock'   => DocBlockGenerator::fromArray(
                         [
                             'shortDescription' => 'Returns primary key.',
-                            'longDescription'  => null,
+                            'longDescription'  => '',
                             'tags'             => [
                                 new ReturnTag(['datatype' => 'array|string']),
                             ],

@@ -118,6 +118,7 @@ class GenerateDbModelCommand extends BaseCommand
             }
         }
         $output->writeln(sprintf('<info>Done !!</info>'));
+        return 1;
     }
 
     /**
