@@ -241,8 +241,8 @@ class DocumentManager extends AbstractGenerator
             $body .= '  }' . PHP_EOL;
         } else {
             foreach ($this->data['_primaryKey']['fields'] as $key) {
-                $body .= '  if ( $d->' . $key['field'] . ' instanceof \MongoDB\BSON\ObjectId ){' . PHP_EOL;
-                $body .= '      $t[\'' . $key['field'] . '\'] = $d->' . $key['field'] . '->__toString();' . PHP_EOL;
+                $body .= '  if ( $dc->' . $key['field'] . ' instanceof \MongoDB\BSON\ObjectId ){' . PHP_EOL;
+                $body .= '      $t[\'' . $key['field'] . '\'] = $dc->' . $key['field'] . '->__toString();' . PHP_EOL;
                 $body .= '  }' . PHP_EOL;
             }
         }
