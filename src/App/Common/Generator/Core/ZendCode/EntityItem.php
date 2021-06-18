@@ -221,7 +221,7 @@ class EntityItem extends AbstractGenerator
         foreach ($this->data['_columns'] as $column) {
             $is_date = strpos($column['type'], 'datetime') === false && strpos($column['type'], 'timestamp') === false;
             $comment = 'Sets column ' . $column['field'];
-            $comment .= $is_date ? '' : ' Stored in \DateTime::ATOM format .';
+            $comment .= $is_date ? '' : ' Stored in \'Y-m-d H:i:s\' format .';
             $constructBody = '';
             if (!$is_date) {
                 $constructBody .= 'if (! empty($data)) {' . PHP_EOL;
@@ -231,7 +231,7 @@ class EntityItem extends AbstractGenerator
                 $constructBody .= '    if (! $data instanceof \DateTime) {' . PHP_EOL;
                 $constructBody .= '        $data = new \DateTime($data);' . PHP_EOL;
                 $constructBody .= '    }' . PHP_EOL;
-                $constructBody .= '    $data = $data->format(\DateTime::ATOM);' . PHP_EOL;
+                $constructBody .= '    $data = $data->format(\'Y-m-d H:i:s\');' . PHP_EOL;
                 $constructBody .= '}' . PHP_EOL;
             }
             $constructBody .= '$this->' . $column['capital'] . ' = $data;' . PHP_EOL;
@@ -255,7 +255,7 @@ class EntityItem extends AbstractGenerator
                 ),
             ]);
             $comment = 'Gets column ' . $column['field'];
-            $comment .= $is_date ? '' : ' Stored in \DateTime::ATOM format .';
+            $comment .= $is_date ? '' : ' Stored in \'Y-m-d H:i:s\' format .';
             $constructBody = '';
             $parameters    = [];
             $returnType    = $column['phptype'];
