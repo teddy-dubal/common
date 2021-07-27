@@ -325,7 +325,7 @@ class DocumentManager extends AbstractGenerator
                     $constructBody .= '    }' . PHP_EOL;
                 }
             } else {
-                $constructBody .= '    $where = [\'' . $this->data['_primaryKey']['field'] . '\' => \is_string($pk_val) ? new \MongoDB\BSON\ObjectId($entity->get' . $this->data['_primaryKey']['capital'] . '()):$entity->get' . $this->data['_primaryKey']['capital'] . '()];' . PHP_EOL;
+                $constructBody .= '    $where = [\'' . $this->data['_primaryKey']['field'] . '\' => \is_string($entity->get' . $this->data['_primaryKey']['capital'] . '()) ? new \MongoDB\BSON\ObjectId($entity->get' . $this->data['_primaryKey']['capital'] . '()):$entity->get' . $this->data['_primaryKey']['capital'] . '()];' . PHP_EOL;
             }
             $constructBody .= '    $result = $this->deleteOne($where);' . PHP_EOL;
         }
