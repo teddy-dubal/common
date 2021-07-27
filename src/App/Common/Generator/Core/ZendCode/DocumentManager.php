@@ -321,11 +321,11 @@ class DocumentManager extends AbstractGenerator
                     $constructBody .= '    if ($pk_val === null) {' . PHP_EOL;
                     $constructBody .= '        throw new \Exception(\'The value for ' . $key['capital'] . ' cannot be null\');' . PHP_EOL;
                     $constructBody .= '    } else {' . PHP_EOL;
-                    $constructBody .= '        $where[\'' . $key['field'] . '\'] =  new \MongoDB\BSON\ObjectId($pk_val); ' . PHP_EOL;
+                    $constructBody .= '        $where[\'' . $key['field'] . '\'] =  \is_string($pk_val) ? new \MongoDB\BSON\ObjectId($pk_val) : $pk_val; ' . PHP_EOL;
                     $constructBody .= '    }' . PHP_EOL;
                 }
             } else {
-                $constructBody .= '    $where = [\'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($entity->get' . $this->data['_primaryKey']['capital'] . '())];' . PHP_EOL;
+                $constructBody .= '    $where = [\'' . $this->data['_primaryKey']['field'] . '\' => \is_string($pk_val) ? new \MongoDB\BSON\ObjectId($entity->get' . $this->data['_primaryKey']['capital'] . '()):$entity->get' . $this->data['_primaryKey']['capital'] . '()];' . PHP_EOL;
             }
             $constructBody .= '    $result = $this->deleteOne($where);' . PHP_EOL;
         }
@@ -451,10 +451,10 @@ class DocumentManager extends AbstractGenerator
         $constructBody .= '            [' . PHP_EOL;
         if ($this->data['_primaryKey']['phptype'] == 'array') {
             foreach ($this->data['_primaryKey']['fields'] as $key) {
-                $constructBody .= '            \'' . $key['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key[\'' . $key['field'] . '\']),' . PHP_EOL;
+                $constructBody .= '            \'' . $key['field'] . '\' => \is_string($primary_key[\'' . $key['field'] . '\']) ? new \MongoDB\BSON\ObjectId($primary_key[\'' . $key['field'] . '\']) : $primary_key[\'' . $key['field'] . '\'],' . PHP_EOL;
             }
         } else {
-            $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . '\' => new \MongoDB\BSON\ObjectId($primary_key)' . PHP_EOL;
+            $constructBody .= '             \'' . $this->data['_primaryKey']['field'] . '\' => \is_string($primary_key) ? new \MongoDB\BSON\ObjectId($primary_key) : $primary_key' . PHP_EOL;
         }
 
         $constructBody .= '            ],' . PHP_EOL;
