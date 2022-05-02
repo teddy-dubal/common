@@ -11,7 +11,7 @@ use Exception;
 class MakeMysql extends MakeDbTableFactory
 {
 
-    protected function getPDOString($host, $port = 3306, $dbname)
+    protected function getPDOString($host, $port = 3306, $dbname = null)
     {
         return "mysql:host=$host;port=$port;dbname=$dbname";
     }
