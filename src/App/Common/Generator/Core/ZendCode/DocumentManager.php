@@ -229,7 +229,7 @@ class DocumentManager extends AbstractGenerator
         $body = '$doc = $this->find($criteria,[\'limit\' => $limit,\'sort\' => $order,\'skip\' => $offset]);' . PHP_EOL;
         $body .= '$res = [];' . PHP_EOL;
         $body .= 'foreach ($doc as $dc) {' . PHP_EOL;
-        $body .= '   $t        = json_decode(\MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($dc)), true);' . PHP_EOL;
+        $body .= '   $t        = json_decode(\MongoDB\BSON\Document::fromPHP($dc)->toCanonicalExtendedJSON(), true);' . PHP_EOL;
         if ('array' !== $this->data['_primaryKey']['phptype']) {
             $body .= '  foreach ($dc as $k => $d) {' . PHP_EOL;
             $body .= '      if ($d instanceof \MongoDB\BSON\ObjectId) {' . PHP_EOL;
