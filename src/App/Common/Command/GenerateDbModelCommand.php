@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Common\Command;
 
 use App\Common\Command\BaseCommand;
@@ -34,7 +33,7 @@ class GenerateDbModelCommand extends BaseCommand
             ]);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $database     = $input->getArgument('database');
         $namespace    = $input->getArgument('namespace');
@@ -45,7 +44,7 @@ class GenerateDbModelCommand extends BaseCommand
         $tablesRegex  = $input->getOption('tables-regex');
         $tablesPrefix = $input->getOption('tables-prefix');
 
-        if (!file_exists($configfile)) {
+        if (! file_exists($configfile)) {
             $output->writeln(sprintf('<error>Incorrect config file path "%s"</error>', $configfile));
             return false;
         }
@@ -84,7 +83,7 @@ class GenerateDbModelCommand extends BaseCommand
         }
         // Check if a relative path
         $filesystem = new Filesystem();
-        if (!$filesystem->isAbsolutePath($location)) {
+        if (! $filesystem->isAbsolutePath($location)) {
             $location = getcwd() . DIRECTORY_SEPARATOR . $location;
         }
         $location .= DIRECTORY_SEPARATOR;
@@ -96,8 +95,8 @@ class GenerateDbModelCommand extends BaseCommand
         }
         foreach ($a as $name) {
             $dir = $location . $name;
-            if (!is_dir($dir)) {
-                if (!@mkdir($dir, 0755, true)) {
+            if (! is_dir($dir)) {
+                if (! @mkdir($dir, 0755, true)) {
                     $output->writeln(sprintf('<error>Could not create directory zf2 "%s"</error>', $dir));
                     return false;
                 }
@@ -106,7 +105,7 @@ class GenerateDbModelCommand extends BaseCommand
         $dbAdapter->setTableList($tables);
         $dbAdapter->addTablePrefixes($tablesPrefix);
         foreach ($tables as $table) {
-            if ($tablesRegex && !preg_match("/$tablesRegex/", $table) > 0) {
+            if ($tablesRegex && ! preg_match("/$tablesRegex/", $table) > 0) {
                 continue;
             }
             $dbAdapter->setTableName($table);
@@ -130,7 +129,7 @@ class GenerateDbModelCommand extends BaseCommand
     {
 
         $helper = $this->getHelper('question');
-        if (!$input->getArgument('config-file')) {
+        if (! $input->getArgument('config-file')) {
             $question = new Question('Please set the config file path : ');
             $question->setValidator(function ($answer) {
                 if (empty($answer)) {
@@ -142,7 +141,7 @@ class GenerateDbModelCommand extends BaseCommand
             $input->setArgument('config-file', $item);
         }
         $helper = $this->getHelper('question');
-        if (!$input->getArgument('database')) {
+        if (! $input->getArgument('database')) {
             $question = new Question('Please choose a module database : ');
             $question->setValidator(function ($answer) {
                 if (empty($answer)) {
@@ -154,7 +153,7 @@ class GenerateDbModelCommand extends BaseCommand
             $input->setArgument('database', $item);
         }
         $helper = $this->getHelper('question');
-        if (!$input->getArgument('namespace')) {
+        if (! $input->getArgument('namespace')) {
             $question = new Question('Please choose a namespace : ');
             $question->setValidator(function ($answer) {
                 if (empty($answer)) {
@@ -166,7 +165,7 @@ class GenerateDbModelCommand extends BaseCommand
             $input->setArgument('namespace', $item);
         }
         $helper = $this->getHelper('question');
-        if (!$input->getArgument('location')) {
+        if (! $input->getArgument('location')) {
             $question = new Question('Please choose a location : ');
             $question->setValidator(function ($answer) {
                 if (empty($answer)) {
