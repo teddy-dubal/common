@@ -8,22 +8,21 @@
         }
     ],
     "require": {
-        "symfony/console": "^6.3",
-        "symfony/filesystem": "^6.3",
-        "symfony/finder": "^6.3",
+        "symfony/console": "^v7.2.5",
+        "symfony/filesystem": "^v7.2.0",
+        "symfony/finder": "^v7.2.2",
         "pimple/pimple": "^3.5",
         "defuse/php-encryption": "^2.4",
-        "symfony/yaml": "^6.3",
-        "laminas/laminas-db": "^2.18",
-        "laminas/laminas-inputfilter": "^2.27",
-        "laminas/laminas-code": "^4.11",
-        "mongodb/mongodb": "^1.16"
+        "symfony/yaml": "^v7.2.5",
+        "laminas/laminas-db": "^2.20.0",
+        "laminas/laminas-inputfilter": "^2.31.0",
+        "laminas/laminas-code": "^4.16.0",
+        "mongodb/mongodb": "^2.0.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^10.3",
-        "monolog/monolog": "~3.4",
-        "friendsofphp/php-cs-fixer": "v3.23.0"
+        "monolog/monolog": "~3.4"
     },
     "autoload": {
         "psr-4": {

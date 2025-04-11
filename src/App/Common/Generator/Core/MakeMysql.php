@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Common\Generator\Core;
 
 use App\Common\Generator\Core\MakeDbTableFactory;
@@ -11,7 +10,7 @@ use Exception;
 class MakeMysql extends MakeDbTableFactory
 {
 
-    protected function getPDOString($host, $port = 3306, $dbname)
+    protected function getPDOString($host, $port = 3306, $dbname = 'test')
     {
         return "mysql:host=$host;port=$port;dbname=$dbname";
     }
@@ -66,12 +65,12 @@ class MakeMysql extends MakeDbTableFactory
         $this->_pdo->query("SET NAMES UTF8");
         $qry = $this->_pdo->query("show create table `$tbname`");
 
-        if (!$qry) {
+        if (! $qry) {
             throw new Exception("`show create table $tbname` returned false!.");
         }
 
         $res = $qry->fetchAll();
-        if (!isset($res[0]['Create Table'])) {
+        if (! isset($res[0]['Create Table'])) {
             throw new Exception("`show create table $tbname` did not provide known output");
         }
 
@@ -134,12 +133,12 @@ class MakeMysql extends MakeDbTableFactory
         foreach ($tables as $table) {
             $qry = $this->_pdo->query("show create table `$table`");
 
-            if (!$qry) {
+            if (! $qry) {
                 throw new Exception("`show create table $table` returned false!");
             }
 
             $res = $qry->fetchAll();
-            if (!isset($res[0]['Create Table'])) {
+            if (! isset($res[0]['Create Table'])) {
                 throw new Exception("`show create table $table` did not provide known output");
             }
 
@@ -186,12 +185,12 @@ class MakeMysql extends MakeDbTableFactory
 
         $qry_create = $this->_pdo->query("show create table `$tbname`");
 
-        if (!$qry_create) {
+        if (! $qry_create) {
             throw new Exception("`describe $tbname` returned false!.");
         }
 
         $res_create = $qry_create->fetchAll();
-        if (!isset($res_create[0]['Create Table'])) {
+        if (! isset($res_create[0]['Create Table'])) {
             throw new Exception("`show create table $tbname` did not provide known output");
         }
 
@@ -208,7 +207,7 @@ class MakeMysql extends MakeDbTableFactory
 
         $qry = $this->_pdo->query("describe `$tbname`");
 
-        if (!$qry) {
+        if (! $qry) {
             throw new Exception("`describe $tbname` returned false!.");
         }
 
