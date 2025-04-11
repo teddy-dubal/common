@@ -8,7 +8,6 @@
         }
     ],
     "require": {
-        "symfony/console": "^v7.2.5",
         "symfony/filesystem": "^v7.2.0",
         "symfony/finder": "^v7.2.2",
         "pimple/pimple": "^3.5",
@@ -20,6 +19,7 @@
         "mongodb/mongodb": "^2.0.0"
     },
     "require-dev": {
+        "symfony/console": "^v7.2.5",
         "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^10.3",
         "monolog/monolog": "~3.4"
