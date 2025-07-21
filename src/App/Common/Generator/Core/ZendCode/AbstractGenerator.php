@@ -8,10 +8,11 @@
 
 namespace App\Common\Generator\Core\ZendCode;
 
-use Laminas\Code\Generator\ClassGenerator;
-use Laminas\Code\Generator\DocBlockGenerator;
 use Laminas\Code\Generator\FileGenerator;
+use Laminas\Code\Generator\ClassGenerator;
 use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Reflection\DocBlock\Tag\GenericTag;
 
 /**
  * Description of Entity
@@ -70,26 +71,15 @@ abstract class AbstractGenerator
      */
     protected function defineFileInfo(ClassGenerator $class)
     {
-        $doc = DocBlockGenerator::fromArray(
-            [
-                'shortDescription' => 'Contains ' . $class->getName() . ' class file',
-                'longDescription'  => 'Generated Automatically.' . PHP_EOL . 'Please do not modify',
-                'tags'             => [
-                    [
-                        'name'        => 'author',
-                        'description' => $this->data['_author'],
-                    ],
-                    [
-                        'name'        => 'license',
-                        'description' => $this->data['_license'],
-                    ],
-                    [
-                        'name'        => 'package',
-                        'description' => $class->getNamespaceName(),
-                    ],
-                ],
-            ]
-        );
+        $doc =         (new DocBlockGenerator())
+            ->setShortDescription('Contains ' . $class->getName() . ' class file')
+            ->setLongDescription('Generated Automatically.' . PHP_EOL . 'Please do not modify')
+            ->setTags([
+               new GenericTag('package', $class->getNamespaceName()),
+                new GenericTag('author', $this->data['_author']),
+                // new GenericTag('copyright', $this->data['_copyright']),
+                new GenericTag('license', $this->data['_license']),
+            ]);
         $this->fileGenerator->setDocBlock($doc);
     }
 
