@@ -114,7 +114,6 @@ class GenerateDbModelCommand extends BaseCommand
                 $dbAdapter->generate(['db-type' => $tablesType]);
             } catch (Exception $e) {
                 $output->writeln(sprintf('<error>Warning: Failed to process "%s" : %s ... Skipping</error>', $table, $e->getMessage()));
-                break;
             }
         }
         $output->writeln(sprintf('<info>Done !!</info>'));
