@@ -37,10 +37,10 @@ class EntityManager extends AbstractGenerator
                 ->setShortDescription('Application Entity Manager')
                 ->setLongDescription('')
                 ->setTags([
-                    new GenericTag('package', $this->data['_namespace']),
                     new GenericTag('author', $this->data['_author']),
-                    new GenericTag('copyright', $this->data['_copyright']),
                     new GenericTag('license', $this->data['_license']),
+                    new GenericTag('package', $this->data['_namespace']),
+                    new GenericTag('copyright', $this->data['_copyright']),
                 ]),
             'properties'    => $this->getProperties(),
             'methods'       => $methods,

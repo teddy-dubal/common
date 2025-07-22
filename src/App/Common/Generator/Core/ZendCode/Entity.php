@@ -68,10 +68,10 @@ class Entity extends AbstractGenerator
                 ->setShortDescription('Generic Entity Class')
                 ->setLongDescription('')
                 ->setTags([
-                    new GenericTag('package', $data['_namespace']),
                     new GenericTag('author', $data['_author']),
-                    new GenericTag('copyright', $data['_copyright']),
                     new GenericTag('license', $data['_license']),
+                    new GenericTag('package', $data['_namespace']),
+                    new GenericTag('copyright', $data['_copyright']),
                 ])
             ,
             'properties'    => $this->getProperties(),

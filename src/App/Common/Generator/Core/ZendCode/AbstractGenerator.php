@@ -84,9 +84,9 @@ abstract class AbstractGenerator
             ->setShortDescription('Contains ' . $class->getName() . ' class file')
             ->setLongDescription('Generated Automatically.' . PHP_EOL . 'Please do not modify')
             ->setTags([
-                new GenericTag('package', $class->getNamespaceName()),
                 new GenericTag('author', $this->data['_author']),
                 new GenericTag('license', $this->data['_license']),
+                new GenericTag('package', $class->getNamespaceName()),
             ]);
         $this->fileGenerator->setDocBlock($doc);
     }
