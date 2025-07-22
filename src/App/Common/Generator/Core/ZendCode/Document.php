@@ -42,10 +42,10 @@ class Document extends AbstractGenerator
                 ->setShortDescription('Application Model MongoDb')
                 ->setLongDescription('')
                 ->setTags([
-                    new GenericTag('package', $this->data['_namespace']),
                     new GenericTag('author', $this->data['_author']),
-                    new GenericTag('copyright', $this->data['_copyright']),
                     new GenericTag('license', $this->data['_license']),
+                    new GenericTag('package', $this->data['_namespace']),
+                    new GenericTag('copyright', $this->data['_copyright']),
                 ])
             ,
             'properties'    => [
@@ -117,11 +117,11 @@ class Document extends AbstractGenerator
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->table;',
                     'docblock'   => (new DocBlockGenerator())
-                        ->setShortDescription('')
+                        ->setShortDescription('Get table name')
                         ->setLongDescription('')
                         ->setTags([
                             new ReturnTag([
-                                'datatype' => 'array|string',
+                                'datatype' => 'String',
                             ]),
                         ]),
                 ],
