@@ -70,7 +70,8 @@ class DocumentManager extends AbstractGenerator
     private function getConstructor()
     {
         $constructBody = '$this->container = $app;' . PHP_EOL;
-        $constructBody .= 'parent::__construct($app[\'document\']->getDb()->getManager(), $app[\'document\']->getDb()->getDatabaseName(), \'' . $this->data['_tbname'] . '\');' . PHP_EOL;
+        $constructBody .= '$docManager = $app[\'document\']->getDb();' . PHP_EOL;
+        $constructBody .= 'parent::__construct($docManager->getManager(), $docManager->getDatabaseName(), \'' . $this->data['_tbname'] . '\');' . PHP_EOL;
         $indexes = [];
         $unique  = [];
         foreach ($this->data['_columns'] as $column) {
@@ -214,7 +215,7 @@ class DocumentManager extends AbstractGenerator
             [
                 'name'       => 'findDocBy',
                 'parameters' => [
-                    new ParameterGenerator('criteria',                        'Array',
+                    new ParameterGenerator('criteria', 'Array',
                         []),
                     new ParameterGenerator('order'),
                     new ParameterGenerator('limit', 'int', 0),
@@ -493,8 +494,8 @@ class DocumentManager extends AbstractGenerator
         $class = new ClassGenerator(
             $c['name'],
             $c['namespacename'],
-            $c['flags'],
-            null,
+            $c['flags'] ?? null,
+            $c['extendedclass'],
             [],
             $c['properties'],
             $c['methods'],

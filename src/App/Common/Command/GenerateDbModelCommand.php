@@ -56,7 +56,7 @@ class GenerateDbModelCommand extends BaseCommand
             $conf         = $configValues['parameters'];
             $config       = [
                 'docs.author'    => '',
-                'docs.license'   => 'http://framework.zend.com/license/new-bsd     New BSD License',
+                'docs.license'   => '',
                 'docs.copyright' => '',
                 'db.type'        => 'Mysql',
                 'db.socket'      => '',
@@ -114,6 +114,7 @@ class GenerateDbModelCommand extends BaseCommand
                 $dbAdapter->generate(['db-type' => $tablesType]);
             } catch (Exception $e) {
                 $output->writeln(sprintf('<error>Warning: Failed to process "%s" : %s ... Skipping</error>', $table, $e->getMessage()));
+                break;
             }
         }
         $output->writeln(sprintf('<info>Done !!</info>'));

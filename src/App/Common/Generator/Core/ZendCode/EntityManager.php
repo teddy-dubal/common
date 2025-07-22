@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Common\Generator\Core\ZendCode;
 
 use \Laminas\Code\Generator\ClassGenerator;
@@ -35,14 +34,14 @@ class EntityManager extends AbstractGenerator
             'namespacename' => $this->data['_namespace'] . '\Table',
             'extendedclass' => $this->data['_namespace'] . '\Table\Manager',
             'docblock'      => (new DocBlockGenerator())
-                    ->setShortDescription('Application Entity Manager')
-                    ->setLongDescription('')
-                    ->setTags([
-                new GenericTag('package', $this->data['_namespace']),
-                new GenericTag('author', $this->data['_author']),
-                new GenericTag('copyright', $this->data['_copyright']),
-                new GenericTag('license', $this->data['_license']),
-            ]),
+                ->setShortDescription('Application Entity Manager')
+                ->setLongDescription('')
+                ->setTags([
+                    new GenericTag('package', $this->data['_namespace']),
+                    new GenericTag('author', $this->data['_author']),
+                    new GenericTag('copyright', $this->data['_copyright']),
+                    new GenericTag('license', $this->data['_license']),
+                ]),
             'properties'    => $this->getProperties(),
             'methods'       => $methods,
         ];
@@ -50,27 +49,26 @@ class EntityManager extends AbstractGenerator
 
     private function getProperties()
     {
-        $classProperties   = [];
-        
+        $classProperties = [];
 
-        $classProperties[] = (new PropertyGenerator('table',$this->data['_tbname'],PropertyGenerator::FLAG_PROTECTED
-                ))->setDocBlock((new DocBlockGenerator())
+        $classProperties[] = (new PropertyGenerator('table', $this->data['_tbname'], PropertyGenerator::FLAG_PROTECTED
+        ))->setDocBlock((new DocBlockGenerator())
                 ->setShortDescription('Name of database table ')
                 ->setLongDescription('')
                 ->setTags([
                     new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
                 ]));
 
-        $classProperties[] = (new PropertyGenerator('id','array' !== $this->data['_primaryKey']['phptype'] ? $this->data['_primaryKey']['field'] : eval('return ' . $this->data['_primaryKey']['field'] . ';'),PropertyGenerator::FLAG_PROTECTED
-                ))->setDocBlock((new DocBlockGenerator())
+        $classProperties[] = (new PropertyGenerator('id', 'array' !== $this->data['_primaryKey']['phptype'] ? $this->data['_primaryKey']['field'] : eval('return ' . $this->data['_primaryKey']['field'] . ';'), PropertyGenerator::FLAG_PROTECTED
+        ))->setDocBlock((new DocBlockGenerator())
                 ->setShortDescription('Primary key name')
                 ->setLongDescription('')
                 ->setTags([
                     new GenericTag('var', 'string|array' . ' ' . 'Primary key name'),
                 ]));
 
-        $classProperties[] = (new PropertyGenerator('sequence','array' !== $this->data['_primaryKey']['phptype'],PropertyGenerator::FLAG_PROTECTED
-                ))->setDocBlock((new DocBlockGenerator())
+        $classProperties[] = (new PropertyGenerator('sequence', 'array' !== $this->data['_primaryKey']['phptype'], PropertyGenerator::FLAG_PROTECTED
+        ))->setDocBlock((new DocBlockGenerator())
                 ->setShortDescription('Is primary Key auto increment')
                 ->setLongDescription('')
                 ->setTags([
@@ -89,19 +87,19 @@ class EntityManager extends AbstractGenerator
                     new ParameterGenerator('adapter',
                         'Laminas\Db\Adapter\Adapter'),
                     new ParameterGenerator('entity',
-                            $this->data['_namespace'] . '\Entity\\' . $this->data['_className'],
-                            null)
-                        ,
+                        '?'.$this->data['_namespace'] . '\Entity\\' . $this->data['_className']
+                        )
+                    ,
                 ],
                 'flags'      => MethodGenerator::FLAG_PUBLIC,
                 'body'       => $constructBody,
                 'docblock'   => (new DocBlockGenerator())
-                        ->setShortDescription('Constructor')
-                        ->setLongDescription('Pass a DB Adapter to handle connection')
-                        ->setTags([
-                            new ParamTag('adapter', ['Laminas\Db\Adapter\Adapter'], 'Laminas DB Adapter'),
-                            new ParamTag('entity', [$this->data['_className'] . 'Entity'], 'Reference entity'),
-                        ]),
+                    ->setShortDescription('Constructor')
+                    ->setLongDescription('Pass a DB Adapter to handle connection')
+                    ->setTags([
+                        new ParamTag('adapter', ['Laminas\Db\Adapter\Adapter'], 'Laminas DB Adapter'),
+                        new ParamTag('entity', [$this->data['_className'] . 'Entity'], 'Reference entity'),
+                    ]),
             ],
         ];
         return $methods;
@@ -131,12 +129,12 @@ class EntityManager extends AbstractGenerator
             'flags'      => MethodGenerator::FLAG_PUBLIC,
             'body'       => $constructBody,
             'docblock'   => (new DocBlockGenerator())
-                    ->setLongDescription('')
-                    ->setTags([
-                        new ParamTag('id', [$this->data['_primaryKey']['phptype']], 'Primary key value'),
-                        new ReturnTag([$this->data['_className'] . 'Entity',
-                            'null'], 'Found entity'),
-                    ]),
+                ->setLongDescription('')
+                ->setTags([
+                    new ParamTag('id', [$this->data['_primaryKey']['phptype']], 'Primary key value'),
+                    new ReturnTag([$this->data['_className'] . 'Entity',
+                        'null'], 'Found entity'),
+                ]),
         ];
 
         return $methods;
@@ -215,13 +213,13 @@ class EntityManager extends AbstractGenerator
             'flags'      => MethodGenerator::FLAG_PUBLIC,
             'body'       => $constructBody,
             'docblock'   => (new DocBlockGenerator())
-                    ->setShortDescription('Deletes the current entity')
-                    ->setLongDescription('')
-                    ->setTags([
-                        new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to delete'),
-                        new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if delete should be done inside a database transaction'),
-                        new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
-                    ]),
+                ->setShortDescription('Deletes the current entity')
+                ->setLongDescription('')
+                ->setTags([
+                    new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to delete'),
+                    new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if delete should be done inside a database transaction'),
+                    new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
+                ]),
         ];
         return $methods;
     }
@@ -240,7 +238,7 @@ class EntityManager extends AbstractGenerator
         if ($this->data['_primaryKey']['phptype'] == 'array') {
             $constructBody .= '$primary_key = array();' . PHP_EOL;
             foreach ($this->data['_primaryKey']['fields'] as $key) {
-                if (!$key['ai']) {
+                if (! $key['ai']) {
                     $constructBody .= '$pk_val = $entity->get' . $key['capital'] . '();' . PHP_EOL;
                     $constructBody .= 'if ($pk_val === null) {' . PHP_EOL;
                     $constructBody .= '    return false;' . PHP_EOL;
@@ -273,7 +271,7 @@ class EntityManager extends AbstractGenerator
             $constructBody .= 'if ($useTransaction) {' . PHP_EOL;
             $constructBody .= '    $this->beginTransaction();' . PHP_EOL;
             $constructBody .= '}' . PHP_EOL;
-            if (!$this->data['_primaryKey']['foreign_key']) {
+            if (! $this->data['_primaryKey']['foreign_key']) {
                 $constructBody .= 'unset($data[\'' . $this->data['_primaryKey']['field'] . '\']);' . PHP_EOL;
                 $constructBody .= 'try {' . PHP_EOL;
                 $constructBody .= '    if ($primary_key === null) {' . PHP_EOL;
@@ -387,15 +385,15 @@ class EntityManager extends AbstractGenerator
             'flags'      => MethodGenerator::FLAG_PUBLIC,
             'body'       => $constructBody,
             'docblock'   => (new DocBlockGenerator())
-                    ->setShortDescription('Saves current row, and optionally dependent rows')
-                    ->setLongDescription('')
-                    ->setTags([
-                        new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to save'),
-                        new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),
-                        new ParamTag('recursive', ['boolean'], 'Should the object graph be walked for all related elements'),
-                        new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if save should be done inside a database transaction'),
-                        new ReturnTag(['int', 'array', 'false'], 'Inserted ID'),
-                    ]),
+                ->setShortDescription('Saves current row, and optionally dependent rows')
+                ->setLongDescription('')
+                ->setTags([
+                    new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Entity to save'),
+                    new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),
+                    new ParamTag('recursive', ['boolean'], 'Should the object graph be walked for all related elements'),
+                    new ParamTag('useTransaction', ['boolean'], 'Flag to indicate if save should be done inside a database transaction'),
+                    new ReturnTag(['int', 'array', 'false'], 'Inserted ID'),
+                ]),
         ];
         return $methods;
     }
@@ -411,7 +409,7 @@ class EntityManager extends AbstractGenerator
             $c['name'],
             $c['namespacename'],
             null,
-            null,
+            $c['extendedclass'],
             [],
             $c['properties'],
             $c['methods'],

@@ -36,13 +36,13 @@ class Entity extends AbstractGenerator
             ['name' => '_dependentList'],
         ];
         foreach ($properties as $column) {
-            $classProperties[] = (new PropertyGenerator($column['name'],null,PropertyGenerator::FLAG_PROTECTED
-                ))->setDocBlock((new DocBlockGenerator())
-                        ->setShortDescription($column['name'])
-                        ->setLongDescription('')
-                        ->setTags([
-                            new GenericTag('var', $column['name']),
-                        ]));
+            $classProperties[] = (new PropertyGenerator($column['name'], null, PropertyGenerator::FLAG_PROTECTED
+            ))->setDocBlock((new DocBlockGenerator())
+                    ->setShortDescription($column['name'])
+                    ->setLongDescription('')
+                    ->setTags([
+                        new GenericTag('var', $column['name']),
+                    ]));
         }
         return $classProperties;
     }
@@ -50,6 +50,15 @@ class Entity extends AbstractGenerator
     public function getClassArrayRepresentation()
     {
         $data = $this->getData();
+        // var_dump((new DocBlockGenerator())
+        //                 ->setShortDescription('Converts database column name to PHP setter/getter function name')
+        //                 ->setLongDescription('')
+        //                 ->setTags([
+        //                     new ParamTag('thevar', ['string'], 'Column name'),
+        //                     new ReturnTag([
+        //                         'datatype' => 'self',
+        //                     ]),
+        //                 ]));exit;
         return [
             'name'          => 'Entity',
             'namespacename' => $data['_namespace'] . '\Entity',

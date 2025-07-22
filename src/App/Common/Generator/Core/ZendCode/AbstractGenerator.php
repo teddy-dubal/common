@@ -8,11 +8,11 @@
 
 namespace App\Common\Generator\Core\ZendCode;
 
-use Laminas\Code\Generator\FileGenerator;
 use Laminas\Code\Generator\ClassGenerator;
-use Laminas\Code\Generator\MethodGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
-use Laminas\Code\Reflection\DocBlock\Tag\GenericTag;
+use Laminas\Code\Generator\DocBlock\Tag\GenericTag;
+use Laminas\Code\Generator\FileGenerator;
+use Laminas\Code\Generator\MethodGenerator;
 
 /**
  * Description of Entity
@@ -59,7 +59,15 @@ abstract class AbstractGenerator
 
     public function generate()
     {
-        $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
+        $c     = $this->getClassArrayRepresentation();
+        $class = new ClassGenerator($c["name"] ?? null,
+            $c["namespacename"] ?? null,
+            $c["flags"] ?? null,
+            $c['extendedclass'] ?? null,
+            [],
+            $c["properties"] ?? [],
+            $c["methods"] ?? [],
+            $c["docblock"] ?? null);
         $this->defineFileInfo($class);
         return $this->fileGenerator->setClass($class)->generate();
     }
@@ -71,13 +79,13 @@ abstract class AbstractGenerator
      */
     protected function defineFileInfo(ClassGenerator $class)
     {
-        $doc =         (new DocBlockGenerator())
+
+        $doc = (new DocBlockGenerator())
             ->setShortDescription('Contains ' . $class->getName() . ' class file')
             ->setLongDescription('Generated Automatically.' . PHP_EOL . 'Please do not modify')
             ->setTags([
-               new GenericTag('package', $class->getNamespaceName()),
+                new GenericTag('package', $class->getNamespaceName()),
                 new GenericTag('author', $this->data['_author']),
-                // new GenericTag('copyright', $this->data['_copyright']),
                 new GenericTag('license', $this->data['_license']),
             ]);
         $this->fileGenerator->setDocBlock($doc);
