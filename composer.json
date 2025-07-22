@@ -8,17 +8,17 @@
         }
     ],
     "require": {
+        "defuse/php-encryption": "^2.4"
+    },
+    "require-dev": {
         "symfony/filesystem": "^v7.3.0",
         "symfony/finder": "^v7.3.0",
         "pimple/pimple": "^3.5",
-        "defuse/php-encryption": "^2.4",
         "symfony/yaml": "^v7.3.1",
         "laminas/laminas-db": "^2.20.0",
         "laminas/laminas-inputfilter": "^2.33.0",
         "laminas/laminas-code": "^4.16.0",
-        "mongodb/mongodb": "^2.1.0"
-    },
-    "require-dev": {
+        "mongodb/mongodb": "^2.1.0",
         "symfony/console": "^v7.2.5",
         "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^10.3",
