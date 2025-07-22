@@ -40,10 +40,10 @@ class DocumentManager extends AbstractGenerator
                 ->setShortDescription('Application Document')
                 ->setLongDescription('')
                 ->setTags([
-                    new GenericTag('package', $this->data['_namespace']),
                     new GenericTag('author', $this->data['_author']),
-                    new GenericTag('copyright', $this->data['_copyright']),
                     new GenericTag('license', $this->data['_license']),
+                    new GenericTag('package', $this->data['_namespace']),
+                    new GenericTag('copyright', $this->data['_copyright']),
                 ])
             ,
             'properties'    => $this->getProperties(),
@@ -110,7 +110,6 @@ class DocumentManager extends AbstractGenerator
                     ->setShortDescription('Constructor')
                     ->setLongDescription('')
                     ->setTags([
-                        new ParamTag('adapter', ['Adapter']),
                         new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
                     ]),
             ],
