@@ -17,6 +17,7 @@ $app['logger']       = function ($container) {
     $log->pushHandler(new StreamHandler('php://stderr'));
     return $log;
 };
+/**@var DocumentFactory */
 $app['document'] = function () use ($app) {
     return new DocumentFactory($app, $app['mongodb_conf']['mongodb.options']['database']);
 };
@@ -45,7 +46,7 @@ foreach ($result as $v) {
     $id_Users[] = $v['_id'];
 }
 echo "***********************************************" . PHP_EOL;
-$name = 'Teddy';
+$name = 'Teddy_8';
 echo sprintf('Find user by criteria (name) : %s', $name) . PHP_EOL;
 $u = $userManager->findDocBy(array('name' => $name));
 
@@ -65,7 +66,7 @@ $u = $userManager->count(array('name' => $name));
 var_dump($u);
 
 echo "***********************************************" . PHP_EOL;
-$name = 'Teddy';
+$name = 'Teddy_5';
 echo sprintf('FindOneBy With result : %s', $name) . PHP_EOL;
 $u = $userManager->findOneDocBy(array('name' => $name));
 var_dump($u);

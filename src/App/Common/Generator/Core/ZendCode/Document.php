@@ -10,6 +10,7 @@ namespace App\Common\Generator\Core\ZendCode;
 
 use Laminas\Code\Generator\ClassGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\DocBlock\Tag\GenericTag;
 use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
 use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
 use Laminas\Code\Generator\MethodGenerator;
@@ -36,30 +37,17 @@ class Document extends AbstractGenerator
             'namespacename' => $this->data['_namespace'] . '\Document',
             'extendedclass' => $this->useTableGatewayClass,
             'flags'         => ClassGenerator::FLAG_ABSTRACT,
-            'docblock'      => DocBlockGenerator::fromArray(
-                [
-                    'shortDescription' => 'Application Model MongoDb',
-                    'longDescription'  => '',
-                    'tags'             => [
-                        [
-                            'name'        => 'package',
-                            'description' => $this->data['_namespace'],
-                        ],
-                        [
-                            'name'        => 'author',
-                            'description' => $this->data['_author'],
-                        ],
-                        [
-                            'name'        => 'copyright',
-                            'description' => $this->data['_copyright'],
-                        ],
-                        [
-                            'name'        => 'license',
-                            'description' => $this->data['_license'],
-                        ],
-                    ],
-                ]
-            ),
+            'docblock'      =>
+            (new DocBlockGenerator())
+                ->setShortDescription('Application Model MongoDb')
+                ->setLongDescription('')
+                ->setTags([
+                    new GenericTag('package', $this->data['_namespace']),
+                    new GenericTag('author', $this->data['_author']),
+                    new GenericTag('copyright', $this->data['_copyright']),
+                    new GenericTag('license', $this->data['_license']),
+                ])
+            ,
             'properties'    => [
                 ['container', null, PropertyGenerator::FLAG_PROTECTED],
                 ['table', null, PropertyGenerator::FLAG_PROTECTED],
@@ -69,142 +57,112 @@ class Document extends AbstractGenerator
                 [
                     'name'       => 'setDebug',
                     'parameters' => [
-                        ParameterGenerator::fromArray(
-                            [
-                                'type'         => 'bool',
-                                'name'         => 'debug',
-                                'defaultvalue' => true,
-                            ]
+                        new ParameterGenerator(
+                            'debug',
+                            'bool',
+                            true
                         ),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
                     '$this->debug = $debug;' . PHP_EOL .
                     'return $this;',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => 'Set debug mode',
-                            'longDescription'  => '',
-                            'tags'             => [
-                                new ParamTag('debug', ['boolean']),
-                                new ReturnTag([
-                                    'datatype' => 'self',
-                                ]),
-                            ],
-                        ]
-                    ),
+                    'docblock'   => (new DocBlockGenerator())
+                        ->setShortDescription('Set debug mode')
+                        ->setLongDescription('')
+                        ->setTags([
+                            new ParamTag('debug', ['boolean']),
+                            new ReturnTag([
+                                'datatype' => 'self',
+                            ]),
+                        ]),
                 ],
                 [
                     'name'       => 'setContainer',
                     'parameters' => [
-                        ParameterGenerator::fromArray(
-                            [
-                                'name' => 'c',
-                                'type' => 'Pimple\Container',
-                            ]
-                        ),
+                        new ParameterGenerator('c',
+                            'Pimple\Container'),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       =>
                     '$this->container = $c;' . PHP_EOL .
                     'return $this;',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => 'Inject container',
-                            'longDescription'  => '',
-                            'tags'             => [
-                                new ParamTag('c', ['Pimple\Container']),
-                                new ReturnTag([
-                                    'datatype' => 'self',
-                                ]),
-                            ],
-                        ]
-                    ),
+                    'docblock'   => (new DocBlockGenerator())
+                        ->setShortDescription('Inject container')
+                        ->setLongDescription('')
+                        ->setTags([
+                            new ParamTag('c', ['Pimple\Container']),
+                            new ReturnTag([
+                                'datatype' => 'self',
+                            ]),
+                        ]),
                 ],
                 [
                     'name'       => 'getContainer',
                     'parameters' => [],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->container;',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => '',
-                            'longDescription'  => '',
-                            'tags'             => [
-                                new ReturnTag([
-                                    'datatype' => '\Pimple\Container',
-                                ]),
-                            ],
-                        ]
-                    ),
+                    'docblock'   => (new DocBlockGenerator())
+                        ->setShortDescription('')
+                        ->setLongDescription('')
+                        ->setTags([
+                            new ReturnTag([
+                                'datatype' => '\Pimple\Container',
+                            ]),
+                        ]),
                 ],
                 [
                     'name'       => 'getTableName',
                     'parameters' => [],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => 'return $this->table;',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => 'Get table name',
-                            'longDescription'  => '',
-                            'tags'             => [
-                                new ReturnTag([
-                                    'datatype' => 'String',
-                                ]),
-                            ],
-                        ]
-                    ),
+                    'docblock'   => (new DocBlockGenerator())
+                        ->setShortDescription('')
+                        ->setLongDescription('')
+                        ->setTags([
+                            new ReturnTag([
+                                'datatype' => 'array|string',
+                            ]),
+                        ]),
                 ],
                 [
                     'name'       => 'setTableName',
                     'parameters' => [
-                        ParameterGenerator::fromArray(
-                            [
-                                'name' => 's',
-                                'type' => 'String',
-                            ]
-                        ),
+                        new ParameterGenerator('s', 'String'),
                     ],
                     'flags'      => MethodGenerator::FLAG_PUBLIC,
                     'body'       => '$this->table = $s;' . PHP_EOL .
                     'return $this;',
-                    'docblock'   => DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => 'Set table name',
-                            'longDescription'  => '',
-                            'tags'             => [
-                                new ReturnTag([
-                                    'datatype' => 'self',
-                                ]),
-                            ],
-                        ]
-                    ),
+                    'docblock'   =>
+                    (new DocBlockGenerator())
+                        ->setShortDescription('Set table name')
+                        ->setLongDescription('')
+                        ->setTags([
+                            new ReturnTag([
+                                'datatype' => 'self',
+                            ]),
+                        ])
+                    ,
                 ],
                 [
                     'name'       => 'deleteDocument',
                     'parameters' => [
-                        ParameterGenerator::fromArray(
-                            [
-                                'name' => 'entity',
-                                'type' => $this->data['_namespace'] . '\Entity\Entity',
-                            ]
-                        ),
+                        new ParameterGenerator('entity', $this->data['_namespace'] . '\Entity\Entity'),
                     ],
                     'flags'      => [MethodGenerator::FLAG_PUBLIC, MethodGenerator::FLAG_ABSTRACT],
                     'body'       => null,
-                    'docblock'   => DocBlockGenerator::fromArray(
-                        [
-                            'shortDescription' => 'Converts database column name to php setter/getter function name',
-                            'longDescription'  => '',
-                            'tags'             => [
-                                new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
-                                new ParamTag('useTransaction', ['boolean']),
-                                new ReturnTag([
-                                    'datatype' => 'int',
-                                ]),
-                            ],
-                        ]
-                    ),
+                    'docblock'   =>
+                    (new DocBlockGenerator())
+                        ->setShortDescription('Converts database column name to php setter/getter function name')
+                        ->setLongDescription('')
+                        ->setTags([
+                            new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
+                            new ParamTag('useTransaction', ['boolean']),
+                            new ReturnTag([
+                                'datatype' => 'int',
+                            ]),
+                        ])
+                    ,
                 ],
             ],
         ];
@@ -212,7 +170,17 @@ class Document extends AbstractGenerator
 
     public function generate()
     {
-        $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
+        $c     = $this->getClassArrayRepresentation();
+        $class = new ClassGenerator(
+            $c['name'],
+            $c['namespacename'],
+            $c['flags'],
+            $c['extendedclass'],
+            [],
+            $c['properties'],
+            $c['methods'],
+            $c['docblock'],
+        );
         $class->addUse($this->useTableGatewayClass);
         $this->defineFileInfo($class);
         $fileGenerator = $this->getFileGenerator();

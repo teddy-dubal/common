@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Common\Generator\Core\ZendCode;
 
 use \Laminas\Code\Generator\ClassGenerator;
@@ -36,30 +35,17 @@ class DocumentManager extends AbstractGenerator
             'name'          => $this->data['_className'],
             'namespacename' => $this->data['_namespace'] . '\Document',
             'extendedclass' => $this->data['_namespace'] . '\Document\Document',
-            'docblock'      => DocBlockGenerator::fromArray(
-                [
-                    'shortDescription' => 'Application Document',
-                    'longDescription'  => '',
-                    'tags'             => [
-                        [
-                            'name'        => 'package',
-                            'description' => $this->data['_namespace'],
-                        ],
-                        [
-                            'name'        => 'author',
-                            'description' => $this->data['_author'],
-                        ],
-                        [
-                            'name'        => 'copyright',
-                            'description' => $this->data['_copyright'],
-                        ],
-                        [
-                            'name'        => 'license',
-                            'description' => $this->data['_license'],
-                        ],
-                    ],
-                ]
-            ),
+            'docblock'      =>
+            (new DocBlockGenerator())
+                ->setShortDescription('Application Document')
+                ->setLongDescription('')
+                ->setTags([
+                    new GenericTag('package', $this->data['_namespace']),
+                    new GenericTag('author', $this->data['_author']),
+                    new GenericTag('copyright', $this->data['_copyright']),
+                    new GenericTag('license', $this->data['_license']),
+                ])
+            ,
             'properties'    => $this->getProperties(),
             'methods'       => $methods,
         ];
@@ -67,38 +53,25 @@ class DocumentManager extends AbstractGenerator
 
     private function getProperties()
     {
-        $classProperties = [];
-        // $classProperties[] = PropertyGenerator::fromArray([
-        //     'name'         => 'table',
-        //     'defaultvalue' => $this->data['_tbname'],
-        //     'flags'        => PropertyGenerator::FLAG_PROTECTED,
-        //     'docblock'     => DocBlockGenerator::fromArray([
-        //         'shortDescription' => 'Name of database table ',
-        //         'longDescription'  => '',
-        //         'tags'             => [
-        //             new GenericTag('var', 'string' . ' ' . 'Name of DB Table'),
-        //         ],
-        //     ]),
-        // ]);
-        $classProperties[] = PropertyGenerator::fromArray([
-            'name'         => 'id',
-            'defaultvalue' => 'array' !== $this->data['_primaryKey']['phptype'] ? $this->data['_primaryKey']['field'] : eval('return ' . $this->data['_primaryKey']['field'] . ';'),
-            'flags'        => PropertyGenerator::FLAG_PROTECTED,
-            'docblock'     => DocBlockGenerator::fromArray([
-                'shortDescription' => 'Primary key name',
-                'longDescription'  => '',
-                'tags'             => [
+        $classProperties   = [];
+        $classProperties[] = (new PropertyGenerator(
+            'id',
+            'array' !== $this->data['_primaryKey']['phptype'] ? $this->data['_primaryKey']['field'] : eval('return ' . $this->data['_primaryKey']['field'] . ';'),
+            PropertyGenerator::FLAG_PROTECTED
+        ))->setDocBlock((new DocBlockGenerator())
+                ->setShortDescription('Primary key name')
+                ->setLongDescription('')
+                ->setTags([
                     new GenericTag('var', 'string|array' . ' ' . 'Primary key name'),
-                ],
-            ]),
-        ]);
+                ]));
         return $classProperties;
     }
 
     private function getConstructor()
     {
         $constructBody = '$this->container = $app;' . PHP_EOL;
-        $constructBody .= 'parent::__construct($app[\'document\']->getDb()->getManager(), $app[\'document\']->getDb()->getDatabaseName(), \'' . $this->data['_tbname'] . '\');' . PHP_EOL;
+        $constructBody .= '$docManager = $app[\'document\']->getDb();' . PHP_EOL;
+        $constructBody .= 'parent::__construct($docManager->getManager(), $docManager->getDatabaseName(), \'' . $this->data['_tbname'] . '\');' . PHP_EOL;
         $indexes = [];
         $unique  = [];
         foreach ($this->data['_columns'] as $column) {
@@ -129,22 +102,17 @@ class DocumentManager extends AbstractGenerator
             [
                 'name'       => '__construct',
                 'parameters' => [
-                    ParameterGenerator::fromArray([
-                        'name' => 'app',
-                        'type' => '\Pimple\Container',
-                    ]),
+                    new ParameterGenerator('app', '\Pimple\Container'),
                 ],
                 'flags'      => MethodGenerator::FLAG_PUBLIC,
                 'body'       => $constructBody,
-                'docblock'   => DocBlockGenerator::fromArray(
-                    [
-                        'shortDescription' => 'Constructor',
-                        'longDescription'  => '',
-                        'tags'             => [
-                            new ParamTag('adapter', ['\Pimple\Container'], 'Container'),
-                        ],
-                    ]
-                ),
+                'docblock'   => (new DocBlockGenerator())
+                    ->setShortDescription('Constructor')
+                    ->setLongDescription('')
+                    ->setTags([
+                        new ParamTag('adapter', ['Adapter']),
+                        new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity']),
+                    ]),
             ],
         ];
         return $methods;
@@ -177,22 +145,19 @@ class DocumentManager extends AbstractGenerator
             [
                 'name'       => 'findDoc',
                 'parameters' => [
-                    ParameterGenerator::fromArray([
-                        'name' => 'id',
-                    ]),
+                    new ParameterGenerator('id'),
                 ],
                 'flags'      => MethodGenerator::FLAG_PUBLIC,
                 'body'       => $body,
-                'docblock'   => DocBlockGenerator::fromArray(
-                    [
-                        'shortDescription' => 'Find by criteria',
-                        'longDescription'  => '',
-                        'tags'             => [
-                            new ParamTag('id', ['mixed'], 'Search by primary key'),
-                            new ReturnTag(['array'], ''),
-                        ],
-                    ]
-                ),
+                'docblock'   =>
+                (new DocBlockGenerator())
+                    ->setShortDescription('Find by criteria')
+                    ->setLongDescription('')
+                    ->setTags([
+                        new ParamTag('id', ['mixed'], 'Search by primary key'),
+                        new ReturnTag(['array'], ''),
+                    ])
+                ,
             ],
         ];
     }
@@ -203,24 +168,20 @@ class DocumentManager extends AbstractGenerator
             [
                 'name'       => 'findOneDocBy',
                 'parameters' => [
-                    ParameterGenerator::fromArray([
-                        'name'         => 'criteria',
-                        'defaultvalue' => [],
-                        'type'         => 'array',
-                    ]),
+                    new ParameterGenerator('criteria',
+                        'array',
+                        []
+                    ),
                 ],
                 'flags'      => MethodGenerator::FLAG_PUBLIC,
                 'body'       => 'return current($this->findDocBy($criteria,[],1));',
-                'docblock'   => DocBlockGenerator::fromArray(
-                    [
-                        'shortDescription' => 'Find one by criteria',
-                        'longDescription'  => '',
-                        'tags'             => [
-                            new ParamTag('criteria', ['array'], 'Search criteria'),
-                            new ReturnTag(['array|boolean'], ''),
-                        ],
-                    ]
-                ),
+                'docblock'   => (new DocBlockGenerator())
+                    ->setShortDescription('Find one by criteria')
+                    ->setLongDescription('')
+                    ->setTags([
+                        new ParamTag('criteria', ['array'], 'Search criteria'),
+                        new ReturnTag(['array|boolean'], ''),
+                    ]),
             ],
         ];
     }
@@ -254,41 +215,27 @@ class DocumentManager extends AbstractGenerator
             [
                 'name'       => 'findDocBy',
                 'parameters' => [
-                    ParameterGenerator::fromArray([
-                        'name'         => 'criteria',
-                        'defaultvalue' => [],
-                        'type'         => 'Array',
-                    ]),
-                    ParameterGenerator::fromArray([
-                        'name'         => 'order',
-                        'defaultvalue' => null,
-                    ]),
-                    ParameterGenerator::fromArray([
-                        'type'         => 'int',
-                        'name'         => 'limit',
-                        'defaultvalue' => 0,
-                    ]),
-                    ParameterGenerator::fromArray([
-                        'type'         => 'int',
-                        'name'         => 'offset',
-                        'defaultvalue' => 0,
-                    ])
+                    new ParameterGenerator('criteria', 'array',[]),
+                    (new ParameterGenerator("order","array|null"))->setDefaultValue(null),
+                    new ParameterGenerator("limit", 'int', 0),
+                    new ParameterGenerator("offset",
+                        'int',
+                        0)
                 ],
                 'flags'      => MethodGenerator::FLAG_PUBLIC,
                 'body'       => $body,
-                'docblock'   => DocBlockGenerator::fromArray(
-                    [
-                        'shortDescription' => 'Find by criteria',
-                        'longDescription'  => '',
-                        'tags'             => [
-                            new ParamTag('criteria', ['array'], 'Search criteria'),
-                            new ParamTag('order', ['string'], 'sorting option'),
-                            new ParamTag('limit', ['int'], 'limit option'),
-                            new ParamTag('offset', ['int'], 'offset option'),
-                            new ReturnTag(['array'], ''),
-                        ],
-                    ]
-                ),
+                'docblock'   =>
+                (new DocBlockGenerator())
+                    ->setShortDescription('Find by criteria')
+                    ->setLongDescription('')
+                    ->setTags([
+                        new ParamTag('criteria', ['array'], 'Search criteria'),
+                        new ParamTag('order', ['string'], 'sorting option'),
+                        new ParamTag('limit', ['int'], 'limit option'),
+                        new ParamTag('offset', ['int'], 'offset option'),
+                        new ReturnTag(['array'], ''),
+                    ])
+                ,
             ],
         ];
     }
@@ -347,23 +294,19 @@ class DocumentManager extends AbstractGenerator
         $methods[] = [
             'name'       => 'deleteDocument',
             'parameters' => [
-                ParameterGenerator::fromArray([
-                    'name' => 'entity',
-                    'type' => $this->data['_namespace'] . '\Entity\Entity',
-                ]),
+                new ParameterGenerator('entity', $this->data['_namespace'] . '\Entity\Entity'),
             ],
             'flags'      => MethodGenerator::FLAG_PUBLIC,
             'body'       => $constructBody,
-            'docblock'   => DocBlockGenerator::fromArray(
-                [
-                    'shortDescription' => 'Deletes the current entity',
-                    'longDescription'  => '',
-                    'tags'             => [
-                        new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Document to delete'),
-                        new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
-                    ],
-                ]
-            ),
+            'docblock'   =>
+            (new DocBlockGenerator())
+                ->setShortDescription('Deletes the current entity')
+                ->setLongDescription('')
+                ->setTags([
+                    new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Document to delete'),
+                    new ReturnTag(['int', 'array', 'false'], 'Inserted id'),
+                ])
+            ,
         ];
         return $methods;
     }
@@ -382,7 +325,7 @@ class DocumentManager extends AbstractGenerator
         if ($this->data['_primaryKey']['phptype'] == 'array') {
             $constructBody .= '$primary_key = [];' . PHP_EOL;
             foreach ($this->data['_primaryKey']['fields'] as $key) {
-                if (!$key['ai']) {
+                if (! $key['ai']) {
                     $constructBody .= '$pk_val = $entity->get' . $key['capital'] . '();' . PHP_EOL;
                     $constructBody .= 'if ($pk_val === null) {' . PHP_EOL;
                     $constructBody .= '    return false;' . PHP_EOL;
@@ -409,7 +352,7 @@ class DocumentManager extends AbstractGenerator
         } else {
             $constructBody .= '$primary_key = $entity->get' . $this->data['_primaryKey']['capital'] . '();' . PHP_EOL;
             $constructBody .= '$success = true;' . PHP_EOL;
-            if (!$this->data['_primaryKey']['foreign_key']) {
+            if (! $this->data['_primaryKey']['foreign_key']) {
                 $constructBody .= 'unset($data[\'' . $this->data['_primaryKey']['field'] . '\']);' . PHP_EOL;
                 $constructBody .= 'try {' . PHP_EOL;
                 $constructBody .= '    if ($primary_key === null) {' . PHP_EOL;
@@ -519,35 +462,23 @@ class DocumentManager extends AbstractGenerator
         $methods[] = [
             'name'       => 'saveDocument',
             'parameters' => [
-                ParameterGenerator::fromArray([
-                    'name' => 'entity',
-                    'type' => $this->data['_namespace'] . '\Entity\Entity',
-                ]),
-                ParameterGenerator::fromArray([
-                    'type'         => 'bool',
-                    'name'         => 'ignoreEmptyValues',
-                    'defaultValue' => true,
-                ]),
-                ParameterGenerator::fromArray([
-                    'type'         => 'bool',
-                    'name'         => 'recursive',
-                    'defaultValue' => false,
-                ]),
+                new ParameterGenerator('entity', $this->data['_namespace'] . '\Entity\Entity'),
+                new ParameterGenerator('ignoreEmptyValues', 'bool', true),
+                new ParameterGenerator('recursive', 'bool', false),
             ],
             'flags'      => MethodGenerator::FLAG_PUBLIC,
             'body'       => $constructBody,
-            'docblock'   => DocBlockGenerator::fromArray(
-                [
-                    'shortDescription' => 'Saves current row, and optionally dependent rows',
-                    'longDescription'  => '',
-                    'tags'             => [
-                        new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Document to save'),
-                        new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),
-                        new ParamTag('recursive', ['boolean'], 'Should the object graph be walked for all related elements'),
-                        new ReturnTag(['int', 'array', 'false'], 'Inserted ID'),
-                    ],
-                ]
-            ),
+            'docblock'   =>
+            (new DocBlockGenerator())
+                ->setShortDescription('Saves current row, and optionally dependent rows')
+                ->setLongDescription('')
+                ->setTags([
+                    new ParamTag('entity', [$this->data['_namespace'] . '\Entity\Entity'], 'Document to save'),
+                    new ParamTag('ignoreEmptyValues', ['boolean'], 'Should empty values saved'),
+                    new ParamTag('recursive', ['boolean'], 'Should the object graph be walked for all related elements'),
+                    new ReturnTag(['int', 'array', 'false'], 'Inserted ID'),
+                ])
+            ,
         ];
         return $methods;
     }
@@ -558,7 +489,17 @@ class DocumentManager extends AbstractGenerator
      */
     public function generate()
     {
-        $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
+        $c     = $this->getClassArrayRepresentation();
+        $class = new ClassGenerator(
+            $c['name'],
+            $c['namespacename'],
+            $c['flags'] ?? null,
+            $c['extendedclass'],
+            [],
+            $c['properties'],
+            $c['methods'],
+            $c['docblock'],
+        );
         $class
             ->addUse($this->data['_namespace'] . '\Entity\\' . $this->data['_className'], $this->data['_className'] . 'Document')
         ;
