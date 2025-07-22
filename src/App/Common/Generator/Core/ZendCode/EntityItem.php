@@ -70,7 +70,7 @@ class EntityItem extends AbstractGenerator
 
         foreach ($this->data['_columns'] as $column) {
             $comment           = ! empty($column['comment']) ? $column['comment'] : '';
-            $classProperties[] = (new PropertyGenerator($column['capital'], false, PropertyGenerator::FLAG_PROTECTED
+            $classProperties[] = (new PropertyGenerator($column['capital'], null, PropertyGenerator::FLAG_PROTECTED
             ))->setDocBlock((new DocBlockGenerator())
                     ->setShortDescription($column['capital'])
                     ->setLongDescription($comment)
@@ -476,12 +476,12 @@ class EntityItem extends AbstractGenerator
         $constructBody .= ');' . PHP_EOL;
         $constructBody .= 'return $result;' . PHP_EOL;
 
-        $methods[] = new MethodGenerator('toArray', [], MethodGenerator::FLAG_PUBLIC, $constructBody, (new DocBlockGenerator())
+        $methods[] = (new MethodGenerator('toArray', [], MethodGenerator::FLAG_PUBLIC, $constructBody, (new DocBlockGenerator())
                 ->setShortDescription('Returns an array, keys are the field names.')
                 ->setLongDescription('')
                 ->setTags([
                     new ReturnTag(['datatype' => 'array']),
-                ]));
+                ])))->setReturnType('array');
         return $methods;
     }
 
