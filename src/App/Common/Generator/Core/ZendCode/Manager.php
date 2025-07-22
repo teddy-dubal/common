@@ -177,10 +177,10 @@ BODY
                 [
                     "name" => "findBy",
                     "parameters" => [
-                        new ParameterGenerator("criteria", "Array", []),
-                        new ParameterGenerator("order",'?Array',[]),
-                        new ParameterGenerator("limit", "?int"),
-                        new ParameterGenerator("offset", "int", 0),
+                        new ParameterGenerator("criteria", "array", []),
+                        (new ParameterGenerator("order","string|null"))->setDefaultValue(null),
+                        new ParameterGenerator("limit", "?int",0),
+                        new ParameterGenerator("offset", "?int", 0),
                         new ParameterGenerator("toEntity", "bool", false),
                     ],
                     "flags" => MethodGenerator::FLAG_PUBLIC,
@@ -235,8 +235,8 @@ BODY
                         new ParameterGenerator("orderBy", "array", []),
                         new ParameterGenerator("groupBy", "array", []),
                         new ParameterGenerator("having", "array", []),
-                        new ParameterGenerator("limit", "int", null),
-                        new ParameterGenerator("offset", "int", null),
+                        new ParameterGenerator("limit", "?int", 0),
+                        new ParameterGenerator("offset", "?int", 0),
                     ],
                     "flags" => MethodGenerator::FLAG_PROTECTED,
                     "body" => <<<'BODY'
@@ -447,7 +447,7 @@ BODY
                     "name" => "findOneBy",
                     "parameters" => [
                         new ParameterGenerator("criteria", "array", []),
-                        new ParameterGenerator("order", null),
+                        (new ParameterGenerator("order", "string|null",[]))->setDefaultValue(null),
                     ],
                     "flags" => MethodGenerator::FLAG_PUBLIC,
                     "body" =>
@@ -468,11 +468,11 @@ BODY
                     "name" => "findOneEntityBy",
                     "parameters" => [
                         new ParameterGenerator("criteria", "array", []),
-                        new ParameterGenerator("order"),
+                        (new ParameterGenerator("order","string|null"))->setDefaultValue(null),
                     ],
                     "flags" => MethodGenerator::FLAG_PUBLIC,
                     "body" =>
-                        'return current($this->findBy($criteria,$order,1,null,true));',
+                        'return current($this->findBy($criteria,$order,1,0,true));',
                     "docblock" => (new DocBlockGenerator())
                         ->setShortDescription("Find Entity one by criteria")
                         ->setLongDescription("")

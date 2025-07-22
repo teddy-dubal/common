@@ -6,7 +6,7 @@ use App\Model\Entity\User;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
-use Zend\Db\Adapter\Adapter;
+use Laminas\Db\Adapter\Adapter;
 
 
 
@@ -25,6 +25,7 @@ $app['logger'] = function ($container) {
     $log->pushHandler(new StreamHandler('php://stderr'));
     return $log;
 };
+/**@var ModelFactory */
 $app['entity'] = function() use ($app) {
     $db           = new Adapter($app['db']);
     $modelFactory = new ModelFactory($db, $app);

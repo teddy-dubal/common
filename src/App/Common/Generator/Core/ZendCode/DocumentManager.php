@@ -215,11 +215,10 @@ class DocumentManager extends AbstractGenerator
             [
                 'name'       => 'findDocBy',
                 'parameters' => [
-                    new ParameterGenerator('criteria', 'Array',
-                        []),
-                    new ParameterGenerator('order'),
-                    new ParameterGenerator('limit', 'int', 0),
-                    new ParameterGenerator('offset',
+                    new ParameterGenerator('criteria', 'array',[]),
+                    (new ParameterGenerator("order","array|null"))->setDefaultValue(null),
+                    new ParameterGenerator("limit", 'int', 0),
+                    new ParameterGenerator("offset",
                         'int',
                         0)
                 ],

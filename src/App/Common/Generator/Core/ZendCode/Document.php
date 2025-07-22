@@ -175,7 +175,7 @@ class Document extends AbstractGenerator
             $c['name'],
             $c['namespacename'],
             $c['flags'],
-            null,
+            $c['extendedclass'],
             [],
             $c['properties'],
             $c['methods'],

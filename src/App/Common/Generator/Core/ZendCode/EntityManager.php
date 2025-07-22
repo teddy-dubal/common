@@ -86,9 +86,8 @@ class EntityManager extends AbstractGenerator
                 'parameters' => [
                     new ParameterGenerator('adapter',
                         'Laminas\Db\Adapter\Adapter'),
-                    new ParameterGenerator('entity',
-                        '?'.$this->data['_namespace'] . '\Entity\\' . $this->data['_className']
-                        )
+                    (new ParameterGenerator('entity',
+                        $this->data['_namespace'] . '\Entity\\' . $this->data['_className'].'|null'))->setDefaultValue(null)
                     ,
                 ],
                 'flags'      => MethodGenerator::FLAG_PUBLIC,
