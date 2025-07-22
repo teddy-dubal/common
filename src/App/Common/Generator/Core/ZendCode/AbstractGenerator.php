@@ -87,6 +87,7 @@ abstract class AbstractGenerator
                 new GenericTag('author', $this->data['_author']),
                 new GenericTag('license', $this->data['_license']),
                 new GenericTag('package', $class->getNamespaceName()),
+                new GenericTag('copyright', $this->data['_copyright']),
             ]);
         $this->fileGenerator->setDocBlock($doc);
     }
