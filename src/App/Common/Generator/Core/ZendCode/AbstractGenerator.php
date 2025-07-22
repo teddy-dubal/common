@@ -10,6 +10,7 @@ namespace App\Common\Generator\Core\ZendCode;
 
 use Laminas\Code\Generator\ClassGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\DocBlock\Tag\GenericTag;
 use Laminas\Code\Generator\FileGenerator;
 use Laminas\Code\Generator\MethodGenerator;
 
@@ -58,7 +59,15 @@ abstract class AbstractGenerator
 
     public function generate()
     {
-        $class = ClassGenerator::fromArray($this->getClassArrayRepresentation());
+        $c     = $this->getClassArrayRepresentation();
+        $class = new ClassGenerator($c["name"] ?? null,
+            $c["namespacename"] ?? null,
+            $c["flags"] ?? null,
+            $c['extendedclass'] ?? null,
+            [],
+            $c["properties"] ?? [],
+            $c["methods"] ?? [],
+            $c["docblock"] ?? null);
         $this->defineFileInfo($class);
         return $this->fileGenerator->setClass($class)->generate();
     }
@@ -70,26 +79,15 @@ abstract class AbstractGenerator
      */
     protected function defineFileInfo(ClassGenerator $class)
     {
-        $doc = DocBlockGenerator::fromArray(
-            [
-                'shortDescription' => 'Contains ' . $class->getName() . ' class file',
-                'longDescription'  => 'Generated Automatically.' . PHP_EOL . 'Please do not modify',
-                'tags'             => [
-                    [
-                        'name'        => 'author',
-                        'description' => $this->data['_author'],
-                    ],
-                    [
-                        'name'        => 'license',
-                        'description' => $this->data['_license'],
-                    ],
-                    [
-                        'name'        => 'package',
-                        'description' => $class->getNamespaceName(),
-                    ],
-                ],
-            ]
-        );
+
+        $doc = (new DocBlockGenerator())
+            ->setShortDescription('Contains ' . $class->getName() . ' class file')
+            ->setLongDescription('Generated Automatically.' . PHP_EOL . 'Please do not modify')
+            ->setTags([
+                new GenericTag('package', $class->getNamespaceName()),
+                new GenericTag('author', $this->data['_author']),
+                new GenericTag('license', $this->data['_license']),
+            ]);
         $this->fileGenerator->setDocBlock($doc);
     }
 

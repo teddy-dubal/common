@@ -88,7 +88,7 @@ abstract class MakeDbTableFactory extends MakeDbTableAbstract
         $entityItem = new EntityItem();
         $entityItem->setData($vars);
         $entityItemFile = rtrim($this->getLocation(), '/') . DIRECTORY_SEPARATOR . "Entity" . DIRECTORY_SEPARATOR . $this->_className . ".php";
-
+        
         $entityManager = new EntityManager();
         $entityManager->setData($vars);
         $entityManagerFile = rtrim($this->getLocation(), '/') . DIRECTORY_SEPARATOR . "Table" . DIRECTORY_SEPARATOR . $this->_className . ".php";
@@ -102,7 +102,6 @@ abstract class MakeDbTableFactory extends MakeDbTableAbstract
         if (!file_put_contents($entityFile, $entity->generate())) {
             die("Error: could not write Entity file $entityFile.");
         }
-
         if (!file_put_contents($managerFile, $manager->generate())) {
             die("Error: could not write Manager file $managerFile.");
         }

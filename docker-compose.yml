@@ -1,6 +1,6 @@
 services:
     app:
-      image: webdevops/php:8.2
+      image: webdevops/php:8.4
       volumes:
         - "./:/app"
       working_dir: "/app"
