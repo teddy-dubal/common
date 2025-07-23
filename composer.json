@@ -10,6 +10,7 @@
     "require": {
         "laminas/laminas-code": "^4.16.0",
         "laminas/laminas-db": "^2.20.0",
+        "mongodb/mongodb": "^2.1.0",
         "defuse/php-encryption": "^2.4"
     },
     "require-dev": {
@@ -18,7 +19,6 @@
         "pimple/pimple": "^3.5",
         "symfony/yaml": "^v7.3.1",
         "laminas/laminas-inputfilter": "^2.33.0",
-        "mongodb/mongodb": "^2.1.0",
         "symfony/console": "^v7.2.5",
         "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^10.3",
