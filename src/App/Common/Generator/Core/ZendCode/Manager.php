@@ -178,7 +178,7 @@ BODY
                     "name" => "findBy",
                     "parameters" => [
                         new ParameterGenerator("criteria", "array", []),
-                        (new ParameterGenerator("order","string|null"))->setDefaultValue(null),
+                        (new ParameterGenerator("order","array|null"))->setDefaultValue(null),
                         new ParameterGenerator("limit", "?int",0),
                         new ParameterGenerator("offset", "?int", 0),
                         new ParameterGenerator("toEntity", "bool", false),
@@ -215,7 +215,7 @@ BODY
                                 ["array"],
                                 "Search criteria"
                             ),
-                            new ParamTag("order", ["string"], "sorting option"),
+                            new ParamTag("order", ["array|null"], "sorting option"),
                             new ParamTag("limit", ["int"], "limit option"),
                             new ParamTag("offset", ["int"], "offset option"),
                             new ParamTag(
@@ -447,7 +447,7 @@ BODY
                     "name" => "findOneBy",
                     "parameters" => [
                         new ParameterGenerator("criteria", "array", []),
-                        (new ParameterGenerator("order", "string|null",[]))->setDefaultValue(null),
+                        (new ParameterGenerator("order", "array|null",[]))->setDefaultValue(null),
                     ],
                     "flags" => MethodGenerator::FLAG_PUBLIC,
                     "body" =>
@@ -461,14 +461,19 @@ BODY
                                 ["array"],
                                 "Search criteria"
                             ),
-                            new ReturnTag(["array|boolean"], ""),
+                            new ParamTag(
+                                "order",
+                                ["array","null"],
+                                "Order"
+                            ),
+                            new ReturnTag(["array","boolean"], ""),
                         ]),
                 ],
                 [
                     "name" => "findOneEntityBy",
                     "parameters" => [
                         new ParameterGenerator("criteria", "array", []),
-                        (new ParameterGenerator("order","string|null"))->setDefaultValue(null),
+                        (new ParameterGenerator("order","array|null"))->setDefaultValue(null),
                     ],
                     "flags" => MethodGenerator::FLAG_PUBLIC,
                     "body" =>
@@ -482,7 +487,12 @@ BODY
                                 ["array"],
                                 "Search criteria"
                             ),
-                            new ReturnTag(["boolean|Entity"], ""),
+                            new ParamTag(
+                                "order",
+                                ["array","null"],
+                                "Order"
+                            ),
+                            new ReturnTag(["array","boolean"], ""),
                         ]),
                 ],
             ],
