@@ -18,8 +18,14 @@ use \Laminas\Code\Generator\PropertyGenerator;
 class EntityManager extends AbstractGenerator
 {
 
+    /**
+     * @var array
+     */
     private $data;
 
+    /**
+     * @return array[]
+     */
     public function getClassArrayRepresentation()
     {
         $this->data = $this->getData();
@@ -131,7 +137,7 @@ class EntityManager extends AbstractGenerator
                 ->setLongDescription('')
                 ->setTags([
                     new ParamTag('id', [$this->data['_primaryKey']['phptype']], 'Primary key value'),
-                    new ReturnTag([$this->data['_className'] . 'Entity',
+                    new ReturnTag(['array',
                         'null'], 'Found entity'),
                 ]),
         ];
